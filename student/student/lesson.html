@@ -1,0 +1,1613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Lesson — TechBridge Rwanda</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Inter, Arial, sans-serif;
+    }
+
+    :root {
+      --bg: #070b14;
+      --sidebar: #0b1120;
+      --card: #0d1627;
+      --card2: #111d31;
+      --border: rgba(255,255,255,.08);
+      --text: #f4f7fb;
+      --muted: #91a0b8;
+      --cyan: #00e5ff;
+      --blue: #3b82f6;
+      --purple: #a855f7;
+      --green: #22c55e;
+      --orange: #f59e0b;
+      --red: #ef4444;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    /* SIDEBAR */
+
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 250px;
+      height: 100vh;
+      background: var(--sidebar);
+      border-right: 1px solid var(--border);
+      padding: 24px 16px;
+      z-index: 1000;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 10px 28px;
+    }
+
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--cyan), var(--blue));
+      color: #001018;
+      font-weight: 900;
+    }
+
+    .logo-text strong {
+      display: block;
+      font-size: 15px;
+    }
+
+    .logo-text span {
+      color: var(--cyan);
+      font-size: 11px;
+    }
+
+    .nav-title {
+      color: #59677e;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      padding: 0 12px 10px;
+    }
+
+    .nav {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .nav a {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      border-radius: 10px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .nav a:hover {
+      background: rgba(255,255,255,.05);
+      color: white;
+    }
+
+    .nav a.active {
+      color: var(--cyan);
+      background: rgba(0,229,255,.10);
+      border: 1px solid rgba(0,229,255,.12);
+    }
+
+    .nav-icon {
+      width: 22px;
+      text-align: center;
+    }
+
+    .sidebar-bottom {
+      position: absolute;
+      left: 16px;
+      right: 16px;
+      bottom: 20px;
+    }
+
+    .sidebar-bottom a {
+      display: block;
+      padding: 12px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    /* MAIN */
+
+    .main {
+      margin-left: 250px;
+      min-height: 100vh;
+    }
+
+    .topbar {
+      height: 72px;
+      padding: 0 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      background: rgba(7,11,20,.9);
+      backdrop-filter: blur(14px);
+      position: sticky;
+      top: 0;
+      z-index: 900;
+    }
+
+    .top-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .back {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .back:hover {
+      color: var(--cyan);
+    }
+
+    .top-right {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .notification {
+      width: 40px;
+      height: 40px;
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      background: var(--card);
+      color: white;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .notification-dot {
+      position: absolute;
+      top: 7px;
+      right: 8px;
+      width: 7px;
+      height: 7px;
+      background: var(--red);
+      border-radius: 50%;
+    }
+
+    .avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--blue), var(--purple));
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    /* CONTENT */
+
+    .content {
+      max-width: 1450px;
+      padding: 30px 32px 60px;
+    }
+
+    .lesson-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 330px;
+      gap: 22px;
+      align-items: start;
+    }
+
+    /* VIDEO */
+
+    .video-card {
+      background: #000;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .video-wrapper {
+      aspect-ratio: 16 / 9;
+      position: relative;
+      background:
+        radial-gradient(circle at 50% 45%, rgba(0,229,255,.12), transparent 25%),
+        linear-gradient(135deg, #09111f, #05070d);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /*
+      Later this visual player will be replaced
+      with the real lesson video URL from Firebase/
+      Cloudinary or another video provider.
+    */
+
+    .video-placeholder {
+      text-align: center;
+      color: var(--muted);
+      padding: 20px;
+    }
+
+    .play-button {
+      width: 72px;
+      height: 72px;
+      margin: 0 auto 16px;
+      border-radius: 50%;
+      border: 1px solid rgba(0,229,255,.35);
+      background: rgba(0,229,255,.08);
+      color: var(--cyan);
+      display: grid;
+      place-items: center;
+      font-size: 25px;
+      cursor: pointer;
+    }
+
+    .video-placeholder h2 {
+      color: white;
+      font-size: 17px;
+      margin-bottom: 7px;
+    }
+
+    .video-placeholder p {
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .video-controls {
+      height: 48px;
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      padding: 0 15px;
+      background: #080b11;
+      color: #9aa5b5;
+      font-size: 12px;
+    }
+
+    .fake-progress {
+      flex: 1;
+      height: 4px;
+      background: #263044;
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    .fake-progress div {
+      width: 0;
+      height: 100%;
+      background: var(--cyan);
+    }
+
+    /* LESSON INFO */
+
+    .lesson-header {
+      margin-top: 22px;
+    }
+
+    .lesson-label {
+      color: var(--cyan);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    .lesson-header h1 {
+      font-size: 28px;
+      line-height: 1.25;
+      margin-bottom: 10px;
+    }
+
+    .lesson-description {
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 14px;
+    }
+
+    /* TABS */
+
+    .lesson-tabs {
+      display: flex;
+      gap: 8px;
+      border-bottom: 1px solid var(--border);
+      margin-top: 25px;
+    }
+
+    .lesson-tab {
+      padding: 12px 16px;
+      background: transparent;
+      border: 0;
+      color: var(--muted);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .lesson-tab.active {
+      color: var(--cyan);
+      border-bottom-color: var(--cyan);
+    }
+
+    .tab-content {
+      padding-top: 22px;
+    }
+
+    .tab-panel {
+      display: none;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    .tab-panel h2 {
+      font-size: 18px;
+      margin-bottom: 12px;
+    }
+
+    .tab-panel p {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.8;
+      margin-bottom: 14px;
+    }
+
+    .learning-points {
+      padding-left: 20px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 2;
+    }
+
+    /* RESOURCES */
+
+    .resource {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      padding: 13px 15px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: 9px;
+    }
+
+    .resource-name {
+      font-size: 12px;
+    }
+
+    .resource-type {
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .download {
+      color: var(--cyan);
+      font-size: 11px;
+      cursor: pointer;
+    }
+
+    /* RIGHT */
+
+    .right-column {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .side-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+    }
+
+    .side-card h3 {
+      font-size: 15px;
+      margin-bottom: 15px;
+    }
+
+    .course-progress-number {
+      font-size: 28px;
+      color: var(--cyan);
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    .progress {
+      height: 6px;
+      background: #1b293e;
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--cyan), var(--blue));
+      width: 35%;
+    }
+
+    .small-text {
+      color: var(--muted);
+      font-size: 11px;
+      margin-top: 8px;
+    }
+
+    /* BUTTONS */
+
+    .btn {
+      width: 100%;
+      min-height: 44px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #111d30;
+      color: white;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 9px;
+    }
+
+    .btn:hover {
+      border-color: rgba(0,229,255,.4);
+    }
+
+    .btn.primary {
+      border: 0;
+      background: linear-gradient(135deg, var(--cyan), var(--blue));
+      color: #001018;
+    }
+
+    .btn.success {
+      border-color: rgba(34,197,94,.25);
+      background: rgba(34,197,94,.08);
+      color: var(--green);
+    }
+
+    .btn:last-child {
+      margin-bottom: 0;
+    }
+
+    /* NEXT LESSON */
+
+    .next-lesson {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      padding: 11px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .next-lesson:last-child {
+      border-bottom: 0;
+    }
+
+    .next-number {
+      width: 31px;
+      height: 31px;
+      border-radius: 8px;
+      background: #142138;
+      display: grid;
+      place-items: center;
+      font-size: 10px;
+      color: var(--muted);
+    }
+
+    .next-info {
+      flex: 1;
+    }
+
+    .next-info strong {
+      display: block;
+      font-size: 11px;
+      margin-bottom: 3px;
+    }
+
+    .next-info span {
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .menu-btn {
+      display: none;
+      width: 40px;
+      height: 40px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: white;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    /* RESPONSIVE */
+
+    @media (max-width: 1050px) {
+      .lesson-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .right-column {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 800px) {
+
+      .sidebar {
+        transform: translateX(-100%);
+        transition: .25s;
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .main {
+        margin-left: 0;
+      }
+
+      .menu-btn {
+        display: block;
+      }
+
+      .topbar {
+        padding: 0 16px;
+      }
+
+      .content {
+        padding: 20px 15px 45px;
+      }
+
+      .right-column {
+        display: flex;
+      }
+
+      .lesson-header h1 {
+        font-size: 22px;
+      }
+    }
+
+    @media (max-width: 500px) {
+
+      .notification {
+        display: none;
+      }
+
+      .lesson-tabs {
+        overflow-x: auto;
+      }
+
+      .lesson-tab {
+        white-space: nowrap;
+      }
+
+      .video-controls {
+        padding: 0 10px;
+        gap: 8px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- SIDEBAR -->
+
+  <aside class="sidebar" id="sidebar">
+
+    <div class="logo">
+      <div class="logo-icon">TB</div>
+
+      <div class="logo-text">
+        <strong>TECHBRIDGE</strong>
+        <span>RWANDA</span>
+      </div>
+    </div>
+
+    <div class="nav-title">
+      Student Menu
+    </div>
+
+    <nav class="nav">
+
+      <a href="index.html">
+        <span class="nav-icon">⌂</span>
+        Dashboard
+      </a>
+
+      <a href="courses.html" class="active">
+        <span class="nav-icon">▣</span>
+        My Courses
+      </a>
+
+      <a href="quizzes.html">
+        <span class="nav-icon">✓</span>
+        Quizzes
+      </a>
+
+      <a href="tests.html">
+        <span class="nav-icon">◆</span>
+        Assessments
+      </a>
+
+      <a href="certificates.html">
+        <span class="nav-icon">🏆</span>
+        Certificates & Badges
+      </a>
+
+      <a href="practical.html">
+        <span class="nav-icon">⌘</span>
+        Practical Learning
+      </a>
+
+      <a href="settings.html">
+        <span class="nav-icon">⚙</span>
+        Settings
+      </a>
+
+    </nav>
+
+    <div class="sidebar-bottom">
+      <a href="courses.html">
+        ← Back to Courses
+      </a>
+    </div>
+
+  </aside>
+
+
+  <!-- MAIN -->
+
+  <main class="main">
+
+    <header class="topbar">
+
+      <div class="top-left">
+
+        <button
+          class="menu-btn"
+          onclick="toggleSidebar()"
+        >
+          ☰
+        </button>
+
+        <a
+          href="course.html?id=programming-foundations"
+          class="back"
+          id="backCourse"
+        >
+          ← Back to Course
+        </a>
+
+      </div>
+
+      <div class="top-right">
+
+        <button
+          class="notification"
+          onclick="showNotification()"
+        >
+          🔔
+          <span class="notification-dot"></span>
+        </button>
+
+        <div class="avatar">
+          ST
+        </div>
+
+      </div>
+
+    </header>
+
+
+    <section class="content">
+
+      <div class="lesson-layout">
+
+
+        <!-- LEFT -->
+
+        <div>
+
+
+          <!-- VIDEO -->
+
+          <div class="video-card">
+
+            <div class="video-wrapper">
+
+              <div class="video-placeholder">
+
+                <div
+                  class="play-button"
+                  onclick="startVideo()"
+                >
+                  ▶
+                </div>
+
+                <h2 id="videoTitle">
+                  Introduction to Programming
+                </h2>
+
+                <p>
+                  Your lesson video will appear here
+                  when the course is connected to the
+                  video storage system.
+                </p>
+
+              </div>
+
+            </div>
+
+            <div class="video-controls">
+
+              <span>▶</span>
+
+              <div class="fake-progress">
+                <div id="videoProgress"></div>
+              </div>
+
+              <span id="videoTime">
+                00:00
+              </span>
+
+              <span>⚙</span>
+
+              <span>⛶</span>
+
+            </div>
+
+          </div>
+
+
+          <!-- LESSON HEADER -->
+
+          <div class="lesson-header">
+
+            <div class="lesson-label">
+              Lesson <span id="lessonNumber">1</span>
+            </div>
+
+            <h1 id="lessonTitle">
+              Introduction to Programming
+            </h1>
+
+            <p
+              class="lesson-description"
+              id="lessonDescription"
+            >
+              Understand what programming is,
+              how programs work and why programming
+              is important in technology.
+            </p>
+
+          </div>
+
+
+          <!-- TABS -->
+
+          <div class="lesson-tabs">
+
+            <button
+              class="lesson-tab active"
+              onclick="openTab('overview', this)"
+            >
+              Overview
+            </button>
+
+            <button
+              class="lesson-tab"
+              onclick="openTab('notes', this)"
+            >
+              Notes
+            </button>
+
+            <button
+              class="lesson-tab"
+              onclick="openTab('resources', this)"
+            >
+              Resources
+            </button>
+
+          </div>
+
+
+          <div class="tab-content">
+
+
+            <!-- OVERVIEW -->
+
+            <div
+              class="tab-panel active"
+              id="overview"
+            >
+
+              <h2>
+                What you will learn
+              </h2>
+
+              <p>
+                In this lesson you will learn the
+                basic idea of programming and how
+                instructions are given to a computer.
+              </p>
+
+              <ul class="learning-points">
+
+                <li>
+                  Understand what programming means.
+                </li>
+
+                <li>
+                  Understand how computers execute instructions.
+                </li>
+
+                <li>
+                  Identify common programming languages.
+                </li>
+
+                <li>
+                  Understand the relationship between
+                  algorithms and programs.
+                </li>
+
+              </ul>
+
+            </div>
+
+
+            <!-- NOTES -->
+
+            <div
+              class="tab-panel"
+              id="notes"
+            >
+
+              <h2>
+                Lesson Notes
+              </h2>
+
+              <p>
+                Programming is the process of creating
+                instructions that a computer can execute
+                to perform a particular task.
+              </p>
+
+              <p>
+                A programming language provides a structured
+                way for humans to communicate instructions
+                to computers.
+              </p>
+
+              <p>
+                Examples include C++, Python, JavaScript,
+                Java and many others.
+              </p>
+
+            </div>
+
+
+            <!-- RESOURCES -->
+
+            <div
+              class="tab-panel"
+              id="resources"
+            >
+
+              <h2>
+                Learning Resources
+              </h2>
+
+              <div class="resource">
+
+                <div>
+                  <div class="resource-name">
+                    Lesson PDF
+                  </div>
+
+                  <div class="resource-type">
+                    PDF document
+                  </div>
+                </div>
+
+                <span
+                  class="download"
+                  onclick="downloadResource('Lesson PDF')"
+                >
+                  Open
+                </span>
+
+              </div>
+
+
+              <div class="resource">
+
+                <div>
+                  <div class="resource-name">
+                    Practice Exercise
+                  </div>
+
+                  <div class="resource-type">
+                    Exercise
+                  </div>
+                </div>
+
+                <span
+                  class="download"
+                  onclick="downloadResource('Practice Exercise')"
+                >
+                  Open
+                </span>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- RIGHT -->
+
+        <aside class="right-column">
+
+
+          <!-- PROGRESS -->
+
+          <div class="side-card">
+
+            <h3>
+              Course Progress
+            </h3>
+
+            <div class="course-progress-number">
+              35%
+            </div>
+
+            <div class="progress">
+
+              <div
+                class="progress-bar"
+                style="width:35%"
+              ></div>
+
+            </div>
+
+            <p class="small-text">
+              10 of 28 lessons completed
+            </p>
+
+          </div>
+
+
+          <!-- LESSON ACTIONS -->
+
+          <div class="side-card">
+
+            <h3>
+              Lesson Actions
+            </h3>
+
+            <button
+              class="btn primary"
+              id="completeButton"
+              onclick="markComplete()"
+            >
+              ✓ Mark as Complete
+            </button>
+
+            <button
+              class="btn"
+              onclick="previousLesson()"
+            >
+              ← Previous Lesson
+            </button>
+
+            <button
+              class="btn"
+              onclick="nextLesson()"
+            >
+              Next Lesson →
+            </button>
+
+          </div>
+
+
+          <!-- NEXT -->
+
+          <div class="side-card">
+
+            <h3>
+              Course Navigation
+            </h3>
+
+            <div class="next-lesson">
+
+              <div class="next-number">
+                1
+              </div>
+
+              <div class="next-info">
+
+                <strong>
+                  Introduction to Programming
+                </strong>
+
+                <span>
+                  Completed
+                </span>
+
+              </div>
+
+              <span>✓</span>
+
+            </div>
+
+
+            <div class="next-lesson">
+
+              <div class="next-number">
+                2
+              </div>
+
+              <div class="next-info">
+
+                <strong>
+                  Programming Languages
+                </strong>
+
+                <span>
+                  22 min
+                </span>
+
+              </div>
+
+              <span>›</span>
+
+            </div>
+
+
+            <div class="next-lesson">
+
+              <div class="next-number">
+                3
+              </div>
+
+              <div class="next-info">
+
+                <strong>
+                  Variables and Data
+                </strong>
+
+                <span>
+                  25 min
+                </span>
+
+              </div>
+
+              <span>›</span>
+
+            </div>
+
+          </div>
+
+        </aside>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <script>
+
+    /*
+      TECHBRIDGE RWANDA
+
+      LESSON PAGE
+
+      CURRENT:
+      Frontend learning interface.
+
+      FUTURE:
+      Firebase + Cloudinary/video storage.
+
+      Firestore example:
+
+      courses/{courseId}/lessons/{lessonId}
+
+      {
+        title,
+        description,
+        videoUrl,
+        duration,
+        order,
+        resources,
+        published
+      }
+
+      Student progress:
+
+      users/{userId}/courseProgress/{courseId}
+
+      {
+        completedLessons: [],
+        percentage,
+        lastLessonId,
+        updatedAt
+      }
+    */
+
+
+    const lessons = [
+
+      {
+        number: 1,
+
+        title:
+          "Introduction to Programming",
+
+        description:
+          "Understand what programming is, how programs work and why programming is important in technology.",
+
+        duration:
+          "18 min",
+
+        completed:
+          true
+
+      },
+
+      {
+        number: 2,
+
+        title:
+          "Programming Languages",
+
+        description:
+          "Explore programming languages and understand where different languages are used.",
+
+        duration:
+          "22 min",
+
+        completed:
+          false
+
+      },
+
+      {
+        number: 3,
+
+        title:
+          "Variables and Data",
+
+        description:
+          "Learn how programs store and work with different types of information.",
+
+        duration:
+          "25 min",
+
+        completed:
+          false
+
+      },
+
+      {
+        number: 4,
+
+        title:
+          "Operators",
+
+        description:
+          "Learn arithmetic, comparison and logical operators.",
+
+        duration:
+          "20 min",
+
+        completed:
+          false
+
+      },
+
+      {
+        number: 5,
+
+        title:
+          "Conditional Statements",
+
+        description:
+          "Learn how programs make decisions using conditions.",
+
+        duration:
+          "27 min",
+
+        completed:
+          false
+
+      }
+
+    ];
+
+
+    function getLessonNumber() {
+
+      const params =
+        new URLSearchParams(
+          window.location.search
+        );
+
+      return Number(
+        params.get("lesson")
+      ) || 1;
+
+    }
+
+
+    function getCourseId() {
+
+      const params =
+        new URLSearchParams(
+          window.location.search
+        );
+
+      return (
+        params.get("courseId") ||
+        "programming-foundations"
+      );
+
+    }
+
+
+    function loadLesson() {
+
+      const number =
+        getLessonNumber();
+
+      const lesson =
+        lessons.find(
+          item => item.number === number
+        ) || lessons[0];
+
+
+      document.getElementById(
+        "lessonNumber"
+      ).textContent =
+        lesson.number;
+
+
+      document.getElementById(
+        "lessonTitle"
+      ).textContent =
+        lesson.title;
+
+
+      document.getElementById(
+        "videoTitle"
+      ).textContent =
+        lesson.title;
+
+
+      document.getElementById(
+        "lessonDescription"
+      ).textContent =
+        lesson.description;
+
+
+      const backLink =
+        document.getElementById(
+          "backCourse"
+        );
+
+      backLink.href =
+        `course.html?id=${encodeURIComponent(getCourseId())}`;
+
+
+      const completeButton =
+        document.getElementById(
+          "completeButton"
+        );
+
+
+      if (lesson.completed) {
+
+        completeButton.textContent =
+          "✓ Lesson Completed";
+
+        completeButton.classList.remove(
+          "primary"
+        );
+
+        completeButton.classList.add(
+          "success"
+        );
+
+      }
+
+    }
+
+
+    function startVideo() {
+
+      /*
+        Current version:
+
+        Simulates a video player.
+
+        Firebase phase:
+
+        The actual video URL will be
+        loaded from the course lesson document.
+
+        Example:
+
+        video.src = lesson.videoUrl;
+
+        The system can use Cloudinary
+        or another approved video provider.
+      */
+
+      const progress =
+        document.getElementById(
+          "videoProgress"
+        );
+
+      const time =
+        document.getElementById(
+          "videoTime"
+        );
+
+
+      let value = 0;
+
+      const timer =
+        setInterval(() => {
+
+          value += 5;
+
+          progress.style.width =
+            `${value}%`;
+
+          const seconds =
+            Math.floor(
+              value * 0.6
+            );
+
+          time.textContent =
+            `00:${String(seconds).padStart(2, "0")}`;
+
+
+          if (value >= 100) {
+
+            clearInterval(timer);
+
+          }
+
+        }, 300);
+
+    }
+
+
+    function markComplete() {
+
+      const number =
+        getLessonNumber();
+
+      const lesson =
+        lessons.find(
+          item => item.number === number
+        );
+
+
+      if (!lesson) return;
+
+
+      lesson.completed = true;
+
+
+      const button =
+        document.getElementById(
+          "completeButton"
+        );
+
+
+      button.textContent =
+        "✓ Lesson Completed";
+
+      button.classList.remove(
+        "primary"
+      );
+
+      button.classList.add(
+        "success"
+      );
+
+
+      /*
+        FIREBASE PHASE:
+
+        Update:
+
+        users/{userId}/courseProgress/{courseId}
+
+        Add this lesson ID to completedLessons.
+
+        Recalculate percentage.
+
+        Save updatedAt.
+
+        This should be done securely
+        using Firebase security rules/backend.
+      */
+
+
+      alert(
+        "Lesson marked as completed."
+      );
+
+    }
+
+
+    function nextLesson() {
+
+      const current =
+        getLessonNumber();
+
+      const next =
+        lessons.find(
+          lesson =>
+            lesson.number === current + 1
+        );
+
+
+      if (!next) {
+
+        alert(
+          "You have reached the end of the available lessons."
+        );
+
+        return;
+
+      }
+
+
+      window.location.href =
+        `lesson.html?courseId=${encodeURIComponent(getCourseId())}&lesson=${next.number}`;
+
+    }
+
+
+    function previousLesson() {
+
+      const current =
+        getLessonNumber();
+
+      const previous =
+        lessons.find(
+          lesson =>
+            lesson.number === current - 1
+        );
+
+
+      if (!previous) {
+
+        window.location.href =
+          `course.html?id=${encodeURIComponent(getCourseId())}`;
+
+        return;
+
+      }
+
+
+      window.location.href =
+        `lesson.html?courseId=${encodeURIComponent(getCourseId())}&lesson=${previous.number}`;
+
+    }
+
+
+    function openTab(tabId, button) {
+
+      document
+        .querySelectorAll(".lesson-tab")
+        .forEach(
+          tab =>
+            tab.classList.remove("active")
+        );
+
+
+      document
+        .querySelectorAll(".tab-panel")
+        .forEach(
+          panel =>
+            panel.classList.remove("active")
+        );
+
+
+      button.classList.add("active");
+
+      document
+        .getElementById(tabId)
+        .classList.add("active");
+
+    }
+
+
+    function downloadResource(name) {
+
+      /*
+        Firebase phase:
+
+        Resource URL will come from
+        Firestore/Cloud Storage.
+
+        No fake download is created here.
+      */
+
+      alert(
+        `${name} will be connected to the real course resource in the Firebase phase.`
+      );
+
+    }
+
+
+    function toggleSidebar() {
+
+      document
+        .getElementById("sidebar")
+        .classList.toggle("open");
+
+    }
+
+
+    function showNotification() {
+
+      alert(
+        "Notifications will be connected to Firebase in the next phase."
+      );
+
+    }
+
+
+    loadLesson();
+
+  </script>
+
+</body>
+</html>
