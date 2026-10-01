@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Student Dashboard | TechBridge Rwanda</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #050816;
+      --sidebar: #080e1d;
+      --card: #0c1428;
+      --card2: #101a31;
+      --text: #f7f9ff;
+      --muted: #94a3bd;
+      --primary: #00e5ff;
+      --secondary: #6366f1;
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --border: rgba(255,255,255,.08);
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at 80% 0%, rgba(0,229,255,.06), transparent 25%),
+        var(--bg);
+      color: var(--text);
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    button {
+      font-family: inherit;
+    }
+
+    /* =========================
+       SIDEBAR
+    ========================= */
+
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 245px;
+      background: rgba(8,14,29,.96);
+      border-right: 1px solid var(--border);
+      padding: 22px 14px;
+      z-index: 1000;
+      transition: .3s;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 10px;
+      margin-bottom: 30px;
+      font-weight: 800;
+    }
+
+    .logo-icon {
+      width: 39px;
+      height: 39px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: #001018;
+      font-weight: 900;
+    }
+
+    .logo span {
+      font-size: 15px;
+    }
+
+    .menu-title {
+      color: #59667f;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 0 12px;
+      margin: 20px 0 8px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 12px;
+      border-radius: 11px;
+      margin-bottom: 4px;
+      color: var(--muted);
+      font-size: 13px;
+      transition: .2s;
+    }
+
+    .nav-item:hover {
+      color: white;
+      background: rgba(255,255,255,.04);
+    }
+
+    .nav-item.active {
+      color: var(--primary);
+      background: rgba(0,229,255,.08);
+    }
+
+    .nav-icon {
+      width: 20px;
+      text-align: center;
+    }
+
+    .bottom-menu {
+      position: absolute;
+      bottom: 20px;
+      left: 14px;
+      right: 14px;
+    }
+
+    /* =========================
+       MAIN
+    ========================= */
+
+    .main {
+      margin-left: 245px;
+      min-height: 100vh;
+    }
+
+    .topbar {
+      height: 72px;
+      padding: 0 30px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(5,8,22,.75);
+      backdrop-filter: blur(15px);
+      position: sticky;
+      top: 0;
+      z-index: 900;
+    }
+
+    .mobile-menu {
+      display: none;
+      border: none;
+      background: transparent;
+      color: white;
+      font-size: 23px;
+      cursor: pointer;
+    }
+
+    .page-title {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .notification {
+      position: relative;
+      cursor: pointer;
+      color: var(--muted);
+      font-size: 19px;
+    }
+
+    .notification-dot {
+      position: absolute;
+      width: 7px;
+      height: 7px;
+      background: var(--danger);
+      border-radius: 50%;
+      top: -1px;
+      right: -2px;
+    }
+
+    .profile {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+    }
+
+    .avatar {
+      width: 37px;
+      height: 37px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: #001018;
+      font-weight: 800;
+      font-size: 13px;
+    }
+
+    .profile-info strong {
+      display: block;
+      font-size: 12px;
+    }
+
+    .profile-info span {
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    /* =========================
+       CONTENT
+    ========================= */
+
+    .content {
+      padding: 30px;
+      max-width: 1500px;
+    }
+
+    .welcome {
+      margin-bottom: 25px;
+    }
+
+    .welcome h1 {
+      font-size: 27px;
+      margin-bottom: 7px;
+    }
+
+    .welcome p {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    /* =========================
+       STAT CARDS
+    ========================= */
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    .stat-card {
+      padding: 20px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+    }
+
+    .stat-top {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 18px;
+    }
+
+    .stat-icon {
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      border-radius: 11px;
+      background: rgba(0,229,255,.08);
+      color: var(--primary);
+    }
+
+    .stat-number {
+      font-size: 25px;
+      font-weight: 800;
+    }
+
+    .stat-label {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .stat-change {
+      color: var(--success);
+      font-size: 10px;
+    }
+
+    /* =========================
+       GRID
+    ========================= */
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 18px;
+      margin-bottom: 25px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 22px;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .card-header h2 {
+      font-size: 17px;
+    }
+
+    .view-link {
+      color: var(--primary);
+      font-size: 11px;
+    }
+
+    /* COURSE */
+
+    .course {
+      padding: 15px;
+      border-radius: 13px;
+      background: rgba(255,255,255,.025);
+      border: 1px solid var(--border);
+      margin-bottom: 10px;
+    }
+
+    .course:last-child {
+      margin-bottom: 0;
+    }
+
+    .course-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+    }
+
+    .course-info h3 {
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+
+    .course-info p {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .course-percent {
+      color: var(--primary);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .progress {
+      height: 6px;
+      background: #18243d;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-top: 14px;
+    }
+
+    .progress span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+    }
+
+    /* NEXT ACTIVITY */
+
+    .activity {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      padding: 13px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .activity:last-child {
+      border-bottom: none;
+    }
+
+    .activity-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 11px;
+      display: grid;
+      place-items: center;
+      background: rgba(99,102,241,.1);
+      color: #818cf8;
+    }
+
+    .activity-info {
+      flex: 1;
+    }
+
+    .activity-info strong {
+      display: block;
+      font-size: 12px;
+      margin-bottom: 4px;
+    }
+
+    .activity-info span {
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    /* PRACTICAL */
+
+    .practical-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .practical-card {
+      padding: 20px;
+      border-radius: 15px;
+      background: rgba(255,255,255,.025);
+      border: 1px solid var(--border);
+      transition: .25s;
+    }
+
+    .practical-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(0,229,255,.25);
+    }
+
+    .practical-icon {
+      font-size: 25px;
+      margin-bottom: 15px;
+    }
+
+    .practical-card h3 {
+      font-size: 14px;
+      margin-bottom: 7px;
+    }
+
+    .practical-card p {
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.6;
+      margin-bottom: 15px;
+    }
+
+    .open-btn {
+      border: none;
+      background: transparent;
+      color: var(--primary);
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    /* =========================
+       MOBILE
+    ========================= */
+
+    @media (max-width: 1100px) {
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 800px) {
+
+      .sidebar {
+        transform: translateX(-100%);
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .main {
+        margin-left: 0;
+      }
+
+      .mobile-menu {
+        display: block;
+      }
+
+      .topbar {
+        padding: 0 18px;
+      }
+
+      .content {
+        padding: 20px 15px;
+      }
+
+      .profile-info {
+        display: none;
+      }
+    }
+
+    @media (max-width: 600px) {
+
+      .stats {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+
+      .stat-card {
+        padding: 15px;
+      }
+
+      .stat-number {
+        font-size: 21px;
+      }
+
+      .practical-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .welcome h1 {
+        font-size: 23px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- SIDEBAR -->
+
+  <aside class="sidebar" id="sidebar">
+
+    <a href="index.html" class="logo">
+      <div class="logo-icon">T</div>
+      <span>TechBridge Rwanda</span>
+    </a>
+
+    <div class="menu-title">Learning</div>
+
+    <a href="index.html" class="nav-item active">
+      <span class="nav-icon">⌂</span>
+      Dashboard
+    </a>
+
+    <a href="courses.html" class="nav-item">
+      <span class="nav-icon">📚</span>
+      My Courses
+    </a>
+
+    <a href="quizzes.html" class="nav-item">
+      <span class="nav-icon">🧠</span>
+      Quizzes
+    </a>
+
+    <a href="tests.html" class="nav-item">
+      <span class="nav-icon">📝</span>
+      Assessments
+    </a>
+
+    <a href="certificates.html" class="nav-item">
+      <span class="nav-icon">🏆</span>
+      Certificates & Badges
+    </a>
+
+    <div class="menu-title">Practice</div>
+
+    <a href="practical.html" class="nav-item">
+      <span class="nav-icon">💻</span>
+      Practical Learning
+    </a>
+
+    <div class="menu-title">Account</div>
+
+    <a href="settings.html" class="nav-item">
+      <span class="nav-icon">⚙</span>
+      Settings
+    </a>
+
+    <div class="bottom-menu">
+
+      <a href="../index.html" class="nav-item">
+        <span class="nav-icon">↩</span>
+        Back to Website
+      </a>
+
+    </div>
+
+  </aside>
+
+
+  <!-- MAIN -->
+
+  <main class="main">
+
+    <!-- TOPBAR -->
+
+    <header class="topbar">
+
+      <div style="display:flex;align-items:center;gap:14px;">
+
+        <button class="mobile-menu" id="mobileMenu">
+          ☰
+        </button>
+
+        <div class="page-title">
+          Student Dashboard
+        </div>
+
+      </div>
+
+      <div class="top-actions">
+
+        <div class="notification" title="Notifications">
+          🔔
+          <span class="notification-dot"></span>
+        </div>
+
+        <div class="profile">
+
+          <div class="avatar" id="avatar">
+            S
+          </div>
+
+          <div class="profile-info">
+            <strong id="studentName">
+              Student
+            </strong>
+
+            <span>
+              Student Account
+            </span>
+          </div>
+
+        </div>
+
+      </div>
+
+    </header>
+
+
+    <!-- CONTENT -->
+
+    <div class="content">
+
+      <!-- WELCOME -->
+
+      <div class="welcome">
+
+        <h1>
+          Welcome back, <span id="welcomeName">Student</span> 👋
+        </h1>
+
+        <p>
+          Continue learning and build your technology skills.
+        </p>
+
+      </div>
+
+
+      <!-- STATS -->
+
+      <div class="stats">
+
+        <div class="stat-card">
+
+          <div class="stat-top">
+
+            <div class="stat-icon">
+              📚
+            </div>
+
+            <span class="stat-change">
+              Active
+            </span>
+
+          </div>
+
+          <div class="stat-number" id="courseCount">
+            0
+          </div>
+
+          <div class="stat-label">
+            Enrolled Courses
+          </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+          <div class="stat-top">
+
+            <div class="stat-icon">
+              ✓
+            </div>
+
+            <span class="stat-change">
+              Progress
+            </span>
+
+          </div>
+
+          <div class="stat-number">
+            0
+          </div>
+
+          <div class="stat-label">
+            Quizzes Completed
+          </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+          <div class="stat-top">
+
+            <div class="stat-icon">
+              🏆
+            </div>
+
+            <span class="stat-change">
+              Achievements
+            </span>
+
+          </div>
+
+          <div class="stat-number">
+            0
+          </div>
+
+          <div class="stat-label">
+            Certificates
+          </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+          <div class="stat-top">
+
+            <div class="stat-icon">
+              🎯
+            </div>
+
+            <span class="stat-change">
+              Keep going
+            </span>
+
+          </div>
+
+          <div class="stat-number">
+            0
+          </div>
+
+          <div class="stat-label">
+            Practical Tasks
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- COURSE + ACTIVITY -->
+
+      <div class="dashboard-grid">
+
+        <!-- COURSES -->
+
+        <div class="card">
+
+          <div class="card-header">
+
+            <h2>Continue Learning</h2>
+
+            <a href="courses.html" class="view-link">
+              View all →
+            </a>
+
+          </div>
+
+
+          <div class="course">
+
+            <div class="course-top">
+
+              <div class="course-info">
+
+                <h3>
+                  Computer Fundamentals
+                </h3>
+
+                <p>
+                  Build your basic computer knowledge.
+                </p>
+
+              </div>
+
+              <div class="course-percent">
+                0%
+              </div>
+
+            </div>
+
+            <div class="progress">
+              <span style="width:0%"></span>
+            </div>
+
+          </div>
+
+
+          <div class="course">
+
+            <div class="course-top">
+
+              <div class="course-info">
+
+                <h3>
+                  Programming Fundamentals
+                </h3>
+
+                <p>
+                  Learn programming step by step.
+                </p>
+
+              </div>
+
+              <div class="course-percent">
+                0%
+              </div>
+
+            </div>
+
+            <div class="progress">
+              <span style="width:0%"></span>
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- ACTIVITY -->
+
+        <div class="card">
+
+          <div class="card-header">
+
+            <h2>Next Activities</h2>
+
+          </div>
+
+
+          <div class="activity">
+
+            <div class="activity-icon">
+              🧠
+            </div>
+
+            <div class="activity-info">
+
+              <strong>
+                Complete a Quiz
+              </strong>
+
+              <span>
+                No pending quiz
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <div class="activity">
+
+            <div class="activity-icon">
+              📝
+            </div>
+
+            <div class="activity-info">
+
+              <strong>
+                Beginner Assessment
+              </strong>
+
+              <span>
+                Not started
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <div class="activity">
+
+            <div class="activity-icon">
+              💻
+            </div>
+
+            <div class="activity-info">
+
+              <strong>
+                Practical Task
+              </strong>
+
+              <span>
+                No task assigned
+              </span>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- PRACTICAL LEARNING -->
+
+      <div class="card">
+
+        <div class="card-header">
+
+          <h2>
+            Practical Learning
+          </h2>
+
+          <a href="practical.html" class="view-link">
+            Open dashboard →
+          </a>
+
+        </div>
+
+
+        <div class="practical-grid">
+
+          <div class="practical-card">
+
+            <div class="practical-icon">
+              🤖
+            </div>
+
+            <h3>
+              Gemini AI Assistant
+            </h3>
+
+            <p>
+              Get learning assistance and explanations
+              for difficult technology concepts.
+            </p>
+
+            <button
+              class="open-btn"
+              onclick="openPractical('AI Assistant')"
+            >
+              Open →
+            </button>
+
+          </div>
+
+
+          <div class="practical-card">
+
+            <div class="practical-icon">
+              ⌨️
+            </div>
+
+            <h3>
+              Online Code Editor
+            </h3>
+
+            <p>
+              Practice programming and experiment
+              with code in the browser.
+            </p>
+
+            <button
+              class="open-btn"
+              onclick="openPractical('Code Editor')"
+            >
+              Open →
+            </button>
+
+          </div>
+
+
+          <div class="practical-card">
+
+            <div class="practical-icon">
+              🖥️
+            </div>
+
+            <h3>
+              Computer Workshop
+            </h3>
+
+            <p>
+              Complete guided computer and technology
+              practical exercises.
+            </p>
+
+            <button
+              class="open-btn"
+              onclick="openPractical('Computer Workshop')"
+            >
+              Open →
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+
+  <script>
+
+    /* =========================
+       MOBILE SIDEBAR
+    ========================= */
+
+    const mobileMenu =
+      document.getElementById("mobileMenu");
+
+    const sidebar =
+      document.getElementById("sidebar");
+
+    mobileMenu.addEventListener("click", () => {
+
+      sidebar.classList.toggle("open");
+
+    });
+
+
+    /* =========================
+       DEMO STUDENT DATA
+    ========================= */
+
+    /*
+      Later this information will come
+      from Firebase Authentication
+      and Firestore.
+
+      Example:
+
+      {
+        firstName: "Viateur",
+        lastName: "Irasubiza",
+        role: "student"
+      }
+    */
+
+    const student = {
+      firstName: "Student",
+      lastName: ""
+    };
+
+
+    document.getElementById("studentName")
+      .textContent =
+      student.firstName + " " + student.lastName;
+
+    document.getElementById("welcomeName")
+      .textContent =
+      student.firstName;
+
+    document.getElementById("avatar")
+      .textContent =
+      student.firstName
+        .charAt(0)
+        .toUpperCase();
+
+
+    /* =========================
+       PRACTICAL TOOLS
+    ========================= */
+
+    function openPractical(tool) {
+
+      alert(
+        tool +
+        " will open from the Practical Learning dashboard."
+      );
+
+    }
+
+
+    /* =========================
+       FIREBASE PLACEHOLDER
+    ========================= */
+
+    /*
+      Later this dashboard will load:
+
+      - enrolled courses
+      - course progress
+      - completed quizzes
+      - test results
+      - certificates
+      - badges
+      - practical tasks
+      - notifications
+
+      directly from Firestore.
+
+      No fake permanent data will be used
+      in the final production version.
+    */
+
+  </script>
+
+</body>
+</html>
