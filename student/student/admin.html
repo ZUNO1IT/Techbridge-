@@ -1,0 +1,1915 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payments • TechBridge Rwanda Admin</title>
+
+  <style>
+    :root {
+      --bg: #070b14;
+      --panel: #0d1527;
+      --panel2: #111c31;
+      --border: rgba(255,255,255,.09);
+      --text: #f5f7ff;
+      --muted: #8d9ab2;
+      --cyan: #00e5ff;
+      --blue: #3b82f6;
+      --purple: #a855f7;
+      --green: #22c55e;
+      --yellow: #f59e0b;
+      --red: #ef4444;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Inter, Arial, sans-serif;
+      background:
+        radial-gradient(circle at 10% 10%, rgba(0,229,255,.07), transparent 28%),
+        radial-gradient(circle at 90% 90%, rgba(168,85,247,.07), transparent 30%),
+        var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 260px;
+      background: rgba(8,13,25,.98);
+      border-right: 1px solid var(--border);
+      padding: 20px 14px;
+      overflow-y: auto;
+      z-index: 100;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 8px 10px 25px;
+    }
+
+    .brand-logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 13px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg,var(--cyan),var(--blue),var(--purple));
+      font-weight: 900;
+    }
+
+    .brand-name {
+      font-weight: 800;
+      font-size: 17px;
+    }
+
+    .brand-sub {
+      color: var(--muted);
+      font-size: 11px;
+      margin-top: 3px;
+    }
+
+    .nav-label {
+      color: #62718d;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1.1px;
+      padding: 13px 12px 8px;
+      text-transform: uppercase;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 12px;
+      margin: 3px 0;
+      border-radius: 12px;
+      text-decoration: none;
+      color: #aeb9cc;
+      font-size: 13px;
+    }
+
+    .nav-item:hover {
+      background: rgba(255,255,255,.05);
+      color: white;
+    }
+
+    .nav-item.active {
+      color: white;
+      background: rgba(0,229,255,.09);
+      border: 1px solid rgba(0,229,255,.13);
+    }
+
+    .nav-icon {
+      width: 22px;
+      text-align: center;
+    }
+
+    .main {
+      margin-left: 260px;
+      min-height: 100vh;
+    }
+
+    .topbar {
+      height: 72px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      background: rgba(7,11,20,.8);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .mobile-menu {
+      display: none;
+      border: 0;
+      background: transparent;
+      color: white;
+      font-size: 24px;
+    }
+
+    .top-title {
+      font-size: 17px;
+      font-weight: 800;
+    }
+
+    .top-sub {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 3px;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .icon-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.04);
+      color: white;
+    }
+
+    .avatar {
+      width: 39px;
+      height: 39px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg,var(--purple),var(--blue));
+      font-weight: 800;
+      font-size: 12px;
+    }
+
+    .content {
+      max-width: 1500px;
+      margin: auto;
+      padding: 28px;
+    }
+
+    .hero {
+      padding: 26px;
+      border: 1px solid var(--border);
+      border-radius: 21px;
+      background:
+        linear-gradient(135deg,rgba(0,229,255,.08),rgba(168,85,247,.06)),
+        rgba(13,21,39,.8);
+      margin-bottom: 20px;
+    }
+
+    .hero-badge {
+      color: var(--cyan);
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+    }
+
+    .hero h1 {
+      font-size: clamp(25px,4vw,34px);
+      margin-bottom: 8px;
+    }
+
+    .hero p {
+      max-width: 760px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4,1fr);
+      gap: 13px;
+      margin-bottom: 20px;
+    }
+
+    .stat {
+      padding: 17px;
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      background: rgba(13,21,39,.78);
+    }
+
+    .stat-label {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .stat-value {
+      font-size: 25px;
+      font-weight: 900;
+      margin-top: 7px;
+    }
+
+    .stat.pending .stat-value {
+      color: var(--yellow);
+    }
+
+    .stat.approved .stat-value {
+      color: var(--green);
+    }
+
+    .stat.rejected .stat-value {
+      color: var(--red);
+    }
+
+    .panel {
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: rgba(13,21,39,.82);
+      overflow: hidden;
+    }
+
+    .panel-header {
+      padding: 17px 18px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      align-items: center;
+    }
+
+    .panel-title {
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .panel-sub {
+      color: var(--muted);
+      font-size: 11px;
+      margin-top: 4px;
+    }
+
+    .filters {
+      display: flex;
+      gap: 9px;
+      flex-wrap: wrap;
+    }
+
+    .filter-input,
+    .filter-select {
+      height: 40px;
+      background: #0a1221;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: white;
+      padding: 0 11px;
+      outline: none;
+    }
+
+    .filter-input {
+      min-width: 220px;
+    }
+
+    .filter-select {
+      min-width: 130px;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      min-width: 950px;
+      border-collapse: collapse;
+    }
+
+    th {
+      text-align: left;
+      padding: 13px 15px;
+      color: #71809b;
+      font-size: 10px;
+      letter-spacing: .7px;
+      text-transform: uppercase;
+      background: rgba(255,255,255,.025);
+      border-bottom: 1px solid var(--border);
+    }
+
+    td {
+      padding: 15px;
+      border-bottom: 1px solid var(--border);
+      font-size: 12px;
+      vertical-align: middle;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .student {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .student-avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg,var(--blue),var(--purple));
+      font-size: 10px;
+      font-weight: 900;
+    }
+
+    .student-name {
+      font-weight: 800;
+    }
+
+    .student-email {
+      color: var(--muted);
+      font-size: 10px;
+      margin-top: 3px;
+    }
+
+    .course-name {
+      font-weight: 700;
+    }
+
+    .muted {
+      color: var(--muted);
+      font-size: 11px;
+      margin-top: 3px;
+    }
+
+    .amount {
+      font-weight: 900;
+    }
+
+    .reference {
+      font-family: "Courier New", monospace;
+      font-size: 11px;
+      color: #a9c8ff;
+    }
+
+    .status {
+      display: inline-block;
+      padding: 6px 9px;
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 900;
+    }
+
+    .status.pending {
+      color: #ffd166;
+      background: rgba(245,158,11,.1);
+    }
+
+    .status.approved {
+      color: #7ff2a3;
+      background: rgba(34,197,94,.1);
+    }
+
+    .status.rejected {
+      color: #ff9b9b;
+      background: rgba(239,68,68,.1);
+    }
+
+    .actions {
+      display: flex;
+      gap: 7px;
+    }
+
+    .btn {
+      height: 34px;
+      border-radius: 9px;
+      padding: 0 10px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.04);
+      color: white;
+      font-size: 10px;
+      font-weight: 800;
+    }
+
+    .btn:hover {
+      background: rgba(255,255,255,.08);
+    }
+
+    .btn.approve {
+      color: #7ff2a3;
+      border-color: rgba(34,197,94,.22);
+      background: rgba(34,197,94,.07);
+    }
+
+    .btn.reject {
+      color: #ff9b9b;
+      border-color: rgba(239,68,68,.22);
+      background: rgba(239,68,68,.07);
+    }
+
+    .btn.view {
+      color: #8dc8ff;
+      border-color: rgba(59,130,246,.2);
+    }
+
+    .empty {
+      text-align: center;
+      color: var(--muted);
+      padding: 40px 20px;
+      font-size: 12px;
+    }
+
+    /* MODAL */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.65);
+      backdrop-filter: blur(5px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 300;
+    }
+
+    .modal-backdrop.show {
+      display: flex;
+    }
+
+    .modal {
+      width: min(540px,100%);
+      max-height: 90vh;
+      overflow-y: auto;
+      background: #0d1527;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      box-shadow: 0 30px 80px rgba(0,0,0,.5);
+    }
+
+    .modal-header {
+      padding: 18px;
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .modal-title {
+      font-weight: 900;
+    }
+
+    .close {
+      width: 34px;
+      height: 34px;
+      border-radius: 9px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.04);
+      color: white;
+    }
+
+    .modal-body {
+      padding: 18px;
+    }
+
+    .detail {
+      padding: 13px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.025);
+      border-radius: 12px;
+      margin-bottom: 9px;
+    }
+
+    .detail-label {
+      color: var(--muted);
+      font-size: 10px;
+      margin-bottom: 4px;
+    }
+
+    .detail-value {
+      font-size: 13px;
+      font-weight: 700;
+      word-break: break-word;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 9px;
+      margin-top: 15px;
+    }
+
+    .modal-actions button {
+      flex: 1;
+      height: 44px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      font-weight: 800;
+    }
+
+    .confirm {
+      background: rgba(34,197,94,.1);
+      color: #7ff2a3;
+    }
+
+    .cancel {
+      background: rgba(255,255,255,.04);
+      color: white;
+    }
+
+    .toast {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      padding: 13px 16px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: #111c31;
+      font-size: 12px;
+      opacity: 0;
+      transform: translateY(15px);
+      pointer-events: none;
+      transition: .25s;
+      z-index: 500;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media(max-width: 950px) {
+      .stats {
+        grid-template-columns: repeat(2,1fr);
+      }
+    }
+
+    @media(max-width: 800px) {
+      .sidebar {
+        transform: translateX(-100%);
+        transition: .25s;
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .main {
+        margin-left: 0;
+      }
+
+      .mobile-menu {
+        display: block;
+      }
+
+      .topbar {
+        padding: 0 15px;
+      }
+
+      .content {
+        padding: 18px 14px 30px;
+      }
+
+      .panel-header {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .filters {
+        width: 100%;
+      }
+
+      .filter-input,
+      .filter-select {
+        width: 100%;
+      }
+    }
+
+    @media(max-width: 500px) {
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        padding: 21px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- SIDEBAR -->
+
+  <aside class="sidebar" id="sidebar">
+
+    <div class="brand">
+      <div class="brand-logo">TB</div>
+
+      <div>
+        <div class="brand-name">TechBridge</div>
+        <div class="brand-sub">Rwanda • Admin</div>
+      </div>
+    </div>
+
+    <div class="nav-label">Admin</div>
+
+    <a class="nav-item" href="index.html">
+      <span class="nav-icon">⌂</span>
+      Dashboard
+    </a>
+
+    <a class="nav-item" href="courses.html">
+      <span class="nav-icon">▣</span>
+      Courses
+    </a>
+
+    <a class="nav-item" href="students.html">
+      <span class="nav-icon">👥</span>
+      Students
+    </a>
+
+    <a class="nav-item active" href="payments.html">
+      <span class="nav-icon">💳</span>
+      Payments
+    </a>
+
+    <a class="nav-item" href="quizzes.html">
+      <span class="nav-icon">✓</span>
+      Quizzes
+    </a>
+
+    <a class="nav-item" href="tests.html">
+      <span class="nav-icon">▤</span>
+      Assessments
+    </a>
+
+    <a class="nav-item" href="practical.html">
+      <span class="nav-icon">⚙</span>
+      Practical Learning
+    </a>
+
+    <div class="nav-label">System</div>
+
+    <a class="nav-item" href="../index.html">
+      <span class="nav-icon">←</span>
+      Website
+    </a>
+
+  </aside>
+
+
+  <!-- MAIN -->
+
+  <main class="main">
+
+    <header class="topbar">
+
+      <div style="display:flex;align-items:center;gap:13px;">
+
+        <button
+          class="mobile-menu"
+          id="mobileMenu"
+        >
+          ☰
+        </button>
+
+        <div>
+          <div class="top-title">
+            Payment Management
+          </div>
+
+          <div class="top-sub">
+            Verify student course enrollment payments.
+          </div>
+        </div>
+
+      </div>
+
+      <div class="top-actions">
+
+        <button
+          class="icon-btn"
+          onclick="showToast('Admin notifications will be connected to Firebase.')"
+        >
+          🔔
+        </button>
+
+        <div class="avatar">
+          AD
+        </div>
+
+      </div>
+
+    </header>
+
+
+    <section class="content">
+
+      <div class="hero">
+
+        <div class="hero-badge">
+          ADMIN • PAYMENT VERIFICATION
+        </div>
+
+        <h1>
+          Manage Student Payments
+        </h1>
+
+        <p>
+          Review submitted payment references, verify transactions,
+          approve valid enrollments, or reject requests that cannot
+          be verified.
+        </p>
+
+      </div>
+
+
+      <!-- STATS -->
+
+      <div class="stats">
+
+        <div class="stat">
+          <div class="stat-label">
+            Total Requests
+          </div>
+          <div
+            class="stat-value"
+            id="totalCount"
+          >
+            8
+          </div>
+        </div>
+
+        <div class="stat pending">
+          <div class="stat-label">
+            Pending
+          </div>
+          <div
+            class="stat-value"
+            id="pendingCount"
+          >
+            3
+          </div>
+        </div>
+
+        <div class="stat approved">
+          <div class="stat-label">
+            Approved
+          </div>
+          <div
+            class="stat-value"
+            id="approvedCount"
+          >
+            4
+          </div>
+        </div>
+
+        <div class="stat rejected">
+          <div class="stat-label">
+            Rejected
+          </div>
+          <div
+            class="stat-value"
+            id="rejectedCount"
+          >
+            1
+          </div>
+        </div>
+
+      </div>
+
+
+      <!-- PAYMENT TABLE -->
+
+      <section class="panel">
+
+        <div class="panel-header">
+
+          <div>
+            <div class="panel-title">
+              Payment Requests
+            </div>
+
+            <div class="panel-sub">
+              Verify each transaction before unlocking a course.
+            </div>
+          </div>
+
+
+          <div class="filters">
+
+            <input
+              class="filter-input"
+              id="search"
+              type="search"
+              placeholder="Search student, course or reference..."
+            >
+
+            <select
+              class="filter-select"
+              id="statusFilter"
+            >
+              <option value="all">
+                All Status
+              </option>
+
+              <option value="pending">
+                Pending
+              </option>
+
+              <option value="approved">
+                Approved
+              </option>
+
+              <option value="rejected">
+                Rejected
+              </option>
+            </select>
+
+          </div>
+
+        </div>
+
+
+        <div class="table-wrap">
+
+          <table>
+
+            <thead>
+
+              <tr>
+                <th>Student</th>
+                <th>Course</th>
+                <th>Duration</th>
+                <th>Amount</th>
+                <th>Method</th>
+                <th>Reference</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+
+            </thead>
+
+            <tbody id="paymentTable">
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </section>
+
+
+      <div style="margin-top:16px;" class="panel">
+
+        <div style="padding:17px 18px;">
+
+          <div
+            style="
+              color:#ffd166;
+              font-weight:800;
+              font-size:13px;
+              margin-bottom:7px;
+            "
+          >
+            🔐 Admin Security
+          </div>
+
+          <div
+            style="
+              color:#aeb9cc;
+              font-size:11px;
+              line-height:1.7;
+            "
+          >
+            In production, only authenticated administrators
+            with the required role should be able to approve
+            or reject payments. Students must never be able
+            to modify payment status or unlock their own courses.
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- DETAIL / APPROVAL MODAL -->
+
+  <div
+    class="modal-backdrop"
+    id="modal"
+  >
+
+    <div class="modal">
+
+      <div class="modal-header">
+
+        <div>
+          <div
+            class="modal-title"
+            id="modalTitle"
+          >
+            Payment Details
+          </div>
+        </div>
+
+        <button
+          class="close"
+          onclick="closeModal()"
+        >
+          ×
+        </button>
+
+      </div>
+
+
+      <div class="modal-body">
+
+        <div class="detail">
+
+          <div class="detail-label">
+            Student
+          </div>
+
+          <div
+            class="detail-value"
+            id="detailStudent"
+          ></div>
+
+        </div>
+
+
+        <div class="detail">
+
+          <div class="detail-label">
+            Course
+          </div>
+
+          <div
+            class="detail-value"
+            id="detailCourse"
+          ></div>
+
+        </div>
+
+
+        <div class="detail">
+
+          <div class="detail-label">
+            Amount
+          </div>
+
+          <div
+            class="detail-value"
+            id="detailAmount"
+          ></div>
+
+        </div>
+
+
+        <div class="detail">
+
+          <div class="detail-label">
+            Payment Method
+          </div>
+
+          <div
+            class="detail-value"
+            id="detailMethod"
+          ></div>
+
+        </div>
+
+
+        <div class="detail">
+
+          <div class="detail-label">
+            Transaction Reference
+          </div>
+
+          <div
+            class="detail-value"
+            id="detailReference"
+          ></div>
+
+        </div>
+
+
+        <div class="detail">
+
+          <div class="detail-label">
+            Current Status
+          </div>
+
+          <div
+            class="detail-value"
+            id="detailStatus"
+          ></div>
+
+        </div>
+
+
+        <div class="modal-actions">
+
+          <button
+            class="cancel"
+            onclick="closeModal()"
+          >
+            Close
+          </button>
+
+          <button
+            class="confirm"
+            id="approveModalButton"
+          >
+            Approve Payment
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div
+    class="toast"
+    id="toast"
+  ></div>
+
+
+  <script>
+
+    /*
+      ==========================================================
+      TECHBRIDGE RWANDA
+      ADMIN PAYMENTS
+
+      CURRENT:
+      Frontend development with sample payment records.
+
+      PRODUCTION:
+      Firebase Authentication
+            ↓
+      Verify admin role
+            ↓
+      Firestore payments
+            ↓
+      Admin approval
+            ↓
+      Trusted backend
+            ↓
+      Course enrollment unlocked
+
+      IMPORTANT:
+      The frontend must NEVER be trusted to approve a payment.
+
+      Production approval must be performed through
+      protected backend logic / trusted admin operation.
+      ==========================================================
+    */
+
+
+    let payments = [
+
+      {
+        id: "pay001",
+        student: "Eric Ndayisenga",
+        email: "eric@example.com",
+        course: "Computer Basics",
+        duration: "1 Month",
+        amount: 15000,
+        method: "MTN Mobile Money",
+        reference: "MTN928173",
+        status: "pending",
+        submitted: "2026-10-01 05:12"
+      },
+
+      {
+        id: "pay002",
+        student: "Alice Uwase",
+        email: "alice@example.com",
+        course: "Web Development",
+        duration: "2 Months",
+        amount: 35000,
+        method: "Airtel Money",
+        reference: "AIR551928",
+        status: "approved",
+        submitted: "2026-09-30 18:40"
+      },
+
+      {
+        id: "pay003",
+        student: "Patrick Mugisha",
+        email: "patrick@example.com",
+        course: "Programming Foundations",
+        duration: "1 Week",
+        amount: 7000,
+        method: "MTN Mobile Money",
+        reference: "MTN482710",
+        status: "pending",
+        submitted: "2026-10-01 04:32"
+      },
+
+      {
+        id: "pay004",
+        student: "Diane Mukamana",
+        email: "diane@example.com",
+        course: "Cyber Security Fundamentals",
+        duration: "1 Month",
+        amount: 28000,
+        method: "Bank of Kigali",
+        reference: "BK781209",
+        status: "approved",
+        submitted: "2026-09-29 15:22"
+      },
+
+      {
+        id: "pay005",
+        student: "Jean Claude Habimana",
+        email: "jean@example.com",
+        course: "Computer Basics",
+        duration: "1 Week",
+        amount: 5000,
+        method: "Airtel Money",
+        reference: "AIR219044",
+        status: "rejected",
+        submitted: "2026-09-29 10:12"
+      },
+
+      {
+        id: "pay006",
+        student: "Olivia Ingabire",
+        email: "olivia@example.com",
+        course: "Web Development",
+        duration: "1 Month",
+        amount: 20000,
+        method: "MTN Mobile Money",
+        reference: "MTN720194",
+        status: "approved",
+        submitted: "2026-09-28 13:02"
+      },
+
+      {
+        id: "pay007",
+        student: "Samuel Twizeyimana",
+        email: "samuel@example.com",
+        course: "Programming Foundations",
+        duration: "1 Month",
+        amount: 20000,
+        method: "MTN Mobile Money",
+        reference: "MTN908231",
+        status: "pending",
+        submitted: "2026-10-01 03:55"
+      },
+
+      {
+        id: "pay008",
+        student: "Grace Uwamahoro",
+        email: "grace@example.com",
+        course: "Computer Basics",
+        duration: "2 Months",
+        amount: 25000,
+        method: "Bank of Kigali",
+        reference: "BK620118",
+        status: "approved",
+        submitted: "2026-09-27 09:31"
+      }
+
+    ];
+
+
+    let currentPaymentId = null;
+
+
+    /*
+      RENDER TABLE
+    */
+
+    function renderPayments() {
+
+      const table =
+        document.getElementById(
+          "paymentTable"
+        );
+
+      const search =
+        document.getElementById(
+          "search"
+        ).value
+         .toLowerCase()
+         .trim();
+
+      const filter =
+        document.getElementById(
+          "statusFilter"
+        ).value;
+
+
+      const filtered =
+        payments.filter(payment => {
+
+          const searchable =
+            (
+              payment.student +
+              " " +
+              payment.email +
+              " " +
+              payment.course +
+              " " +
+              payment.reference
+            ).toLowerCase();
+
+          const matchesSearch =
+            !search ||
+            searchable.includes(search);
+
+          const matchesStatus =
+            filter === "all" ||
+            payment.status === filter;
+
+          return (
+            matchesSearch &&
+            matchesStatus
+          );
+
+        });
+
+
+      table.innerHTML = "";
+
+
+      if (!filtered.length) {
+
+        table.innerHTML = `
+          <tr>
+            <td colspan="8">
+              <div class="empty">
+                No payment requests found.
+              </div>
+            </td>
+          </tr>
+        `;
+
+        updateStats();
+
+        return;
+
+      }
+
+
+      filtered.forEach(payment => {
+
+        const row =
+          document.createElement("tr");
+
+
+        const initials =
+          payment.student
+            .split(" ")
+            .map(word => word[0])
+            .join("")
+            .slice(0,2)
+            .toUpperCase();
+
+
+        row.innerHTML = `
+
+          <td>
+
+            <div class="student">
+
+              <div class="student-avatar">
+                ${escapeHTML(initials)}
+              </div>
+
+              <div>
+
+                <div class="student-name">
+                  ${escapeHTML(payment.student)}
+                </div>
+
+                <div class="student-email">
+                  ${escapeHTML(payment.email)}
+                </div>
+
+              </div>
+
+            </div>
+
+          </td>
+
+
+          <td>
+
+            <div class="course-name">
+              ${escapeHTML(payment.course)}
+            </div>
+
+          </td>
+
+
+          <td>
+            ${escapeHTML(payment.duration)}
+          </td>
+
+
+          <td>
+
+            <div class="amount">
+              ${formatMoney(payment.amount)}
+            </div>
+
+          </td>
+
+
+          <td>
+            ${escapeHTML(payment.method)}
+          </td>
+
+
+          <td>
+
+            <span class="reference">
+              ${escapeHTML(payment.reference)}
+            </span>
+
+          </td>
+
+
+          <td>
+
+            <span
+              class="status ${payment.status}"
+            >
+              ${capitalize(payment.status)}
+            </span>
+
+          </td>
+
+
+          <td>
+
+            <div class="actions">
+
+              <button
+                class="btn view"
+                onclick="viewPayment('${payment.id}')"
+              >
+                View
+              </button>
+
+              ${
+                payment.status === "pending"
+                ? `
+                  <button
+                    class="btn approve"
+                    onclick="approvePayment('${payment.id}')"
+                  >
+                    Approve
+                  </button>
+
+                  <button
+                    class="btn reject"
+                    onclick="rejectPayment('${payment.id}')"
+                  >
+                    Reject
+                  </button>
+                `
+                : ""
+              }
+
+            </div>
+
+          </td>
+
+        `;
+
+
+        table.appendChild(row);
+
+      });
+
+
+      updateStats();
+
+    }
+
+
+    /*
+      STATS
+    */
+
+    function updateStats() {
+
+      const total =
+        payments.length;
+
+      const pending =
+        payments.filter(
+          p => p.status === "pending"
+        ).length;
+
+      const approved =
+        payments.filter(
+          p => p.status === "approved"
+        ).length;
+
+      const rejected =
+        payments.filter(
+          p => p.status === "rejected"
+        ).length;
+
+
+      document.getElementById(
+        "totalCount"
+      ).textContent = total;
+
+      document.getElementById(
+        "pendingCount"
+      ).textContent = pending;
+
+      document.getElementById(
+        "approvedCount"
+      ).textContent = approved;
+
+      document.getElementById(
+        "rejectedCount"
+      ).textContent = rejected;
+
+    }
+
+
+    /*
+      VIEW PAYMENT
+    */
+
+    function viewPayment(id) {
+
+      const payment =
+        payments.find(
+          p => p.id === id
+        );
+
+      if (!payment) return;
+
+      currentPaymentId = id;
+
+
+      document.getElementById(
+        "detailStudent"
+      ).textContent =
+        payment.student;
+
+
+      document.getElementById(
+        "detailCourse"
+      ).textContent =
+        payment.course +
+        " • " +
+        payment.duration;
+
+
+      document.getElementById(
+        "detailAmount"
+      ).textContent =
+        formatMoney(payment.amount);
+
+
+      document.getElementById(
+        "detailMethod"
+      ).textContent =
+        payment.method;
+
+
+      document.getElementById(
+        "detailReference"
+      ).textContent =
+        payment.reference;
+
+
+      document.getElementById(
+        "detailStatus"
+      ).textContent =
+        capitalize(payment.status);
+
+
+      const approveButton =
+        document.getElementById(
+          "approveModalButton"
+        );
+
+
+      if (payment.status === "pending") {
+
+        approveButton.style.display =
+          "block";
+
+        approveButton.onclick =
+          () => approvePayment(id);
+
+      } else {
+
+        approveButton.style.display =
+          "none";
+
+      }
+
+
+      document
+        .getElementById("modal")
+        .classList.add("show");
+
+    }
+
+
+    /*
+      APPROVE
+    */
+
+    function approvePayment(id) {
+
+      const payment =
+        payments.find(
+          p => p.id === id
+        );
+
+      if (!payment) return;
+
+      if (payment.status !== "pending") {
+
+        showToast(
+          "This payment has already been processed."
+        );
+
+        return;
+
+      }
+
+
+      const confirmed =
+        confirm(
+          "Approve this payment and unlock the selected course for the student?"
+        );
+
+
+      if (!confirmed) return;
+
+
+      /*
+        DEMO FRONTEND ONLY.
+
+        Production:
+        Call a protected backend endpoint/function.
+
+        Backend should:
+
+        1. Authenticate admin
+        2. Verify admin role
+        3. Validate payment ID
+        4. Update payment status
+        5. Record verifiedBy
+        6. Record verifiedAt
+        7. Create/update course enrollment
+        8. Set enrollment status = active
+        9. Calculate expiration date
+        10. Create notification for student
+      */
+
+      payment.status =
+        "approved";
+
+
+      closeModal();
+
+      renderPayments();
+
+
+      showToast(
+        "Payment approved. Course enrollment can now be activated."
+      );
+
+    }
+
+
+    /*
+      REJECT
+    */
+
+    function rejectPayment(id) {
+
+      const payment =
+        payments.find(
+          p => p.id === id
+        );
+
+      if (!payment) return;
+
+      if (payment.status !== "pending") {
+
+        showToast(
+          "This payment has already been processed."
+        );
+
+        return;
+
+      }
+
+
+      const reason =
+        prompt(
+          "Enter the reason for rejecting this payment:"
+        );
+
+
+      if (!reason || !reason.trim()) {
+
+        showToast(
+          "A rejection reason is required."
+        );
+
+        return;
+
+      }
+
+
+      /*
+        Production:
+        Save rejectionReason using trusted
+        admin/backend logic.
+      */
+
+      payment.status =
+        "rejected";
+
+      payment.rejectionReason =
+        reason.trim();
+
+
+      renderPayments();
+
+
+      showToast(
+        "Payment rejected."
+      );
+
+    }
+
+
+    /*
+      FORMAT
+    */
+
+    function formatMoney(amount) {
+
+      return new Intl.NumberFormat(
+        "en-RW"
+      ).format(amount) +
+      " RWF";
+
+    }
+
+
+    function capitalize(value) {
+
+      return value.charAt(0).toUpperCase() +
+        value.slice(1);
+
+    }
+
+
+    function escapeHTML(value) {
+
+      return String(value)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+
+    }
+
+
+    /*
+      SEARCH / FILTER
+    */
+
+    document
+      .getElementById("search")
+      .addEventListener(
+        "input",
+        renderPayments
+      );
+
+
+    document
+      .getElementById("statusFilter")
+      .addEventListener(
+        "change",
+        renderPayments
+      );
+
+
+    /*
+      MODAL
+    */
+
+    function closeModal() {
+
+      document
+        .getElementById("modal")
+        .classList.remove("show");
+
+      currentPaymentId = null;
+
+    }
+
+
+    document
+      .getElementById("modal")
+      .addEventListener(
+        "click",
+        event => {
+
+          if (
+            event.target.id === "modal"
+          ) {
+
+            closeModal();
+
+          }
+
+        }
+      );
+
+
+    /*
+      TOAST
+    */
+
+    let toastTimer;
+
+    function showToast(message) {
+
+      const toast =
+        document.getElementById("toast");
+
+      toast.textContent =
+        message;
+
+      toast.classList.add("show");
+
+      clearTimeout(toastTimer);
+
+      toastTimer =
+        setTimeout(() => {
+
+          toast.classList.remove("show");
+
+        },3000);
+
+    }
+
+
+    /*
+      MOBILE MENU
+    */
+
+    document
+      .getElementById("mobileMenu")
+      .addEventListener(
+        "click",
+        () => {
+
+          document
+            .getElementById("sidebar")
+            .classList.toggle("open");
+
+        }
+      );
+
+
+    /*
+      INITIAL RENDER
+    */
+
+    renderPayments();
+
+
+    /*
+      ==========================================================
+      FIREBASE PRODUCTION DATA MODEL
+      ==========================================================
+
+      payments/{paymentId}
+
+      {
+        userId,
+        courseId,
+        courseName,
+        duration,
+        amount,
+        currency: "RWF",
+        paymentMethod,
+        transactionReference,
+        status: "pending | approved | rejected",
+        submittedAt,
+        verifiedAt,
+        verifiedBy,
+        rejectionReason
+      }
+
+
+      courseEnrollments/{enrollmentId}
+
+      {
+        userId,
+        courseId,
+        paymentId,
+        duration,
+        status: "active",
+        enrolledAt,
+        expiresAt
+      }
+
+
+      SECURITY RULES MUST ENSURE:
+
+      Student:
+        - create own payment request
+        - read own payment requests
+        - cannot approve
+        - cannot reject
+        - cannot modify amount
+        - cannot modify status
+        - cannot unlock course
+
+
+      Admin:
+        - read payment requests
+        - verify payment
+        - approve/reject
+        - create enrollment through trusted operation
+
+
+      IMPORTANT:
+
+      Firebase Security Rules should not rely only
+      on hidden buttons or frontend JavaScript.
+
+      Backend authorization is required.
+
+      ==========================================================
+    */
+
+  </script>
+
+</body>
+</html>
