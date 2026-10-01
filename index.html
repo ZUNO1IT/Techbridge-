@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>TechBridge Rwanda | Learn • Build • Practice • Grow</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #050816;
+      --card: #0b1224;
+      --card-2: #101a31;
+      --text: #f5f7ff;
+      --muted: #9ca9c5;
+      --primary: #00e5ff;
+      --secondary: #6366f1;
+      --success: #22c55e;
+      --border: rgba(255,255,255,.09);
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at 10% 10%, rgba(0,229,255,.12), transparent 30%),
+        radial-gradient(circle at 90% 20%, rgba(99,102,241,.14), transparent 30%),
+        var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    /* NAVBAR */
+    .navbar {
+      width: 100%;
+      height: 74px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 7%;
+      border-bottom: 1px solid var(--border);
+      background: rgba(5,8,22,.75);
+      backdrop-filter: blur(18px);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      font-size: 20px;
+    }
+
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: #001018;
+      font-weight: 900;
+      box-shadow: 0 0 25px rgba(0,229,255,.25);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      font-size: 14px;
+      transition: .25s;
+    }
+
+    .nav-links a:hover {
+      color: var(--primary);
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 12px;
+      padding: 11px 18px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: .25s;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), #3b82f6);
+      color: #001018;
+      box-shadow: 0 8px 25px rgba(0,229,255,.15);
+    }
+
+    .menu-btn {
+      display: none;
+      background: transparent;
+      border: none;
+      color: white;
+      font-size: 25px;
+      cursor: pointer;
+    }
+
+    /* HERO */
+    .hero {
+      width: 86%;
+      max-width: 1200px;
+      margin: auto;
+      min-height: 650px;
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      align-items: center;
+      gap: 50px;
+      padding: 70px 0;
+    }
+
+    .badge {
+      display: inline-flex;
+      padding: 8px 13px;
+      border: 1px solid rgba(0,229,255,.2);
+      border-radius: 50px;
+      color: var(--primary);
+      background: rgba(0,229,255,.06);
+      font-size: 13px;
+      margin-bottom: 20px;
+    }
+
+    .hero h1 {
+      font-size: clamp(42px, 6vw, 72px);
+      line-height: 1.03;
+      letter-spacing: -2px;
+      margin-bottom: 22px;
+    }
+
+    .gradient-text {
+      background: linear-gradient(90deg, var(--primary), #818cf8);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero p {
+      max-width: 650px;
+      color: var(--muted);
+      line-height: 1.8;
+      font-size: 17px;
+      margin-bottom: 30px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    /* HERO CARD */
+    .hero-visual {
+      position: relative;
+    }
+
+    .learning-card {
+      background: linear-gradient(
+        145deg,
+        rgba(16,26,49,.95),
+        rgba(8,14,30,.95)
+      );
+      border: 1px solid var(--border);
+      border-radius: 25px;
+      padding: 25px;
+      box-shadow: 0 30px 80px rgba(0,0,0,.35);
+      transform: rotate(1deg);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+    }
+
+    .course-label {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .status {
+      color: var(--success);
+      font-size: 12px;
+      background: rgba(34,197,94,.1);
+      padding: 6px 10px;
+      border-radius: 20px;
+    }
+
+    .course-title {
+      font-size: 23px;
+      margin-bottom: 8px;
+    }
+
+    .course-desc {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+      margin-bottom: 22px;
+    }
+
+    .progress-row {
+      display: flex;
+      justify-content: space-between;
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+
+    .progress {
+      height: 8px;
+      border-radius: 20px;
+      background: #17233d;
+      overflow: hidden;
+      margin-bottom: 25px;
+    }
+
+    .progress span {
+      display: block;
+      width: 72%;
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      border-radius: inherit;
+    }
+
+    .lesson {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      margin-bottom: 9px;
+      background: rgba(255,255,255,.025);
+    }
+
+    .lesson-icon {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 10px;
+      background: rgba(0,229,255,.08);
+      color: var(--primary);
+    }
+
+    .lesson-text {
+      font-size: 13px;
+    }
+
+    .lesson-text small {
+      display: block;
+      color: var(--muted);
+      margin-top: 3px;
+    }
+
+    /* SECTIONS */
+    section {
+      width: 86%;
+      max-width: 1200px;
+      margin: auto;
+      padding: 80px 0;
+    }
+
+    .section-heading {
+      text-align: center;
+      max-width: 700px;
+      margin: auto auto 45px;
+    }
+
+    .section-heading h2 {
+      font-size: 38px;
+      margin-bottom: 12px;
+    }
+
+    .section-heading p {
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    /* FEATURES */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .feature {
+      padding: 25px;
+      background: rgba(255,255,255,.025);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      transition: .3s;
+    }
+
+    .feature:hover {
+      transform: translateY(-6px);
+      border-color: rgba(0,229,255,.25);
+    }
+
+    .feature-icon {
+      width: 45px;
+      height: 45px;
+      display: grid;
+      place-items: center;
+      border-radius: 13px;
+      background: rgba(0,229,255,.08);
+      color: var(--primary);
+      font-size: 20px;
+      margin-bottom: 18px;
+    }
+
+    .feature h3 {
+      font-size: 17px;
+      margin-bottom: 9px;
+    }
+
+    .feature p {
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 13px;
+    }
+
+    /* LEVELS */
+    .levels {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .level {
+      padding: 28px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      border-radius: 20px;
+    }
+
+    .level span {
+      font-size: 12px;
+      color: var(--primary);
+    }
+
+    .level h3 {
+      margin: 10px 0;
+      font-size: 21px;
+    }
+
+    .level p {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    /* CTA */
+    .cta {
+      text-align: center;
+      padding: 70px 30px;
+      border: 1px solid var(--border);
+      border-radius: 30px;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(0,229,255,.13), transparent 45%),
+        var(--card);
+    }
+
+    .cta h2 {
+      font-size: 40px;
+      margin-bottom: 15px;
+    }
+
+    .cta p {
+      color: var(--muted);
+      margin-bottom: 25px;
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      margin-top: 70px;
+      padding: 35px 7%;
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    /* MOBILE */
+    @media (max-width: 900px) {
+      .hero {
+        grid-template-columns: 1fr;
+        padding-top: 50px;
+      }
+
+      .hero-visual {
+        max-width: 600px;
+        margin: auto;
+      }
+
+      .features {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .levels {
+        grid-template-columns: 1fr;
+      }
+
+      .nav-links,
+      .nav-buttons {
+        display: none;
+      }
+
+      .menu-btn {
+        display: block;
+      }
+
+      .navbar.mobile-open {
+        height: auto;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        flex-wrap: wrap;
+      }
+
+      .navbar.mobile-open .nav-links {
+        display: flex;
+        width: 100%;
+        flex-direction: column;
+        align-items: flex-start;
+        padding-top: 20px;
+      }
+
+      .navbar.mobile-open .nav-buttons {
+        display: flex;
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .hero,
+      section {
+        width: 90%;
+      }
+
+      .hero h1 {
+        font-size: 43px;
+      }
+
+      .hero p {
+        font-size: 15px;
+      }
+
+      .features {
+        grid-template-columns: 1fr;
+      }
+
+      .section-heading h2 {
+        font-size: 30px;
+      }
+
+      .cta h2 {
+        font-size: 30px;
+      }
+
+      footer {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+
+    <a href="index.html" class="logo">
+      <div class="logo-icon">T</div>
+      <span>TechBridge Rwanda</span>
+    </a>
+
+    <div class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#levels">Learning</a>
+      <a href="#practical">Practical</a>
+    </div>
+
+    <div class="nav-buttons">
+      <a href="login.html" class="btn btn-outline">Login</a>
+      <a href="register.html" class="btn btn-primary">Get Started</a>
+    </div>
+
+    <button class="menu-btn" id="menuBtn">☰</button>
+
+  </nav>
+
+  <!-- HERO -->
+  <main>
+
+    <div class="hero">
+
+      <div class="hero-content">
+
+        <div class="badge">
+          🇷🇼 Built for learners in Rwanda
+        </div>
+
+        <h1>
+          Learn Technology.<br />
+          <span class="gradient-text">Build Your Future.</span>
+        </h1>
+
+        <p>
+          TechBridge Rwanda is a modern learning platform designed to help
+          students develop computer, programming, and technology skills through
+          structured courses, tests, practical projects, and AI-powered learning.
+        </p>
+
+        <div class="hero-actions">
+          <a href="register.html" class="btn btn-primary">
+            Start Learning →
+          </a>
+
+          <a href="#features" class="btn btn-outline">
+            Explore Platform
+          </a>
+        </div>
+
+      </div>
+
+      <div class="hero-visual">
+
+        <div class="learning-card">
+
+          <div class="card-header">
+            <div>
+              <div class="course-label">CURRENT COURSE</div>
+              <strong>Computer Programming</strong>
+            </div>
+
+            <div class="status">● Learning</div>
+          </div>
+
+          <h3 class="course-title">
+            Introduction to Programming
+          </h3>
+
+          <p class="course-desc">
+            Learn programming concepts step by step through lessons,
+            quizzes and practical exercises.
+          </p>
+
+          <div class="progress-row">
+            <span>Course progress</span>
+            <strong>72%</strong>
+          </div>
+
+          <div class="progress">
+            <span></span>
+          </div>
+
+          <div class="lesson">
+            <div class="lesson-icon">✓</div>
+            <div class="lesson-text">
+              Computer Basics
+              <small>Completed</small>
+            </div>
+          </div>
+
+          <div class="lesson">
+            <div class="lesson-icon">▶</div>
+            <div class="lesson-text">
+              Programming Fundamentals
+              <small>Continue learning</small>
+            </div>
+          </div>
+
+          <div class="lesson">
+            <div class="lesson-icon">?</div>
+            <div class="lesson-text">
+              Beginner Assessment
+              <small>Available</small>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- FEATURES -->
+    <section id="features">
+
+      <div class="section-heading">
+        <h2>Everything You Need to Learn</h2>
+        <p>
+          TechBridge combines structured education with assessments and
+          practical technology tools.
+        </p>
+      </div>
+
+      <div class="features">
+
+        <div class="feature">
+          <div class="feature-icon">📚</div>
+          <h3>Structured Courses</h3>
+          <p>
+            Follow organized lessons and video content designed for different
+            levels of learners.
+          </p>
+        </div>
+
+        <div class="feature">
+          <div class="feature-icon">🧠</div>
+          <h3>Smart Assessments</h3>
+          <p>
+            Test your knowledge through quizzes and beginner, intermediate,
+            and advanced assessments.
+          </p>
+        </div>
+
+        <div class="feature">
+          <div class="feature-icon">💻</div>
+          <h3>Practical Learning</h3>
+          <p>
+            Practice programming, computer skills, and technology through
+            hands-on tasks.
+          </p>
+        </div>
+
+        <div class="feature">
+          <div class="feature-icon">🏆</div>
+          <h3>Certificates & Badges</h3>
+          <p>
+            Complete learning requirements and earn certificates and
+            achievement badges.
+          </p>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- LEVELS -->
+    <section id="levels">
+
+      <div class="section-heading">
+        <h2>Learn Step by Step</h2>
+        <p>
+          Build your knowledge progressively instead of trying to learn
+          everything at once.
+        </p>
+      </div>
+
+      <div class="levels">
+
+        <div class="level">
+          <span>LEVEL 01</span>
+          <h3>Beginner</h3>
+          <p>
+            Start with computer fundamentals, digital literacy,
+            programming basics, and essential technology concepts.
+          </p>
+        </div>
+
+        <div class="level">
+          <span>LEVEL 02</span>
+          <h3>Intermediate</h3>
+          <p>
+            Develop stronger programming, problem-solving, and practical
+            computer skills through structured projects.
+          </p>
+        </div>
+
+        <div class="level">
+          <span>LEVEL 03</span>
+          <h3>Advanced</h3>
+          <p>
+            Work on advanced concepts, real-world projects, challenging
+            assessments, and practical technology tasks.
+          </p>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- PRACTICAL -->
+    <section id="practical">
+
+      <div class="section-heading">
+        <h2>Practice, Don't Just Watch</h2>
+        <p>
+          Students will have access to practical tools that turn lessons
+          into real skills.
+        </p>
+      </div>
+
+      <div class="features">
+
+        <div class="feature">
+          <div class="feature-icon">🤖</div>
+          <h3>Gemini AI Assistant</h3>
+          <p>
+            Ask questions, understand difficult concepts, and receive
+            learning assistance.
+          </p>
+        </div>
+
+        <div class="feature">
+          <div class="feature-icon">⌨️</div>
+          <h3>Online Code Editor</h3>
+          <p>
+            Write and practice code directly from the learning platform.
+          </p>
+        </div>
+
+        <div class="feature">
+          <div class="feature-icon">🖥️</div>
+          <h3>Computer Workshop</h3>
+          <p>
+            Follow practical computer exercises and technology challenges.
+          </p>
+        </div>
+
+        <div class="feature">
+          <div class="feature-icon">🎯</div>
+          <h3>Practical Tasks</h3>
+          <p>
+            Apply what you learn through assignments and real-world
+            technology projects.
+          </p>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- CTA -->
+    <section>
+
+      <div class="cta">
+
+        <h2>Ready to Start Learning?</h2>
+
+        <p>
+          Create your TechBridge Rwanda account and begin building your
+          technology skills.
+        </p>
+
+        <a href="register.html" class="btn btn-primary">
+          Create Student Account →
+        </a>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+
+    <div>
+      © <span id="year"></span> TechBridge Rwanda
+    </div>
+
+    <div>
+      Learn • Build • Practice • Grow
+    </div>
+
+  </footer>
+
+  <script>
+
+    // Current year
+    document.getElementById("year").textContent =
+      new Date().getFullYear();
+
+    // Mobile navigation
+    const menuBtn = document.getElementById("menuBtn");
+    const navbar = document.getElementById("navbar");
+
+    menuBtn.addEventListener("click", () => {
+      navbar.classList.toggle("mobile-open");
+    });
+
+    // Close mobile menu after clicking a link
+    document.querySelectorAll(".nav-links a").forEach(link => {
+      link.addEventListener("click", () => {
+        navbar.classList.remove("mobile-open");
+      });
+    });
+
+  </script>
+
+</body>
+  </html>
