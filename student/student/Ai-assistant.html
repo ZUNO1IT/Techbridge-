@@ -1,0 +1,1980 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>AI Assistant | TechBridge Rwanda</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #070b14;
+      --sidebar: #0a1020;
+      --card: #0d1527;
+      --card2: #101b31;
+      --border: rgba(255,255,255,.08);
+      --text: #f5f7ff;
+      --muted: #8e9ab3;
+      --cyan: #00e5ff;
+      --blue: #3b82f6;
+      --purple: #a855f7;
+      --green: #22c55e;
+      --red: #ef4444;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at 80% 10%, rgba(0,229,255,.08), transparent 25%),
+        radial-gradient(circle at 15% 90%, rgba(168,85,247,.08), transparent 25%),
+        var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    button,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* ================= SIDEBAR ================= */
+
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 250px;
+      height: 100vh;
+      padding: 24px 16px;
+      background: rgba(10,16,32,.96);
+      border-right: 1px solid var(--border);
+      backdrop-filter: blur(18px);
+      z-index: 1000;
+      transition: .25s ease;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 8px;
+      margin-bottom: 35px;
+    }
+
+    .brand-logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(
+        135deg,
+        var(--cyan),
+        var(--blue),
+        var(--purple)
+      );
+      font-weight: 900;
+      box-shadow: 0 0 25px rgba(0,229,255,.2);
+    }
+
+    .brand-text strong {
+      display: block;
+      font-size: 15px;
+    }
+
+    .brand-text span {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      margin-top: 2px;
+    }
+
+    .nav-title {
+      color: #66728c;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      font-weight: 700;
+      padding: 0 12px;
+      margin-bottom: 10px;
+    }
+
+    .nav {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .nav a {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      border-radius: 11px;
+      color: #a8b2c8;
+      font-size: 14px;
+      transition: .2s;
+    }
+
+    .nav a:hover {
+      background: rgba(255,255,255,.05);
+      color: white;
+    }
+
+    .nav a.active {
+      color: var(--cyan);
+      background: linear-gradient(
+        90deg,
+        rgba(0,229,255,.12),
+        rgba(59,130,246,.07)
+      );
+      border: 1px solid rgba(0,229,255,.12);
+    }
+
+    .nav-icon {
+      width: 21px;
+      text-align: center;
+    }
+
+    .sidebar-bottom {
+      position: absolute;
+      left: 16px;
+      right: 16px;
+      bottom: 20px;
+      border-top: 1px solid var(--border);
+      padding-top: 15px;
+    }
+
+    /* ================= MAIN ================= */
+
+    .main {
+      margin-left: 250px;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .topbar {
+      height: 72px;
+      flex-shrink: 0;
+      padding: 0 30px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      background: rgba(7,11,20,.78);
+      backdrop-filter: blur(15px);
+      z-index: 500;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .topbar-title h2 {
+      font-size: 18px;
+    }
+
+    .topbar-title p {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 3px;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .notification {
+      width: 40px;
+      height: 40px;
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      background: rgba(255,255,255,.03);
+      color: white;
+      position: relative;
+    }
+
+    .notification-dot {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      width: 7px;
+      height: 7px;
+      background: var(--cyan);
+      border-radius: 50%;
+    }
+
+    .profile {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: linear-gradient(135deg,var(--blue),var(--purple));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .profile-info strong {
+      display: block;
+      font-size: 13px;
+    }
+
+    .profile-info span {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      margin-top: 2px;
+    }
+
+    .menu-btn {
+      display: none;
+      width: 40px;
+      height: 40px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.04);
+      color: white;
+      border-radius: 10px;
+    }
+
+    /* ================= AI LAYOUT ================= */
+
+    .ai-layout {
+      flex: 1;
+      min-height: 0;
+      display: grid;
+      grid-template-columns: 270px 1fr;
+    }
+
+    /* ================= AI SIDEBAR ================= */
+
+    .ai-sidebar {
+      border-right: 1px solid var(--border);
+      padding: 18px;
+      overflow-y: auto;
+      background: rgba(10,16,32,.45);
+    }
+
+    .new-chat {
+      width: 100%;
+      border: 1px solid rgba(0,229,255,.2);
+      background: rgba(0,229,255,.07);
+      color: var(--cyan);
+      padding: 11px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    .new-chat:hover {
+      background: rgba(0,229,255,.12);
+    }
+
+    .ai-side-title {
+      color: #66728c;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.3px;
+      margin: 18px 5px 9px;
+    }
+
+    .topic-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 10px;
+      border: 0;
+      border-radius: 9px;
+      background: transparent;
+      color: #aeb8cd;
+      text-align: left;
+      font-size: 12px;
+      margin-bottom: 3px;
+    }
+
+    .topic-btn:hover {
+      background: rgba(255,255,255,.04);
+      color: white;
+    }
+
+    .topic-btn.active {
+      background: rgba(59,130,246,.09);
+      color: #dce9ff;
+    }
+
+    .ai-note {
+      margin-top: 25px;
+      padding: 13px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: rgba(255,255,255,.025);
+    }
+
+    .ai-note strong {
+      display: block;
+      font-size: 11px;
+      margin-bottom: 5px;
+    }
+
+    .ai-note p {
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.55;
+    }
+
+    /* ================= CHAT ================= */
+
+    .chat-area {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      background:
+        radial-gradient(circle at 50% 10%, rgba(59,130,246,.05), transparent 35%);
+    }
+
+    .chat-header {
+      padding: 15px 22px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+
+    .ai-identity {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+    }
+
+    .ai-avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(
+        135deg,
+        var(--cyan),
+        var(--blue),
+        var(--purple)
+      );
+      font-weight: 900;
+      box-shadow: 0 0 22px rgba(0,229,255,.15);
+    }
+
+    .ai-identity strong {
+      display: block;
+      font-size: 14px;
+    }
+
+    .ai-status {
+      color: var(--green);
+      font-size: 10px;
+      margin-top: 4px;
+    }
+
+    .ai-controls {
+      display: flex;
+      gap: 7px;
+    }
+
+    .icon-btn {
+      width: 35px;
+      height: 35px;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      background: rgba(255,255,255,.03);
+      color: #bdc7da;
+    }
+
+    .icon-btn:hover {
+      background: rgba(255,255,255,.07);
+      color: white;
+    }
+
+    /* ================= MESSAGES ================= */
+
+    .messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 25px 8%;
+      scroll-behavior: smooth;
+    }
+
+    .welcome {
+      max-width: 680px;
+      margin: 40px auto;
+      text-align: center;
+    }
+
+    .welcome-icon {
+      width: 65px;
+      height: 65px;
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: auto;
+      background: linear-gradient(
+        135deg,
+        rgba(0,229,255,.15),
+        rgba(168,85,247,.15)
+      );
+      border: 1px solid rgba(0,229,255,.16);
+      font-size: 30px;
+    }
+
+    .welcome h1 {
+      font-size: 26px;
+      margin: 17px 0 8px;
+    }
+
+    .welcome p {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .suggestions {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-top: 22px;
+    }
+
+    .suggestion {
+      padding: 14px;
+      text-align: left;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: rgba(255,255,255,.025);
+      color: #d5dced;
+      font-size: 11px;
+      transition: .2s;
+    }
+
+    .suggestion:hover {
+      border-color: rgba(0,229,255,.22);
+      background: rgba(0,229,255,.04);
+    }
+
+    .suggestion strong {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 12px;
+    }
+
+    .message {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+      max-width: 850px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .message.user {
+      flex-direction: row-reverse;
+    }
+
+    .message-avatar {
+      width: 32px;
+      height: 32px;
+      flex: 0 0 32px;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 800;
+      background: linear-gradient(135deg,var(--blue),var(--purple));
+    }
+
+    .message.ai .message-avatar {
+      background: linear-gradient(135deg,var(--cyan),var(--blue));
+    }
+
+    .message-content {
+      max-width: 75%;
+    }
+
+    .message.user .message-content {
+      text-align: right;
+    }
+
+    .message-bubble {
+      padding: 13px 15px;
+      border-radius: 14px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      font-size: 13px;
+      line-height: 1.65;
+      color: #dce3f2;
+      white-space: pre-wrap;
+    }
+
+    .message.user .message-bubble {
+      background: linear-gradient(
+        135deg,
+        rgba(59,130,246,.18),
+        rgba(168,85,247,.13)
+      );
+      border-color: rgba(59,130,246,.15);
+    }
+
+    .message-time {
+      color: #66728c;
+      font-size: 9px;
+      margin-top: 5px;
+    }
+
+    .typing {
+      display: none;
+      align-items: center;
+      gap: 5px;
+      color: var(--muted);
+      font-size: 11px;
+      margin: 0 auto 15px;
+      max-width: 850px;
+    }
+
+    .typing.show {
+      display: flex;
+    }
+
+    .typing span {
+      width: 5px;
+      height: 5px;
+      background: var(--cyan);
+      border-radius: 50%;
+      animation: blink 1s infinite;
+    }
+
+    .typing span:nth-child(2) {
+      animation-delay: .2s;
+    }
+
+    .typing span:nth-child(3) {
+      animation-delay: .4s;
+    }
+
+    @keyframes blink {
+      0%,100% {
+        opacity: .25;
+      }
+
+      50% {
+        opacity: 1;
+      }
+    }
+
+    /* ================= COMPOSER ================= */
+
+    .composer-wrap {
+      padding: 12px 8% 18px;
+      border-top: 1px solid var(--border);
+      background: rgba(7,11,20,.75);
+    }
+
+    .composer {
+      max-width: 850px;
+      margin: auto;
+      border: 1px solid var(--border);
+      background: var(--card);
+      border-radius: 15px;
+      padding: 9px;
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+    }
+
+    .composer textarea {
+      flex: 1;
+      resize: none;
+      min-height: 43px;
+      max-height: 130px;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: white;
+      padding: 11px 8px;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .composer textarea::placeholder {
+      color: #65718a;
+    }
+
+    .composer-actions {
+      display: flex;
+      gap: 5px;
+    }
+
+    .composer-btn {
+      width: 39px;
+      height: 39px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: rgba(255,255,255,.035);
+      color: #b7c1d5;
+    }
+
+    .composer-btn:hover {
+      background: rgba(255,255,255,.07);
+      color: white;
+    }
+
+    .send-btn {
+      width: 42px;
+      height: 42px;
+      border: 0;
+      border-radius: 11px;
+      color: white;
+      background: linear-gradient(
+        135deg,
+        var(--cyan),
+        var(--blue),
+        var(--purple)
+      );
+      font-weight: 900;
+    }
+
+    .composer-hint {
+      max-width: 850px;
+      margin: 7px auto 0;
+      color: #5f6a81;
+      font-size: 9px;
+      text-align: center;
+    }
+
+    /* ================= MOBILE ================= */
+
+    @media (max-width: 900px) {
+
+      .sidebar {
+        transform: translateX(-100%);
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .main {
+        margin-left: 0;
+      }
+
+      .menu-btn {
+        display: block;
+      }
+
+      .ai-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .ai-sidebar {
+        display: none;
+      }
+
+      .messages {
+        padding: 20px 15px;
+      }
+
+      .composer-wrap {
+        padding: 10px 15px 14px;
+      }
+    }
+
+    @media (max-width: 600px) {
+
+      .topbar {
+        padding: 0 15px;
+      }
+
+      .topbar-title p {
+        display: none;
+      }
+
+      .profile-info {
+        display: none;
+      }
+
+      .chat-header {
+        padding: 12px 15px;
+      }
+
+      .welcome {
+        margin: 25px auto;
+      }
+
+      .welcome h1 {
+        font-size: 22px;
+      }
+
+      .suggestions {
+        grid-template-columns: 1fr;
+      }
+
+      .message-content {
+        max-width: 84%;
+      }
+
+      .composer textarea {
+        font-size: 12px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ================= MAIN SIDEBAR ================= -->
+
+  <aside class="sidebar" id="sidebar">
+
+    <div class="brand">
+      <div class="brand-logo">TB</div>
+
+      <div class="brand-text">
+        <strong>TechBridge</strong>
+        <span>Rwanda</span>
+      </div>
+    </div>
+
+    <div class="nav-title">
+      Student Menu
+    </div>
+
+    <nav class="nav">
+
+      <a href="index.html">
+        <span class="nav-icon">🏠</span>
+        Dashboard
+      </a>
+
+      <a href="courses.html">
+        <span class="nav-icon">📚</span>
+        My Courses
+      </a>
+
+      <a href="quizzes.html">
+        <span class="nav-icon">🧠</span>
+        Quizzes
+      </a>
+
+      <a href="tests.html">
+        <span class="nav-icon">📝</span>
+        Assessments
+      </a>
+
+      <a href="certificates.html">
+        <span class="nav-icon">🏆</span>
+        Certificates & Badges
+      </a>
+
+      <a href="practical.html" class="active">
+        <span class="nav-icon">💻</span>
+        Practical Learning
+      </a>
+
+      <a href="settings.html">
+        <span class="nav-icon">⚙️</span>
+        Settings
+      </a>
+
+    </nav>
+
+    <div class="sidebar-bottom">
+
+      <a href="../index.html" class="nav">
+        <span class="nav-icon">←</span>
+        Back to Website
+      </a>
+
+    </div>
+
+  </aside>
+
+
+  <!-- ================= MAIN ================= -->
+
+  <main class="main">
+
+    <!-- TOPBAR -->
+
+    <header class="topbar">
+
+      <div class="topbar-left">
+
+        <button
+          class="menu-btn"
+          onclick="toggleSidebar()">
+          ☰
+        </button>
+
+        <div class="topbar-title">
+          <h2>AI Assistant</h2>
+          <p>Your TechBridge learning companion</p>
+        </div>
+
+      </div>
+
+
+      <div class="top-actions">
+
+        <button
+          class="notification"
+          onclick="showToast('No new notifications')">
+
+          🔔
+
+          <span class="notification-dot"></span>
+
+        </button>
+
+
+        <div class="profile">
+
+          <div class="avatar">
+            JS
+          </div>
+
+          <div class="profile-info">
+            <strong>John Student</strong>
+            <span>Student</span>
+          </div>
+
+        </div>
+
+      </div>
+
+    </header>
+
+
+    <!-- ================= AI LAYOUT ================= -->
+
+    <div class="ai-layout">
+
+
+      <!-- ================= AI SIDE PANEL ================= -->
+
+      <aside class="ai-sidebar">
+
+        <button
+          class="new-chat"
+          onclick="newChat()">
+
+          ＋ New Conversation
+
+        </button>
+
+
+        <div class="ai-side-title">
+          Learning Topics
+        </div>
+
+
+        <button
+          class="topic-btn active"
+          onclick="selectTopic('Computer Basics', this)">
+
+          💻 Computer Basics
+
+        </button>
+
+
+        <button
+          class="topic-btn"
+          onclick="selectTopic('Programming', this)">
+
+          👨‍💻 Programming
+
+        </button>
+
+
+        <button
+          class="topic-btn"
+          onclick="selectTopic('Web Development', this)">
+
+          🌐 Web Development
+
+        </button>
+
+
+        <button
+          class="topic-btn"
+          onclick="selectTopic('Cyber Security', this)">
+
+          🛡️ Cyber Security
+
+        </button>
+
+
+        <button
+          class="topic-btn"
+          onclick="selectTopic('Artificial Intelligence', this)">
+
+          🤖 Artificial Intelligence
+
+        </button>
+
+
+        <button
+          class="topic-btn"
+          onclick="selectTopic('Database', this)">
+
+          🗄️ Databases
+
+        </button>
+
+
+        <div class="ai-side-title">
+          Recent Conversations
+        </div>
+
+
+        <button
+          class="topic-btn"
+          onclick="loadConversation('Variables in programming')">
+
+          💬 Variables in programming
+
+        </button>
+
+
+        <button
+          class="topic-btn"
+          onclick="loadConversation('What is an operating system?')">
+
+          💬 Operating systems
+
+        </button>
+
+
+        <button
+          class="topic-btn"
+          onclick="loadConversation('HTML basics')">
+
+          💬 HTML basics
+
+        </button>
+
+
+        <div class="ai-note">
+
+          <strong>
+            🎓 TechBridge AI
+          </strong>
+
+          <p>
+            The assistant is designed to help
+            you understand TechBridge learning
+            materials, lessons, quizzes, and
+            practical activities.
+          </p>
+
+        </div>
+
+      </aside>
+
+
+      <!-- ================= CHAT AREA ================= -->
+
+      <section class="chat-area">
+
+
+        <!-- CHAT HEADER -->
+
+        <div class="chat-header">
+
+          <div class="ai-identity">
+
+            <div class="ai-avatar">
+              AI
+            </div>
+
+            <div>
+
+              <strong>
+                TechBridge AI
+              </strong>
+
+              <div class="ai-status">
+                ● Learning Assistant
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div class="ai-controls">
+
+            <button
+              class="icon-btn"
+              title="Clear conversation"
+              onclick="clearChat()">
+              🗑
+            </button>
+
+            <button
+              class="icon-btn"
+              title="AI settings"
+              onclick="showAIInfo()">
+              ℹ️
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <!-- MESSAGES -->
+
+        <div
+          class="messages"
+          id="messages">
+
+          <div
+            class="welcome"
+            id="welcome">
+
+            <div class="welcome-icon">
+              🤖
+            </div>
+
+            <h1>
+              Learn with TechBridge AI
+            </h1>
+
+            <p>
+              Ask questions about your TechBridge
+              lessons, programming concepts,
+              computer skills, web development,
+              cyber security, or practical tasks.
+            </p>
+
+
+            <div class="suggestions">
+
+              <button
+                class="suggestion"
+                onclick="useSuggestion(
+                  'Explain what a computer operating system is in simple terms.'
+                )">
+
+                <strong>
+                  💻 Computer Basics
+                </strong>
+
+                Explain an operating system
+                in simple terms.
+
+              </button>
+
+
+              <button
+                class="suggestion"
+                onclick="useSuggestion(
+                  'Explain variables in programming with a simple example.'
+                )">
+
+                <strong>
+                  👨‍💻 Programming
+                </strong>
+
+                Explain variables with
+                a simple example.
+
+              </button>
+
+
+              <button
+                class="suggestion"
+                onclick="useSuggestion(
+                  'Teach me the basic structure of an HTML page.'
+                )">
+
+                <strong>
+                  🌐 Web Development
+                </strong>
+
+                Teach me the structure
+                of an HTML page.
+
+              </button>
+
+
+              <button
+                class="suggestion"
+                onclick="useSuggestion(
+                  'Explain three basic ways to protect a computer from common security threats.'
+                )">
+
+                <strong>
+                  🛡️ Cyber Security
+                </strong>
+
+                Learn basic computer
+                security principles.
+
+              </button>
+
+            </div>
+
+          </div>
+
+
+          <div
+            class="typing"
+            id="typing">
+
+            <span></span>
+            <span></span>
+            <span></span>
+
+            AI is thinking...
+
+          </div>
+
+        </div>
+
+
+        <!-- COMPOSER -->
+
+        <div class="composer-wrap">
+
+          <div class="composer">
+
+            <button
+              class="composer-btn"
+              title="Attach image"
+              onclick="attachImage()">
+
+              🖼
+
+            </button>
+
+
+            <textarea
+              id="messageInput"
+              rows="1"
+              placeholder="Ask TechBridge AI about your lesson..."
+              oninput="autoResize(this)"
+              onkeydown="handleEnter(event)">
+            </textarea>
+
+
+            <div class="composer-actions">
+
+              <button
+                class="composer-btn"
+                title="Voice input"
+                onclick="startVoiceInput()">
+
+                🎤
+
+              </button>
+
+
+              <button
+                class="send-btn"
+                onclick="sendMessage()">
+
+                ➤
+
+              </button>
+
+            </div>
+
+          </div>
+
+
+          <div class="composer-hint">
+
+            TechBridge AI can make mistakes.
+            Check important information with your course materials.
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </div>
+
+  </main>
+
+
+  <script>
+
+    /* =========================================
+       STATE
+       ========================================= */
+
+    let selectedTopic = "Computer Basics";
+
+
+    /* =========================================
+       SIDEBAR
+       ========================================= */
+
+    function toggleSidebar() {
+
+      document
+        .getElementById("sidebar")
+        .classList
+        .toggle("open");
+
+    }
+
+
+    /* =========================================
+       TOAST
+       ========================================= */
+
+    let toastTimer;
+
+    function showToast(message) {
+
+      let old =
+        document.getElementById("toast");
+
+      if (!old) {
+
+        old = document.createElement("div");
+
+        old.id = "toast";
+
+        old.style.position = "fixed";
+        old.style.right = "20px";
+        old.style.bottom = "20px";
+        old.style.padding = "12px 16px";
+        old.style.background = "#101b31";
+        old.style.border = "1px solid rgba(0,229,255,.2)";
+        old.style.borderRadius = "10px";
+        old.style.color = "white";
+        old.style.fontSize = "12px";
+        old.style.zIndex = "5000";
+        old.style.boxShadow = "0 15px 40px rgba(0,0,0,.4)";
+
+        document.body.appendChild(old);
+
+      }
+
+      old.textContent = message;
+
+      clearTimeout(toastTimer);
+
+      toastTimer = setTimeout(() => {
+
+        old.remove();
+
+      }, 2500);
+
+    }
+
+
+    /* =========================================
+       TOPIC
+       ========================================= */
+
+    function selectTopic(topic, button) {
+
+      selectedTopic = topic;
+
+      document
+        .querySelectorAll(".topic-btn")
+        .forEach(btn => {
+
+          btn.classList.remove("active");
+
+        });
+
+      button.classList.add("active");
+
+
+      const input =
+        document.getElementById("messageInput");
+
+      input.placeholder =
+        `Ask about ${topic}...`;
+
+    }
+
+
+    /* =========================================
+       SUGGESTION
+       ========================================= */
+
+    function useSuggestion(text) {
+
+      const input =
+        document.getElementById("messageInput");
+
+      input.value = text;
+
+      autoResize(input);
+
+      sendMessage();
+
+    }
+
+
+    /* =========================================
+       ENTER KEY
+       ========================================= */
+
+    function handleEnter(event) {
+
+      if (
+        event.key === "Enter" &&
+        !event.shiftKey
+      ) {
+
+        event.preventDefault();
+
+        sendMessage();
+
+      }
+
+    }
+
+
+    /* =========================================
+       TEXTAREA RESIZE
+       ========================================= */
+
+    function autoResize(textarea) {
+
+      textarea.style.height = "auto";
+
+      textarea.style.height =
+        Math.min(textarea.scrollHeight, 130) + "px";
+
+    }
+
+
+    /* =========================================
+       SEND MESSAGE
+       ========================================= */
+
+    function sendMessage() {
+
+      const input =
+        document.getElementById("messageInput");
+
+      const text =
+        input.value.trim();
+
+      if (!text) return;
+
+
+      document
+        .getElementById("welcome")
+        ?.remove();
+
+
+      addMessage(
+        text,
+        "user"
+      );
+
+
+      input.value = "";
+
+      autoResize(input);
+
+
+      showTyping();
+
+
+      /*
+        DEMO RESPONSE
+
+        Replace this section with
+        Firebase Cloud Function → Gemini API.
+
+        Never place the Gemini API key
+        directly in this HTML file.
+      */
+
+      setTimeout(() => {
+
+        hideTyping();
+
+        generateDemoResponse(text);
+
+      }, 1000);
+
+    }
+
+
+    /* =========================================
+       ADD MESSAGE
+       ========================================= */
+
+    function addMessage(text, type) {
+
+      const messages =
+        document.getElementById("messages");
+
+
+      const message =
+        document.createElement("div");
+
+      message.className =
+        `message ${type}`;
+
+
+      const avatar =
+        document.createElement("div");
+
+      avatar.className =
+        "message-avatar";
+
+      avatar.textContent =
+        type === "user" ? "JS" : "AI";
+
+
+      const content =
+        document.createElement("div");
+
+      content.className =
+        "message-content";
+
+
+      const bubble =
+        document.createElement("div");
+
+      bubble.className =
+        "message-bubble";
+
+      bubble.textContent =
+        text;
+
+
+      const time =
+        document.createElement("div");
+
+      time.className =
+        "message-time";
+
+      time.textContent =
+        type === "user"
+          ? "You"
+          : "TechBridge AI";
+
+
+      content.appendChild(bubble);
+      content.appendChild(time);
+
+      message.appendChild(avatar);
+      message.appendChild(content);
+
+
+      const typing =
+        document.getElementById("typing");
+
+      messages.insertBefore(
+        message,
+        typing
+      );
+
+
+      messages.scrollTop =
+        messages.scrollHeight;
+
+    }
+
+
+    /* =========================================
+       DEMO RESPONSE
+       ========================================= */
+
+    function generateDemoResponse(question) {
+
+      const q =
+        question.toLowerCase();
+
+
+      let response =
+        "I’m ready to help you learn this topic. " +
+        "In the production version, TechBridge AI " +
+        "will use the approved TechBridge course " +
+        "materials and Gemini through a secure backend.";
+
+
+      if (
+        q.includes("variable") ||
+        q.includes("variables")
+      ) {
+
+        response =
+          "A variable is a named place used by a program " +
+          "to store a value. For example, in many programming " +
+          "languages you can create a variable called age " +
+          "and store a number such as 20 in it.";
+
+      }
+
+
+      else if (
+        q.includes("html")
+      ) {
+
+        response =
+          "HTML is used to structure web pages. " +
+          "A basic HTML document normally contains " +
+          "an html element, a head section for page " +
+          "information, and a body section containing " +
+          "the visible content.";
+
+      }
+
+
+      else if (
+        q.includes("operating system") ||
+        q.includes("os")
+      ) {
+
+        response =
+          "An operating system is the main software " +
+          "that manages a computer's hardware and provides " +
+          "services that applications use. Examples include " +
+          "Windows, Linux, macOS, Android, and iOS.";
+
+      }
+
+
+      else if (
+        q.includes("security") ||
+        q.includes("cyber")
+      ) {
+
+        response =
+          "Basic computer security includes using strong " +
+          "unique passwords, keeping software updated, " +
+          "being careful with unexpected links or files, " +
+          "and protecting important accounts with available " +
+          "security features.";
+
+      }
+
+
+      addMessage(
+        response,
+        "ai"
+      );
+
+    }
+
+
+    /* =========================================
+       TYPING
+       ========================================= */
+
+    function showTyping() {
+
+      document
+        .getElementById("typing")
+        .classList
+        .add("show");
+
+
+      const messages =
+        document.getElementById("messages");
+
+      messages.scrollTop =
+        messages.scrollHeight;
+
+    }
+
+
+    function hideTyping() {
+
+      document
+        .getElementById("typing")
+        .classList
+        .remove("show");
+
+    }
+
+
+    /* =========================================
+       NEW CHAT
+       ========================================= */
+
+    function newChat() {
+
+      const messages =
+        document.getElementById("messages");
+
+      messages.innerHTML = "";
+
+
+      const welcome =
+        document.createElement("div");
+
+      welcome.className =
+        "welcome";
+
+      welcome.id =
+        "welcome";
+
+
+      welcome.innerHTML = `
+        <div class="welcome-icon">🤖</div>
+
+        <h1>New TechBridge AI Conversation</h1>
+
+        <p>
+          Ask a question about your TechBridge
+          lessons, courses, quizzes, or practical
+          activities.
+        </p>
+      `;
+
+
+      messages.appendChild(welcome);
+
+
+      const typing =
+        document.createElement("div");
+
+      typing.className =
+        "typing";
+
+      typing.id =
+        "typing";
+
+      typing.innerHTML =
+        "<span></span><span></span><span></span> AI is thinking...";
+
+
+      messages.appendChild(typing);
+
+      showToast(
+        "New conversation started."
+      );
+
+    }
+
+
+    /* =========================================
+       CLEAR CHAT
+       ========================================= */
+
+    function clearChat() {
+
+      const confirmed =
+        confirm(
+          "Clear this conversation?"
+        );
+
+      if (!confirmed) return;
+
+      newChat();
+
+    }
+
+
+    /* =========================================
+       IMAGE ATTACHMENT
+       ========================================= */
+
+    function attachImage() {
+
+      /*
+        Production feature:
+
+        User selects an image.
+
+        The image should be uploaded/processed
+        securely and sent to the backend.
+
+        The backend can then provide the image
+        and relevant course context to Gemini.
+
+        Do not expose Gemini API keys here.
+      */
+
+      showToast(
+        "Image analysis will be connected to the secure AI backend."
+      );
+
+    }
+
+
+    /* =========================================
+       VOICE INPUT
+       ========================================= */
+
+    function startVoiceInput() {
+
+      /*
+        Production:
+
+        Browser SpeechRecognition can be used
+        where supported.
+
+        For a more reliable implementation,
+        audio can be sent to a secure speech
+        processing backend.
+      */
+
+      const SpeechRecognition =
+        window.SpeechRecognition ||
+        window.webkitSpeechRecognition;
+
+
+      if (!SpeechRecognition) {
+
+        showToast(
+          "Voice input is not supported by this browser."
+        );
+
+        return;
+
+      }
+
+
+      const recognition =
+        new SpeechRecognition();
+
+      recognition.lang =
+        "en-US";
+
+      recognition.interimResults =
+        false;
+
+      recognition.maxAlternatives =
+        1;
+
+
+      recognition.onstart = () => {
+
+        showToast(
+          "Listening..."
+        );
+
+      };
+
+
+      recognition.onresult = event => {
+
+        const transcript =
+          event.results[0][0].transcript;
+
+        const input =
+          document.getElementById("messageInput");
+
+        input.value =
+          transcript;
+
+        autoResize(input);
+
+      };
+
+
+      recognition.onerror = () => {
+
+        showToast(
+          "Voice input could not be completed."
+        );
+
+      };
+
+
+      recognition.start();
+
+    }
+
+
+    /* =========================================
+       AI INFORMATION
+       ========================================= */
+
+    function showAIInfo() {
+
+      alert(
+        "TechBridge AI Assistant\n\n" +
+        "Purpose: Help students understand " +
+        "TechBridge learning materials and " +
+        "complete learning activities.\n\n" +
+        "Production AI: Gemini through a secure " +
+        "backend/Firebase Cloud Function.\n\n" +
+        "The assistant should prioritize approved " +
+        "TechBridge course content when answering."
+      );
+
+    }
+
+
+    /* =========================================
+       RECENT CONVERSATION
+       ========================================= */
+
+    function loadConversation(title) {
+
+      newChat();
+
+      setTimeout(() => {
+
+        addMessage(
+          title,
+          "user"
+        );
+
+        showTyping();
+
+        setTimeout(() => {
+
+          hideTyping();
+
+          generateDemoResponse(title);
+
+        }, 700);
+
+      }, 100);
+
+    }
+
+
+    /* =========================================
+       FIREBASE + GEMINI PRODUCTION PLAN
+       =========================================
+
+       IMPORTANT:
+
+       DO NOT put a Gemini API key in this
+       frontend file.
+
+       Recommended architecture:
+
+       Student Browser
+            |
+            v
+       Firebase Authentication
+            |
+            v
+       Firebase Cloud Function
+            |
+            +---- Firestore
+            |     - courses
+            |     - lessons
+            |     - approved resources
+            |     - student progress
+            |
+            v
+       Gemini API
+            |
+            v
+       Secure AI Response
+            |
+            v
+       Student Browser
+
+
+       AI CONTEXT:
+
+       Before sending a question to Gemini,
+       the backend should identify:
+
+       - authenticated user
+       - selected course
+       - current lesson
+       - learning level
+       - approved course content
+       - relevant quiz/practical context
+
+
+       The system prompt should instruct the AI
+       to prioritize TechBridge materials.
+
+       If the answer is not available in the
+       approved course material, the assistant
+       should clearly say that the requested
+       information is outside the available
+       TechBridge material rather than pretending
+       that it came from a TechBridge lesson.
+
+
+       FUTURE FIRESTORE:
+
+       aiConversations/{conversationId}
+
+       {
+         userId,
+         title,
+         selectedTopic,
+         courseId,
+         lessonId,
+         createdAt,
+         updatedAt
+       }
+
+
+       aiConversations/{conversationId}/messages/{messageId}
+
+       {
+         userId,
+         role: "user" | "assistant",
+         content,
+         createdAt
+       }
+
+
+       SECURITY:
+
+       - Require Firebase Authentication.
+       - Verify userId on backend.
+       - Never trust client-supplied role.
+       - Never expose Gemini API credentials.
+       - Apply rate limits.
+       - Validate uploaded files.
+       - Limit request size.
+       - Do not allow students to modify
+         other students' conversations.
+       - Do not allow AI responses to modify
+         grades, certificates, payments, or
+         account roles.
+    */
+
+  </script>
+
+</body>
+</html>
