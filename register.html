@@ -621,246 +621,505 @@
     </div>
 
   </div>
+<script type="module">
 
-  <script>
+  import { initializeApp }
+    from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
 
-    const registerForm =
-      document.getElementById("registerForm");
+  import {
+    getAuth,
+    createUserWithEmailAndPassword,
+    updateProfile
+  }
+    from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
 
-    const registerBtn =
-      document.getElementById("registerBtn");
-
-    const message =
-      document.getElementById("message");
-
-    const password =
-      document.getElementById("password");
-
-    const confirmPassword =
-      document.getElementById("confirmPassword");
-
-    const strengthBar =
-      document.getElementById("strengthBar");
-
-
-    // Show message
-    function showMessage(text, type) {
-
-      message.textContent = text;
-
-      message.className =
-        "message " + type;
-
-    }
+  import {
+    getFirestore,
+    doc,
+    setDoc,
+    serverTimestamp
+  }
+    from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
 
-    // Password visibility
-    document
-      .querySelectorAll(".toggle-password")
-      .forEach(button => {
+  /* =========================================
+     FIREBASE CONFIG
+     ========================================= */
 
-        button.addEventListener("click", () => {
+  const firebaseConfig = {
 
-          const target =
-            document.getElementById(
-              button.dataset.target
-            );
+    apiKey: "YOUR_FIREBASE_API_KEY",
 
-          if (target.type === "password") {
+    authDomain:
+      "techbrige-rwanda.firebaseapp.com",
 
-            target.type = "text";
-            button.textContent = "🙈";
+    projectId:
+      "techbrige-rwanda",
 
-          } else {
+    storageBucket:
+      "techbrige-rwanda.firebasestorage.app",
 
-            target.type = "password";
-            button.textContent = "👁";
+    messagingSenderId:
+      "391783540774",
 
-          }
+    appId:
+      "1:391783540774:web:de825e268d4ed6b2711ee7"
 
-        });
+  };
+
+
+  /* =========================================
+     INITIALIZE FIREBASE
+     ========================================= */
+
+  const app =
+    initializeApp(firebaseConfig);
+
+  const auth =
+    getAuth(app);
+
+  const db =
+    getFirestore(app);
+
+
+  /* =========================================
+     ELEMENTS
+     ========================================= */
+
+  const registerForm =
+    document.getElementById("registerForm");
+
+  const registerBtn =
+    document.getElementById("registerBtn");
+
+  const message =
+    document.getElementById("message");
+
+  const password =
+    document.getElementById("password");
+
+  const confirmPassword =
+    document.getElementById("confirmPassword");
+
+  const strengthBar =
+    document.getElementById("strengthBar");
+
+
+  /* =========================================
+     MESSAGE
+     ========================================= */
+
+  function showMessage(text, type) {
+
+    message.textContent = text;
+
+    message.className =
+      "message " + type;
+
+  }
+
+
+  function clearMessage() {
+
+    message.textContent = "";
+
+    message.className =
+      "message";
+
+  }
+
+
+  /* =========================================
+     PASSWORD VISIBILITY
+     ========================================= */
+
+  document
+    .querySelectorAll(".toggle-password")
+    .forEach(button => {
+
+      button.addEventListener("click", () => {
+
+        const target =
+          document.getElementById(
+            button.dataset.target
+          );
+
+        if (target.type === "password") {
+
+          target.type = "text";
+
+          button.textContent = "🙈";
+
+          button.setAttribute(
+            "aria-label",
+            "Hide password"
+          );
+
+        } else {
+
+          target.type = "password";
+
+          button.textContent = "👁";
+
+          button.setAttribute(
+            "aria-label",
+            "Show password"
+          );
+
+        }
 
       });
-
-
-    // Password strength
-    password.addEventListener("input", () => {
-
-      const value = password.value;
-
-      let strength = 0;
-
-      if (value.length >= 8)
-        strength++;
-
-      if (/[A-Z]/.test(value))
-        strength++;
-
-      if (/[0-9]/.test(value))
-        strength++;
-
-      if (/[^A-Za-z0-9]/.test(value))
-        strength++;
-
-      const widths = [
-        "0%",
-        "25%",
-        "50%",
-        "75%",
-        "100%"
-      ];
-
-      strengthBar.style.width =
-        widths[strength];
-
-      /*
-        Color will later be controlled by
-        the application's final theme.
-      */
 
     });
 
 
-    // Registration
-    registerForm.addEventListener(
-      "submit",
-      event => {
+  /* =========================================
+     PASSWORD STRENGTH
+     ========================================= */
 
-        event.preventDefault();
+  password.addEventListener("input", () => {
 
-        const firstName =
-          document.getElementById("firstName")
-            .value.trim();
+    const value =
+      password.value;
 
-        const lastName =
-          document.getElementById("lastName")
-            .value.trim();
+    let strength = 0;
 
-        const email =
-          document.getElementById("email")
-            .value.trim();
+    if (value.length >= 8)
+      strength++;
 
-        const phone =
-          document.getElementById("phone")
-            .value.trim();
+    if (/[A-Z]/.test(value))
+      strength++;
 
-        const education =
-          document.getElementById("education")
-            .value;
+    if (/[0-9]/.test(value))
+      strength++;
 
-        const passwordValue =
-          password.value;
+    if (/[^A-Za-z0-9]/.test(value))
+      strength++;
 
-        const confirmValue =
-          confirmPassword.value;
+    const widths = [
+      "0%",
+      "25%",
+      "50%",
+      "75%",
+      "100%"
+    ];
 
-        const terms =
-          document.getElementById("terms").checked;
+    strengthBar.style.width =
+      widths[strength];
+
+  });
 
 
-        if (
-          !firstName ||
-          !lastName ||
-          !email ||
-          !phone ||
-          !education ||
-          !passwordValue ||
-          !confirmValue
-        ) {
+  /* =========================================
+     FIREBASE ERROR MESSAGES
+     ========================================= */
 
-          showMessage(
-            "Please complete all required fields.",
-            "error"
+  function getFirebaseError(error) {
+
+    switch (error.code) {
+
+      case "auth/email-already-in-use":
+
+        return "An account with this email already exists.";
+
+      case "auth/invalid-email":
+
+        return "Please enter a valid email address.";
+
+      case "auth/weak-password":
+
+        return "Password is too weak. Use at least 8 characters.";
+
+      case "auth/network-request-failed":
+
+        return "Network error. Please check your internet connection.";
+
+      case "auth/operation-not-allowed":
+
+        return "Email/password authentication is not enabled in Firebase.";
+
+      case "auth/too-many-requests":
+
+        return "Too many requests. Please try again later.";
+
+      default:
+
+        console.error(
+          "Firebase error:",
+          error
+        );
+
+        return "Unable to create your account. Please try again.";
+
+    }
+
+  }
+
+
+  /* =========================================
+     REGISTER USER
+     ========================================= */
+
+  registerForm.addEventListener(
+    "submit",
+    async event => {
+
+      event.preventDefault();
+
+      clearMessage();
+
+
+      /* -------------------------------------
+         GET FORM DATA
+         ------------------------------------- */
+
+      const firstName =
+        document
+          .getElementById("firstName")
+          .value
+          .trim();
+
+      const lastName =
+        document
+          .getElementById("lastName")
+          .value
+          .trim();
+
+      const email =
+        document
+          .getElementById("email")
+          .value
+          .trim()
+          .toLowerCase();
+
+      const phone =
+        document
+          .getElementById("phone")
+          .value
+          .trim();
+
+      const education =
+        document
+          .getElementById("education")
+          .value;
+
+      const passwordValue =
+        password.value;
+
+      const confirmValue =
+        confirmPassword.value;
+
+      const terms =
+        document
+          .getElementById("terms")
+          .checked;
+
+
+      /* -------------------------------------
+         VALIDATION
+         ------------------------------------- */
+
+      if (
+        !firstName ||
+        !lastName ||
+        !email ||
+        !phone ||
+        !education ||
+        !passwordValue ||
+        !confirmValue
+      ) {
+
+        showMessage(
+          "Please complete all required fields.",
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      if (passwordValue.length < 8) {
+
+        showMessage(
+          "Password must contain at least 8 characters.",
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      if (passwordValue !== confirmValue) {
+
+        showMessage(
+          "Passwords do not match.",
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      if (!terms) {
+
+        showMessage(
+          "Please accept the Terms of Service and Privacy Policy.",
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      /* -------------------------------------
+         DISABLE BUTTON
+         ------------------------------------- */
+
+      registerBtn.disabled = true;
+
+      registerBtn.textContent =
+        "Creating account...";
+
+
+      try {
+
+        /* ===================================
+           CREATE FIREBASE AUTH USER
+           =================================== */
+
+        const userCredential =
+          await createUserWithEmailAndPassword(
+            auth,
+            email,
+            passwordValue
           );
 
-          return;
 
-        }
-
-
-        if (passwordValue.length < 8) {
-
-          showMessage(
-            "Password must contain at least 8 characters.",
-            "error"
-          );
-
-          return;
-
-        }
+        const user =
+          userCredential.user;
 
 
-        if (passwordValue !== confirmValue) {
+        /* ===================================
+           UPDATE DISPLAY NAME
+           =================================== */
 
-          showMessage(
-            "Passwords do not match.",
-            "error"
-          );
+        await updateProfile(
+          user,
+          {
+            displayName:
+              `${firstName} ${lastName}`
+          }
+        );
 
-          return;
 
-        }
+        /* ===================================
+           CREATE FIRESTORE PROFILE
+           =================================== */
+
+        await setDoc(
+          doc(
+            db,
+            "users",
+            user.uid
+          ),
+          {
+
+            uid:
+              user.uid,
+
+            firstName:
+              firstName,
+
+            lastName:
+              lastName,
+
+            fullName:
+              `${firstName} ${lastName}`,
+
+            email:
+              email,
+
+            phone:
+              phone,
+
+            education:
+              education,
+
+            role:
+              "student",
+
+            accountStatus:
+              "active",
+
+            createdAt:
+              serverTimestamp(),
+
+            updatedAt:
+              serverTimestamp()
+
+          }
+        );
 
 
-        if (!terms) {
+        /* ===================================
+           SUCCESS
+           =================================== */
 
-          showMessage(
-            "Please accept the Terms of Service and Privacy Policy.",
-            "error"
-          );
+        showMessage(
+          "Account created successfully! Opening your dashboard...",
+          "success"
+        );
 
-          return;
 
-        }
+        registerBtn.textContent =
+          "Account Created ✓";
 
 
         /*
-          FIREBASE REGISTRATION WILL BE CONNECTED HERE.
-
-          Later we will create:
-
-          Firebase Authentication user
-          +
-          Firestore student profile
-
-          Example fields:
-
-          {
-            firstName,
-            lastName,
-            email,
-            phone,
-            education,
-            role: "student",
-            createdAt,
-            accountStatus: "active"
-          }
+          Small delay so the user can see
+          the success message.
         */
 
-
-        registerBtn.disabled = true;
-        registerBtn.textContent =
-          "Creating account...";
-
-
-        // Temporary development response
         setTimeout(() => {
 
-          registerBtn.disabled = false;
-          registerBtn.textContent =
-            "Create Account";
+          window.location.href =
+            "student/index.html";
 
-          showMessage(
-            "Registration interface is ready. Firebase will be connected in the backend phase.",
-            "success"
-          );
+        }, 1000);
 
-        }, 900);
+
+      } catch (error) {
+
+        console.error(
+          "Registration error:",
+          error
+        );
+
+
+        showMessage(
+          getFirebaseError(error),
+          "error"
+        );
+
+
+        registerBtn.disabled =
+          false;
+
+        registerBtn.textContent =
+          "Create Account";
 
       }
-    );
 
-  </script>
+    }
+  );
+
+</script>
+
+
 
 </body>
   </html>
