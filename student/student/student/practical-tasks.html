@@ -1,0 +1,1749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Practical Tasks • TechBridge Rwanda</title>
+
+  <style>
+    :root {
+      --bg:#070b14;
+      --panel:#0d1527;
+      --panel2:#111c32;
+      --border:rgba(255,255,255,.08);
+      --text:#f5f7ff;
+      --muted:#8e9ab2;
+      --cyan:#00e5ff;
+      --blue:#3b82f6;
+      --purple:#a855f7;
+      --green:#22c55e;
+      --orange:#f59e0b;
+      --red:#ef4444;
+      --sidebar:250px;
+    }
+
+    * {
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+    }
+
+    body {
+      font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background:
+        radial-gradient(circle at 15% 10%,rgba(0,229,255,.08),transparent 25%),
+        radial-gradient(circle at 85% 20%,rgba(168,85,247,.08),transparent 25%),
+        var(--bg);
+      color:var(--text);
+      min-height:100vh;
+    }
+
+    button,input,textarea,select {
+      font:inherit;
+    }
+
+    button {
+      cursor:pointer;
+    }
+
+    /* SIDEBAR */
+
+    .sidebar {
+      position:fixed;
+      left:0;
+      top:0;
+      width:var(--sidebar);
+      height:100vh;
+      background:rgba(8,13,25,.97);
+      border-right:1px solid var(--border);
+      padding:20px 14px;
+      z-index:100;
+      overflow-y:auto;
+      transition:.25s;
+    }
+
+    .brand {
+      display:flex;
+      align-items:center;
+      gap:11px;
+      padding:5px 10px 25px;
+    }
+
+    .brand-logo {
+      width:40px;
+      height:40px;
+      display:grid;
+      place-items:center;
+      border-radius:12px;
+      background:linear-gradient(135deg,var(--cyan),var(--blue),var(--purple));
+      font-weight:900;
+    }
+
+    .brand h2 {
+      font-size:15px;
+    }
+
+    .brand span {
+      display:block;
+      color:var(--muted);
+      font-size:10px;
+      margin-top:3px;
+    }
+
+    .nav-section {
+      margin:16px 8px 8px;
+      color:#66728a;
+      font-size:10px;
+      text-transform:uppercase;
+      letter-spacing:1.2px;
+    }
+
+    .nav-link {
+      display:flex;
+      align-items:center;
+      gap:12px;
+      color:#aab5ca;
+      text-decoration:none;
+      padding:11px 12px;
+      border-radius:11px;
+      margin:3px 0;
+      font-size:13px;
+      transition:.2s;
+    }
+
+    .nav-link:hover {
+      background:rgba(255,255,255,.05);
+      color:white;
+    }
+
+    .nav-link.active {
+      background:linear-gradient(
+        90deg,
+        rgba(0,229,255,.13),
+        rgba(59,130,246,.08)
+      );
+      color:var(--cyan);
+      border:1px solid rgba(0,229,255,.08);
+    }
+
+    .nav-icon {
+      width:21px;
+      text-align:center;
+    }
+
+    /* MAIN */
+
+    .main {
+      margin-left:var(--sidebar);
+      min-height:100vh;
+    }
+
+    .topbar {
+      height:70px;
+      border-bottom:1px solid var(--border);
+      background:rgba(7,11,20,.82);
+      backdrop-filter:blur(18px);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:0 28px;
+      position:sticky;
+      top:0;
+      z-index:50;
+    }
+
+    .page-title h1 {
+      font-size:19px;
+    }
+
+    .page-title p {
+      color:var(--muted);
+      font-size:11px;
+      margin-top:3px;
+    }
+
+    .top-actions {
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+
+    .icon-btn {
+      width:38px;
+      height:38px;
+      border:1px solid var(--border);
+      border-radius:10px;
+      background:rgba(255,255,255,.035);
+      color:#dbe4f4;
+    }
+
+    .profile {
+      display:flex;
+      align-items:center;
+      gap:9px;
+      padding-left:8px;
+    }
+
+    .avatar {
+      width:35px;
+      height:35px;
+      border-radius:50%;
+      display:grid;
+      place-items:center;
+      background:linear-gradient(135deg,var(--blue),var(--purple));
+      font-size:12px;
+      font-weight:800;
+    }
+
+    .profile small {
+      display:block;
+      color:var(--muted);
+      font-size:10px;
+      margin-top:2px;
+    }
+
+    .mobile-menu {
+      display:none;
+      width:38px;
+      height:38px;
+      border:1px solid var(--border);
+      border-radius:9px;
+      background:rgba(255,255,255,.05);
+      color:white;
+    }
+
+    /* CONTENT */
+
+    .content {
+      padding:25px;
+    }
+
+    .hero {
+      background:linear-gradient(
+        135deg,
+        rgba(0,229,255,.10),
+        rgba(59,130,246,.08),
+        rgba(168,85,247,.10)
+      );
+      border:1px solid rgba(0,229,255,.12);
+      border-radius:18px;
+      padding:25px;
+      margin-bottom:18px;
+    }
+
+    .badge {
+      display:inline-block;
+      padding:6px 10px;
+      border-radius:999px;
+      background:rgba(0,229,255,.08);
+      border:1px solid rgba(0,229,255,.13);
+      color:var(--cyan);
+      font-size:10px;
+      margin-bottom:11px;
+    }
+
+    .hero h2 {
+      font-size:26px;
+      margin-bottom:8px;
+    }
+
+    .hero p {
+      color:#aab5ca;
+      font-size:12px;
+      line-height:1.7;
+      max-width:700px;
+    }
+
+    /* STATS */
+
+    .stats {
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:12px;
+      margin-bottom:18px;
+    }
+
+    .stat {
+      background:rgba(13,21,39,.9);
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:17px;
+    }
+
+    .stat strong {
+      display:block;
+      font-size:22px;
+      margin-bottom:4px;
+    }
+
+    .stat span {
+      color:var(--muted);
+      font-size:10px;
+    }
+
+    /* TOOLBAR */
+
+    .toolbar {
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom:14px;
+    }
+
+    .search {
+      flex:1;
+      min-width:220px;
+      background:rgba(13,21,39,.9);
+      border:1px solid var(--border);
+      color:white;
+      border-radius:10px;
+      padding:10px 12px;
+      outline:none;
+    }
+
+    select {
+      background:#111c32;
+      border:1px solid var(--border);
+      color:white;
+      border-radius:9px;
+      padding:10px;
+      outline:none;
+    }
+
+    /* TASK GRID */
+
+    .task-grid {
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:14px;
+    }
+
+    .task-card {
+      background:rgba(13,21,39,.92);
+      border:1px solid var(--border);
+      border-radius:15px;
+      padding:18px;
+      transition:.2s;
+    }
+
+    .task-card:hover {
+      transform:translateY(-2px);
+      border-color:rgba(0,229,255,.2);
+    }
+
+    .task-top {
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+    }
+
+    .task-icon {
+      width:43px;
+      height:43px;
+      display:grid;
+      place-items:center;
+      border-radius:12px;
+      background:rgba(59,130,246,.10);
+      font-size:20px;
+      margin-bottom:12px;
+    }
+
+    .status {
+      padding:5px 8px;
+      border-radius:999px;
+      font-size:9px;
+      white-space:nowrap;
+    }
+
+    .available {
+      background:rgba(0,229,255,.08);
+      color:var(--cyan);
+    }
+
+    .submitted {
+      background:rgba(245,158,11,.10);
+      color:#f8c25a;
+    }
+
+    .graded {
+      background:rgba(34,197,94,.10);
+      color:#68e292;
+    }
+
+    .locked {
+      background:rgba(255,255,255,.05);
+      color:#7e899d;
+    }
+
+    .task-card h3 {
+      font-size:14px;
+      margin-bottom:7px;
+    }
+
+    .description {
+      color:var(--muted);
+      font-size:11px;
+      line-height:1.65;
+      min-height:52px;
+    }
+
+    .meta {
+      display:flex;
+      flex-wrap:wrap;
+      gap:7px;
+      margin-top:13px;
+    }
+
+    .meta span {
+      padding:5px 8px;
+      border-radius:7px;
+      background:rgba(255,255,255,.04);
+      color:#9eabc0;
+      font-size:9px;
+    }
+
+    .task-bottom {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-top:15px;
+      padding-top:13px;
+      border-top:1px solid rgba(255,255,255,.05);
+    }
+
+    .score {
+      color:#72e6a1;
+      font-size:11px;
+      font-weight:700;
+    }
+
+    .btn {
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.045);
+      color:#dce5f4;
+      border-radius:9px;
+      padding:8px 12px;
+      font-size:10px;
+    }
+
+    .btn-primary {
+      border:0;
+      background:linear-gradient(135deg,var(--cyan),var(--blue));
+      color:white;
+      font-weight:700;
+    }
+
+    .btn-disabled {
+      opacity:.45;
+      cursor:not-allowed;
+    }
+
+    /* MODAL */
+
+    .modal {
+      position:fixed;
+      inset:0;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      background:rgba(0,0,0,.7);
+      backdrop-filter:blur(7px);
+      z-index:500;
+    }
+
+    .modal.show {
+      display:flex;
+    }
+
+    .modal-box {
+      width:100%;
+      max-width:650px;
+      max-height:92vh;
+      overflow-y:auto;
+      background:#0d1527;
+      border:1px solid var(--border);
+      border-radius:17px;
+      box-shadow:0 25px 80px rgba(0,0,0,.5);
+    }
+
+    .modal-header {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:18px;
+      border-bottom:1px solid var(--border);
+    }
+
+    .modal-header h3 {
+      font-size:15px;
+    }
+
+    .close {
+      width:32px;
+      height:32px;
+      border:1px solid var(--border);
+      border-radius:8px;
+      background:rgba(255,255,255,.04);
+      color:white;
+    }
+
+    .modal-body {
+      padding:18px;
+    }
+
+    .instruction {
+      color:#aebbd0;
+      font-size:11px;
+      line-height:1.8;
+      margin-bottom:15px;
+    }
+
+    .requirements {
+      background:rgba(0,229,255,.04);
+      border:1px solid rgba(0,229,255,.10);
+      border-radius:11px;
+      padding:13px;
+      margin-bottom:16px;
+    }
+
+    .requirements strong {
+      color:var(--cyan);
+      font-size:10px;
+    }
+
+    .requirements ul {
+      margin:8px 0 0 18px;
+      color:#aebbd0;
+      font-size:10px;
+      line-height:1.8;
+    }
+
+    .field {
+      margin-bottom:13px;
+    }
+
+    .field label {
+      display:block;
+      color:#b7c2d5;
+      font-size:10px;
+      margin-bottom:6px;
+    }
+
+    textarea,
+    input[type="text"] {
+      width:100%;
+      background:#0a1120;
+      border:1px solid var(--border);
+      color:white;
+      border-radius:9px;
+      padding:10px;
+      outline:none;
+      resize:vertical;
+    }
+
+    textarea {
+      min-height:120px;
+    }
+
+    .file-box {
+      border:1px dashed rgba(0,229,255,.2);
+      border-radius:10px;
+      padding:15px;
+      text-align:center;
+      color:var(--muted);
+      font-size:10px;
+    }
+
+    .file-box input {
+      margin-top:9px;
+      width:100%;
+    }
+
+    .modal-footer {
+      display:flex;
+      justify-content:flex-end;
+      gap:9px;
+      padding:15px 18px;
+      border-top:1px solid var(--border);
+    }
+
+    /* EMPTY */
+
+    .empty {
+      display:none;
+      text-align:center;
+      padding:50px 20px;
+      color:var(--muted);
+      background:rgba(13,21,39,.9);
+      border:1px solid var(--border);
+      border-radius:14px;
+    }
+
+    .empty-icon {
+      font-size:35px;
+      margin-bottom:10px;
+    }
+
+    /* RESPONSIVE */
+
+    @media(max-width:1000px) {
+      .stats {
+        grid-template-columns:repeat(2,1fr);
+      }
+
+      .task-grid {
+        grid-template-columns:1fr;
+      }
+    }
+
+    @media(max-width:760px) {
+      :root {
+        --sidebar:0px;
+      }
+
+      .sidebar {
+        transform:translateX(-100%);
+        width:250px;
+      }
+
+      .sidebar.open {
+        transform:translateX(0);
+      }
+
+      .main {
+        margin-left:0;
+      }
+
+      .mobile-menu {
+        display:block;
+      }
+
+      .topbar {
+        padding:0 14px;
+      }
+
+      .page-title {
+        display:none;
+      }
+
+      .profile > div {
+        display:none;
+      }
+
+      .content {
+        padding:15px;
+      }
+
+      .hero {
+        padding:20px;
+      }
+
+      .hero h2 {
+        font-size:22px;
+      }
+
+      .stats {
+        grid-template-columns:repeat(2,1fr);
+        gap:9px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- SIDEBAR -->
+
+  <aside class="sidebar" id="sidebar">
+
+    <div class="brand">
+      <div class="brand-logo">TB</div>
+
+      <div>
+        <h2>TECHBRIDGE</h2>
+        <span>RWANDA • STUDENT</span>
+      </div>
+    </div>
+
+    <div class="nav-section">Learning</div>
+
+    <a class="nav-link" href="index.html">
+      <span class="nav-icon">⌂</span>
+      Dashboard
+    </a>
+
+    <a class="nav-link" href="courses.html">
+      <span class="nav-icon">▣</span>
+      My Courses
+    </a>
+
+    <a class="nav-link" href="quizzes.html">
+      <span class="nav-icon">✓</span>
+      Quizzes
+    </a>
+
+    <a class="nav-link" href="tests.html">
+      <span class="nav-icon">◈</span>
+      Assessments
+    </a>
+
+    <a class="nav-link" href="certificates.html">
+      <span class="nav-icon">◇</span>
+      Certificates & Badges
+    </a>
+
+    <div class="nav-section">Practical</div>
+
+    <a class="nav-link active" href="practical.html">
+      <span class="nav-icon">⚡</span>
+      Practical Learning
+    </a>
+
+    <a class="nav-link" href="ai-assistant.html">
+      <span class="nav-icon">✦</span>
+      Gemini AI Assistant
+    </a>
+
+    <a class="nav-link" href="code-editor.html">
+      <span class="nav-icon">⌘</span>
+      Code Editor
+    </a>
+
+    <a class="nav-link" href="computer-workshop.html">
+      <span class="nav-icon">💻</span>
+      Computer Workshop
+    </a>
+
+    <a class="nav-link active" href="practical-tasks.html">
+      <span class="nav-icon">⚙</span>
+      Practical Tasks
+    </a>
+
+    <div class="nav-section">Account</div>
+
+    <a class="nav-link" href="settings.html">
+      <span class="nav-icon">⚙</span>
+      Settings
+    </a>
+
+    <a class="nav-link" href="../index.html">
+      <span class="nav-icon">←</span>
+      Back to Website
+    </a>
+
+  </aside>
+
+  <!-- MAIN -->
+
+  <main class="main">
+
+    <header class="topbar">
+
+      <div style="display:flex;align-items:center;gap:10px;">
+
+        <button
+          class="mobile-menu"
+          onclick="toggleSidebar()">
+          ☰
+        </button>
+
+        <div class="page-title">
+          <h1>Practical Tasks</h1>
+          <p>Build real skills through practical assignments.</p>
+        </div>
+
+      </div>
+
+      <div class="top-actions">
+
+        <button
+          class="icon-btn"
+          onclick="showToast('Notifications will be connected to Firebase.')">
+          🔔
+        </button>
+
+        <div class="profile">
+
+          <div class="avatar">ST</div>
+
+          <div>
+            <strong style="font-size:12px;">Student</strong>
+            <small>TechBridge Learner</small>
+          </div>
+
+        </div>
+
+      </div>
+
+    </header>
+
+    <section class="content">
+
+      <!-- HERO -->
+
+      <section class="hero">
+
+        <span class="badge">
+          🚀 PROJECT-BASED LEARNING
+        </span>
+
+        <h2>
+          Build Skills Through Practice
+        </h2>
+
+        <p>
+          Complete practical assignments from your courses.
+          Submit your work, receive instructor feedback,
+          and build evidence of what you can actually do.
+        </p>
+
+      </section>
+
+      <!-- STATS -->
+
+      <section class="stats">
+
+        <div class="stat">
+          <strong id="totalTasks">8</strong>
+          <span>Total Tasks</span>
+        </div>
+
+        <div class="stat">
+          <strong id="completedTasks">3</strong>
+          <span>Completed</span>
+        </div>
+
+        <div class="stat">
+          <strong>2</strong>
+          <span>Awaiting Review</span>
+        </div>
+
+        <div class="stat">
+          <strong>82%</strong>
+          <span>Average Score</span>
+        </div>
+
+      </section>
+
+      <!-- TOOLBAR -->
+
+      <div class="toolbar">
+
+        <input
+          class="search"
+          id="searchInput"
+          type="text"
+          placeholder="Search practical tasks..."
+          oninput="filterTasks()">
+
+        <select
+          id="levelFilter"
+          onchange="filterTasks()">
+
+          <option value="all">
+            All Levels
+          </option>
+
+          <option value="beginner">
+            Beginner
+          </option>
+
+          <option value="intermediate">
+            Intermediate
+          </option>
+
+          <option value="advanced">
+            Advanced
+          </option>
+
+        </select>
+
+        <select
+          id="statusFilter"
+          onchange="filterTasks()">
+
+          <option value="all">
+            All Status
+          </option>
+
+          <option value="available">
+            Available
+          </option>
+
+          <option value="submitted">
+            Submitted
+          </option>
+
+          <option value="graded">
+            Graded
+          </option>
+
+          <option value="locked">
+            Locked
+          </option>
+
+        </select>
+
+      </div>
+
+      <!-- TASKS -->
+
+      <section
+        class="task-grid"
+        id="taskGrid">
+
+      </section>
+
+      <div
+        class="empty"
+        id="emptyState">
+
+        <div class="empty-icon">
+          🔎
+        </div>
+
+        <strong>
+          No practical tasks found
+        </strong>
+
+        <p style="margin-top:5px;">
+          Try another search or filter.
+        </p>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- SUBMISSION MODAL -->
+
+  <div
+    class="modal"
+    id="submissionModal">
+
+    <div class="modal-box">
+
+      <div class="modal-header">
+
+        <h3 id="modalTitle">
+          Submit Practical Task
+        </h3>
+
+        <button
+          class="close"
+          onclick="closeModal()">
+          ×
+        </button>
+
+      </div>
+
+      <div class="modal-body">
+
+        <p
+          class="instruction"
+          id="modalInstruction">
+        </p>
+
+        <div class="requirements">
+
+          <strong>
+            SUBMISSION REQUIREMENTS
+          </strong>
+
+          <ul id="requirementsList">
+          </ul>
+
+        </div>
+
+        <div class="field">
+
+          <label>
+            Your answer / explanation
+          </label>
+
+          <textarea
+            id="submissionText"
+            placeholder="Explain what you built or completed...">
+          </textarea>
+
+        </div>
+
+        <div class="field">
+
+          <label>
+            Project link (optional)
+          </label>
+
+          <input
+            type="text"
+            id="projectLink"
+            placeholder="https://...">
+
+        </div>
+
+        <div class="field">
+
+          <label>
+            Attach evidence
+          </label>
+
+          <div class="file-box">
+
+            Upload a screenshot or project file if required.
+
+            <input
+              type="file"
+              id="submissionFile"
+              accept=".jpg,.jpeg,.png,.pdf,.zip,.html,.css,.js">
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+
+        <button
+          class="btn"
+          onclick="closeModal()">
+          Cancel
+        </button>
+
+        <button
+          class="btn btn-primary"
+          onclick="submitTask()">
+          Submit Task
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+
+    /*
+      =====================================================
+      TECHBRIDGE PRACTICAL TASKS
+
+      FRONTEND PROTOTYPE
+
+      Production Firestore structure:
+
+      practicalTasks/{taskId}
+
+      {
+        courseId,
+        title,
+        description,
+        level,
+        instructions,
+        requirements,
+        deadline,
+        maxScore,
+        published
+      }
+
+      practicalSubmissions/{submissionId}
+
+      {
+        taskId,
+        userId,
+        answer,
+        projectLink,
+        fileUrl,
+        status: "submitted",
+        submittedAt,
+        score,
+        feedback,
+        gradedAt,
+        gradedBy
+      }
+
+      IMPORTANT:
+
+      Students must NOT be allowed to change:
+
+      - score
+      - feedback
+      - gradedBy
+      - approval status
+
+      Those values must be controlled by the
+      authenticated admin/instructor backend.
+
+      =====================================================
+    */
+
+    const tasks = [
+
+      {
+        id:"web-page",
+        title:"Build a Personal Web Page",
+        description:
+          "Create a simple responsive personal webpage using HTML and CSS.",
+        level:"beginner",
+        status:"graded",
+        course:"Web Development",
+        deadline:"Completed",
+        score:"88%",
+        icon:"🌐",
+        instructions:
+          "Create a single webpage introducing yourself as a learner. Include a heading, short biography, skills section and contact section.",
+        requirements:[
+          "Use semantic HTML",
+          "Add CSS styling",
+          "Include at least three sections",
+          "Make the page readable on mobile"
+        ]
+      },
+
+      {
+        id:"python-calculator",
+        title:"Build a Python Calculator",
+        description:
+          "Create a calculator program that performs basic arithmetic operations.",
+        level:"beginner",
+        status:"available",
+        course:"Programming Foundations",
+        deadline:"5 Oct 2026",
+        score:"",
+        icon:"🐍",
+        instructions:
+          "Build a Python program that accepts two numbers and performs addition, subtraction, multiplication and division.",
+        requirements:[
+          "Use variables",
+          "Use arithmetic operators",
+          "Accept user input",
+          "Handle division appropriately"
+        ]
+      },
+
+      {
+        id:"network-report",
+        title:"Basic Network Investigation",
+        description:
+          "Investigate the network configuration of a computer and document your findings.",
+        level:"intermediate",
+        status:"submitted",
+        course:"Computer Networking",
+        deadline:"3 Oct 2026",
+        score:"Pending",
+        icon:"🌐",
+        instructions:
+          "Collect basic network information from your own computer and explain what each value means.",
+        requirements:[
+          "Identify the IP address",
+          "Identify the default gateway",
+          "Identify the DNS information",
+          "Explain your findings"
+        ]
+      },
+
+      {
+        id:"security-awareness",
+        title:"Cyber Security Awareness Report",
+        description:
+          "Create a short report explaining common digital security risks and safe practices.",
+        level:"intermediate",
+        status:"available",
+        course:"Cyber Security Fundamentals",
+        deadline:"8 Oct 2026",
+        score:"",
+        icon:"🛡️",
+        instructions:
+          "Write a short educational report explaining common security risks and practical ways students can protect their accounts and devices.",
+        requirements:[
+          "Explain at least three risks",
+          "Give practical safety measures",
+          "Use clear examples",
+          "Submit a short written report"
+        ]
+      },
+
+      {
+        id:"database-design",
+        title:"Design a Student Database",
+        description:
+          "Design a basic database structure for managing student information.",
+        level:"intermediate",
+        status:"available",
+        course:"Database Fundamentals",
+        deadline:"12 Oct 2026",
+        score:"",
+        icon:"🗄️",
+        instructions:
+          "Design tables for students, courses and enrollments. Explain the relationships between the tables.",
+        requirements:[
+          "Create logical tables",
+          "Identify primary keys",
+          "Identify relationships",
+          "Explain your database design"
+        ]
+      },
+
+      {
+        id:"advanced-web",
+        title:"Advanced Web Application",
+        description:
+          "Build a small full-stack learning project with authentication and persistent data.",
+        level:"advanced",
+        status:"locked",
+        course:"Advanced Web Development",
+        deadline:"Locked",
+        score:"",
+        icon:"⚡",
+        instructions:
+          "This task becomes available after completing the required intermediate assessments.",
+        requirements:[
+          "Complete prerequisite course",
+          "Pass intermediate assessment",
+          "Build the required application"
+        ]
+      },
+
+      {
+        id:"ai-project",
+        title:"AI Learning Assistant Prototype",
+        description:
+          "Design a simple educational assistant interface using an AI API architecture.",
+        level:"advanced",
+        status:"locked",
+        course:"Artificial Intelligence",
+        deadline:"Locked",
+        score:"",
+        icon:"✦",
+        instructions:
+          "Complete the required AI lessons before starting this practical project.",
+        requirements:[
+          "Complete AI fundamentals",
+          "Understand API architecture",
+          "Design the assistant interface"
+        ]
+      },
+
+      {
+        id:"computer-maintenance",
+        title:"Computer Maintenance Checklist",
+        description:
+          "Create a practical checklist for maintaining a computer safely.",
+        level:"beginner",
+        status:"graded",
+        course:"Computer Basics",
+        deadline:"Completed",
+        score:"78%",
+        icon:"🔧",
+        instructions:
+          "Prepare a practical maintenance checklist covering software updates, storage, security and physical care.",
+        requirements:[
+          "Include software maintenance",
+          "Include security maintenance",
+          "Include storage management",
+          "Use clear checklist items"
+        ]
+      }
+
+    ];
+
+    let selectedTask = null;
+
+    /* ================= RENDER ================= */
+
+    function renderTasks(list = tasks) {
+
+      const grid =
+        document.getElementById("taskGrid");
+
+      const empty =
+        document.getElementById("emptyState");
+
+      grid.innerHTML = "";
+
+      if (!list.length) {
+
+        empty.style.display = "block";
+
+        return;
+
+      }
+
+      empty.style.display = "none";
+
+      list.forEach(task => {
+
+        const card =
+          document.createElement("article");
+
+        card.className =
+          "task-card";
+
+        card.innerHTML = `
+
+          <div class="task-top">
+
+            <div class="task-icon">
+              ${task.icon}
+            </div>
+
+            <span class="status ${task.status}">
+              ${formatStatus(task.status)}
+            </span>
+
+          </div>
+
+          <h3>
+            ${escapeHTML(task.title)}
+          </h3>
+
+          <p class="description">
+            ${escapeHTML(task.description)}
+          </p>
+
+          <div class="meta">
+
+            <span>
+              ${escapeHTML(task.course)}
+            </span>
+
+            <span>
+              ${capitalize(task.level)}
+            </span>
+
+            <span>
+              ${escapeHTML(task.deadline)}
+            </span>
+
+          </div>
+
+          <div class="task-bottom">
+
+            <div class="score">
+              ${task.score
+                ? "Score: " + escapeHTML(task.score)
+                : "Not submitted"}
+            </div>
+
+            ${getActionButton(task)}
+
+          </div>
+
+        `;
+
+        grid.appendChild(card);
+
+      });
+
+    }
+
+    function getActionButton(task) {
+
+      if (task.status === "locked") {
+
+        return `
+          <button
+            class="btn btn-disabled"
+            disabled>
+            🔒 Locked
+          </button>
+        `;
+
+      }
+
+      if (task.status === "graded") {
+
+        return `
+          <button
+            class="btn"
+            onclick="viewFeedback('${task.id}')">
+            View Feedback
+          </button>
+        `;
+
+      }
+
+      if (task.status === "submitted") {
+
+        return `
+          <button
+            class="btn"
+            onclick="viewSubmission('${task.id}')">
+            View Submission
+          </button>
+        `;
+
+      }
+
+      return `
+        <button
+          class="btn btn-primary"
+          onclick="openSubmission('${task.id}')">
+          Start Task
+        </button>
+      `;
+
+    }
+
+    /* ================= SEARCH/FILTER ================= */
+
+    function filterTasks() {
+
+      const search =
+        document
+          .getElementById("searchInput")
+          .value
+          .toLowerCase();
+
+      const level =
+        document.getElementById(
+          "levelFilter"
+        ).value;
+
+      const status =
+        document.getElementById(
+          "statusFilter"
+        ).value;
+
+      const filtered =
+        tasks.filter(task => {
+
+          const matchesSearch =
+            task.title
+              .toLowerCase()
+              .includes(search) ||
+            task.description
+              .toLowerCase()
+              .includes(search) ||
+            task.course
+              .toLowerCase()
+              .includes(search);
+
+          const matchesLevel =
+            level === "all" ||
+            task.level === level;
+
+          const matchesStatus =
+            status === "all" ||
+            task.status === status;
+
+          return (
+            matchesSearch &&
+            matchesLevel &&
+            matchesStatus
+          );
+
+        });
+
+      renderTasks(filtered);
+
+    }
+
+    /* ================= SUBMISSION ================= */
+
+    function openSubmission(id) {
+
+      const task =
+        tasks.find(
+          item => item.id === id
+        );
+
+      if (!task) return;
+
+      selectedTask = task;
+
+      document.getElementById(
+        "modalTitle"
+      ).textContent =
+        "Submit: " + task.title;
+
+      document.getElementById(
+        "modalInstruction"
+      ).textContent =
+        task.instructions;
+
+      const list =
+        document.getElementById(
+          "requirementsList"
+        );
+
+      list.innerHTML = "";
+
+      task.requirements.forEach(
+        requirement => {
+
+          const li =
+            document.createElement("li");
+
+          li.textContent =
+            requirement;
+
+          list.appendChild(li);
+
+        }
+      );
+
+      document.getElementById(
+        "submissionText"
+      ).value = "";
+
+      document.getElementById(
+        "projectLink"
+      ).value = "";
+
+      document.getElementById(
+        "submissionFile"
+      ).value = "";
+
+      document.getElementById(
+        "submissionModal"
+      ).classList.add("show");
+
+    }
+
+    function closeModal() {
+
+      document.getElementById(
+        "submissionModal"
+      ).classList.remove("show");
+
+      selectedTask = null;
+
+    }
+
+    function submitTask() {
+
+      if (!selectedTask) return;
+
+      const answer =
+        document.getElementById(
+          "submissionText"
+        ).value.trim();
+
+      const link =
+        document.getElementById(
+          "projectLink"
+        ).value.trim();
+
+      const file =
+        document.getElementById(
+          "submissionFile"
+        ).files[0];
+
+      if (!answer && !link && !file) {
+
+        showToast(
+          "Please provide at least one submission item."
+        );
+
+        return;
+
+      }
+
+      /*
+        TEMPORARY FRONTEND STATE
+
+        Production submission:
+
+        1. Authenticate student.
+        2. Upload allowed file to secure storage.
+        3. Get secure file URL.
+        4. Create Firestore submission.
+        5. Notify instructor/admin.
+        6. Instructor grades from admin dashboard.
+
+        Never allow the student client to write
+        score or grading information.
+      */
+
+      selectedTask.status =
+        "submitted";
+
+      selectedTask.score =
+        "Pending";
+
+      showToast(
+        "Task submitted successfully."
+      );
+
+      closeModal();
+
+      renderTasks();
+
+    }
+
+    /* ================= FEEDBACK ================= */
+
+    function viewFeedback(id) {
+
+      const task =
+        tasks.find(
+          item => item.id === id
+        );
+
+      if (!task) return;
+
+      alert(
+        "Instructor Feedback\n\n" +
+        "Score: " + task.score +
+        "\n\nFeedback will be loaded from Firebase after the grading system is connected."
+      );
+
+    }
+
+    function viewSubmission(id) {
+
+      alert(
+        "Your submission is awaiting instructor review.\n\n" +
+        "The production version will load your submitted answer, file and project link from Firebase."
+      );
+
+    }
+
+    /* ================= HELPERS ================= */
+
+    function formatStatus(status) {
+
+      const names = {
+        available:"Available",
+        submitted:"Submitted",
+        graded:"Graded",
+        locked:"Locked"
+      };
+
+      return names[status] || status;
+
+    }
+
+    function capitalize(value) {
+
+      return value.charAt(0).toUpperCase() +
+        value.slice(1);
+
+    }
+
+    function escapeHTML(value) {
+
+      return String(value)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+
+    }
+
+    /* ================= SIDEBAR ================= */
+
+    function toggleSidebar() {
+
+      document
+        .getElementById("sidebar")
+        .classList.toggle("open");
+
+    }
+
+    /* ================= TOAST ================= */
+
+    function showToast(message) {
+
+      const toast =
+        document.createElement("div");
+
+      toast.textContent =
+        message;
+
+      toast.style.position =
+        "fixed";
+
+      toast.style.bottom =
+        "22px";
+
+      toast.style.right =
+        "22px";
+
+      toast.style.zIndex =
+        "9999";
+
+      toast.style.padding =
+        "12px 16px";
+
+      toast.style.borderRadius =
+        "10px";
+
+      toast.style.background =
+        "#111c32";
+
+      toast.style.border =
+        "1px solid rgba(0,229,255,.25)";
+
+      toast.style.color =
+        "white";
+
+      toast.style.fontSize =
+        "12px";
+
+      toast.style.boxShadow =
+        "0 10px 35px rgba(0,0,0,.4)";
+
+      document.body.appendChild(toast);
+
+      setTimeout(() => {
+
+        toast.remove();
+
+      },2600);
+
+    }
+
+    /* ================= MODAL OUTSIDE ================= */
+
+    document
+      .getElementById("submissionModal")
+      .addEventListener(
+        "click",
+        event => {
+
+          if (
+            event.target.id ===
+            "submissionModal"
+          ) {
+
+            closeModal();
+
+          }
+
+        }
+      );
+
+    document.addEventListener(
+      "keydown",
+      event => {
+
+        if (event.key === "Escape") {
+          closeModal();
+        }
+
+      }
+    );
+
+    /* ================= INIT ================= */
+
+    document.addEventListener(
+      "DOMContentLoaded",
+      () => {
+
+        renderTasks();
+
+      }
+    );
+
+  </script>
+
+</body>
+</html>
