@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Create Account | TechBridge Rwanda</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #050816;
+      --card: #0c1428;
+      --text: #f7f9ff;
+      --muted: #9ca9c5;
+      --primary: #00e5ff;
+      --secondary: #6366f1;
+      --success: #22c55e;
+      --danger: #ef4444;
+      --border: rgba(255,255,255,.09);
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 10% 15%, rgba(0,229,255,.12), transparent 30%),
+        radial-gradient(circle at 90% 85%, rgba(99,102,241,.15), transparent 30%),
+        var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .page {
+      width: 100%;
+      max-width: 1100px;
+      min-height: 680px;
+      display: grid;
+      grid-template-columns: .9fr 1.1fr;
+      background: rgba(12,20,40,.85);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: 0 30px 100px rgba(0,0,0,.45);
+      backdrop-filter: blur(20px);
+    }
+
+    /* LEFT */
+
+    .intro {
+      padding: 50px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(0,229,255,.13), transparent 35%),
+        radial-gradient(circle at 80% 80%, rgba(99,102,241,.13), transparent 35%);
+      border-right: 1px solid var(--border);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      font-weight: 800;
+      font-size: 19px;
+    }
+
+    .logo-icon {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 13px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: #001018;
+      font-weight: 900;
+      box-shadow: 0 0 30px rgba(0,229,255,.2);
+    }
+
+    .intro-content h1 {
+      font-size: 43px;
+      line-height: 1.08;
+      margin-bottom: 18px;
+    }
+
+    .gradient {
+      background: linear-gradient(90deg, var(--primary), #818cf8);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .intro-content p {
+      color: var(--muted);
+      line-height: 1.8;
+      font-size: 14px;
+      max-width: 410px;
+    }
+
+    .steps {
+      margin-top: 28px;
+      display: grid;
+      gap: 13px;
+    }
+
+    .step {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .step-number {
+      width: 31px;
+      height: 31px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: rgba(0,229,255,.08);
+      color: var(--primary);
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .step span {
+      color: #dce4f8;
+      font-size: 13px;
+    }
+
+    .intro-footer {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    /* FORM */
+
+    .form-area {
+      padding: 45px 55px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow-y: auto;
+    }
+
+    .form-box {
+      width: 100%;
+      max-width: 470px;
+    }
+
+    .form-box h2 {
+      font-size: 30px;
+      margin-bottom: 7px;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+      margin-bottom: 25px;
+    }
+
+    .message {
+      display: none;
+      padding: 12px;
+      border-radius: 10px;
+      margin-bottom: 18px;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .message.error {
+      display: block;
+      color: #fecaca;
+      background: rgba(239,68,68,.1);
+      border: 1px solid rgba(239,68,68,.2);
+    }
+
+    .message.success {
+      display: block;
+      color: #bbf7d0;
+      background: rgba(34,197,94,.1);
+      border: 1px solid rgba(34,197,94,.2);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 7px;
+      font-size: 12px;
+      color: #dce4f8;
+      font-weight: 600;
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 13px 14px;
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      outline: none;
+      background: rgba(255,255,255,.035);
+      color: var(--text);
+      font-size: 13px;
+      transition: .25s;
+    }
+
+    select option {
+      background: #0c1428;
+      color: white;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: rgba(0,229,255,.55);
+      box-shadow: 0 0 0 3px rgba(0,229,255,.07);
+    }
+
+    input::placeholder {
+      color: #66728d;
+    }
+
+    .password-wrapper {
+      position: relative;
+    }
+
+    .password-wrapper input {
+      padding-right: 45px;
+    }
+
+    .toggle-password {
+      position: absolute;
+      right: 11px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: transparent;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+    }
+
+    .password-strength {
+      margin-top: 7px;
+      height: 4px;
+      background: #18243d;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .password-strength span {
+      display: block;
+      width: 0;
+      height: 100%;
+      transition: .3s;
+    }
+
+    .requirements {
+      margin-top: 7px;
+      color: #69758e;
+      font-size: 10px;
+      line-height: 1.5;
+    }
+
+    .terms {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      margin: 5px 0 18px;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    .terms input {
+      width: auto;
+      margin-top: 2px;
+      accent-color: var(--primary);
+    }
+
+    .terms a {
+      color: var(--primary);
+    }
+
+    .register-btn {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 800;
+      color: #001018;
+      background: linear-gradient(135deg, var(--primary), #3b82f6);
+      transition: .25s;
+    }
+
+    .register-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px rgba(0,229,255,.16);
+    }
+
+    .register-btn:disabled {
+      opacity: .6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .login-text {
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 18px;
+    }
+
+    .login-text a {
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    @media (max-width: 850px) {
+      .page {
+        grid-template-columns: 1fr;
+        max-width: 550px;
+      }
+
+      .intro {
+        display: none;
+      }
+
+      .form-area {
+        padding: 40px 25px;
+      }
+    }
+
+    @media (max-width: 500px) {
+      body {
+        padding: 10px;
+      }
+
+      .page {
+        border-radius: 20px;
+      }
+
+      .form-area {
+        padding: 30px 18px;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+
+      .full {
+        grid-column: auto;
+      }
+
+      .form-box h2 {
+        font-size: 27px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="page">
+
+    <!-- INTRO -->
+
+    <div class="intro">
+
+      <a href="index.html" class="logo">
+        <div class="logo-icon">T</div>
+        <span>TechBridge Rwanda</span>
+      </a>
+
+      <div class="intro-content">
+
+        <h1>
+          Start Your<br>
+          <span class="gradient">Learning Journey.</span>
+        </h1>
+
+        <p>
+          Create your student account and get access to structured
+          technology courses, assessments, practical tasks, and
+          learning tools.
+        </p>
+
+        <div class="steps">
+
+          <div class="step">
+            <div class="step-number">1</div>
+            <span>Create your account</span>
+          </div>
+
+          <div class="step">
+            <div class="step-number">2</div>
+            <span>Choose and enroll in courses</span>
+          </div>
+
+          <div class="step">
+            <div class="step-number">3</div>
+            <span>Learn, practice and complete tests</span>
+          </div>
+
+          <div class="step">
+            <div class="step-number">4</div>
+            <span>Earn certificates and badges</span>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="intro-footer">
+        Learn • Build • Practice • Grow
+      </div>
+
+    </div>
+
+    <!-- REGISTRATION -->
+
+    <div class="form-area">
+
+      <div class="form-box">
+
+        <h2>Create Student Account</h2>
+
+        <p class="subtitle">
+          Fill in your information to create your TechBridge Rwanda account.
+        </p>
+
+        <div id="message" class="message"></div>
+
+        <form id="registerForm">
+
+          <div class="form-grid">
+
+            <div class="form-group">
+
+              <label for="firstName">First name</label>
+
+              <input
+                type="text"
+                id="firstName"
+                placeholder="First name"
+                autocomplete="given-name"
+                required
+              >
+
+            </div>
+
+            <div class="form-group">
+
+              <label for="lastName">Last name</label>
+
+              <input
+                type="text"
+                id="lastName"
+                placeholder="Last name"
+                autocomplete="family-name"
+                required
+              >
+
+            </div>
+
+            <div class="form-group full">
+
+              <label for="email">Email address</label>
+
+              <input
+                type="email"
+                id="email"
+                placeholder="you@example.com"
+                autocomplete="email"
+                required
+              >
+
+            </div>
+
+            <div class="form-group">
+
+              <label for="phone">Phone number</label>
+
+              <input
+                type="tel"
+                id="phone"
+                placeholder="+250 7XX XXX XXX"
+                autocomplete="tel"
+                required
+              >
+
+            </div>
+
+            <div class="form-group">
+
+              <label for="education">Education level</label>
+
+              <select id="education" required>
+                <option value="">Select level</option>
+                <option>Secondary School</option>
+                <option>TVET</option>
+                <option>University</option>
+                <option>Other</option>
+              </select>
+
+            </div>
+
+            <div class="form-group full">
+
+              <label for="password">Password</label>
+
+              <div class="password-wrapper">
+
+                <input
+                  type="password"
+                  id="password"
+                  placeholder="Create a strong password"
+                  autocomplete="new-password"
+                  required
+                >
+
+                <button
+                  type="button"
+                  class="toggle-password"
+                  data-target="password"
+                >
+                  👁
+                </button>
+
+              </div>
+
+              <div class="password-strength">
+                <span id="strengthBar"></span>
+              </div>
+
+              <div class="requirements">
+                Use at least 8 characters, including letters and numbers.
+              </div>
+
+            </div>
+
+            <div class="form-group full">
+
+              <label for="confirmPassword">Confirm password</label>
+
+              <div class="password-wrapper">
+
+                <input
+                  type="password"
+                  id="confirmPassword"
+                  placeholder="Repeat your password"
+                  autocomplete="new-password"
+                  required
+                >
+
+                <button
+                  type="button"
+                  class="toggle-password"
+                  data-target="confirmPassword"
+                >
+                  👁
+                </button>
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <label class="terms">
+
+            <input type="checkbox" id="terms" required>
+
+            <span>
+              I agree to the TechBridge Rwanda
+              <a href="#" onclick="return false;">Terms of Service</a>
+              and
+              <a href="#" onclick="return false;">Privacy Policy</a>.
+            </span>
+
+          </label>
+
+          <button
+            type="submit"
+            class="register-btn"
+            id="registerBtn"
+          >
+            Create Account
+          </button>
+
+        </form>
+
+        <div class="login-text">
+          Already have an account?
+          <a href="login.html">Sign in</a>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+
+    const registerForm =
+      document.getElementById("registerForm");
+
+    const registerBtn =
+      document.getElementById("registerBtn");
+
+    const message =
+      document.getElementById("message");
+
+    const password =
+      document.getElementById("password");
+
+    const confirmPassword =
+      document.getElementById("confirmPassword");
+
+    const strengthBar =
+      document.getElementById("strengthBar");
+
+
+    // Show message
+    function showMessage(text, type) {
+
+      message.textContent = text;
+
+      message.className =
+        "message " + type;
+
+    }
+
+
+    // Password visibility
+    document
+      .querySelectorAll(".toggle-password")
+      .forEach(button => {
+
+        button.addEventListener("click", () => {
+
+          const target =
+            document.getElementById(
+              button.dataset.target
+            );
+
+          if (target.type === "password") {
+
+            target.type = "text";
+            button.textContent = "🙈";
+
+          } else {
+
+            target.type = "password";
+            button.textContent = "👁";
+
+          }
+
+        });
+
+      });
+
+
+    // Password strength
+    password.addEventListener("input", () => {
+
+      const value = password.value;
+
+      let strength = 0;
+
+      if (value.length >= 8)
+        strength++;
+
+      if (/[A-Z]/.test(value))
+        strength++;
+
+      if (/[0-9]/.test(value))
+        strength++;
+
+      if (/[^A-Za-z0-9]/.test(value))
+        strength++;
+
+      const widths = [
+        "0%",
+        "25%",
+        "50%",
+        "75%",
+        "100%"
+      ];
+
+      strengthBar.style.width =
+        widths[strength];
+
+      /*
+        Color will later be controlled by
+        the application's final theme.
+      */
+
+    });
+
+
+    // Registration
+    registerForm.addEventListener(
+      "submit",
+      event => {
+
+        event.preventDefault();
+
+        const firstName =
+          document.getElementById("firstName")
+            .value.trim();
+
+        const lastName =
+          document.getElementById("lastName")
+            .value.trim();
+
+        const email =
+          document.getElementById("email")
+            .value.trim();
+
+        const phone =
+          document.getElementById("phone")
+            .value.trim();
+
+        const education =
+          document.getElementById("education")
+            .value;
+
+        const passwordValue =
+          password.value;
+
+        const confirmValue =
+          confirmPassword.value;
+
+        const terms =
+          document.getElementById("terms").checked;
+
+
+        if (
+          !firstName ||
+          !lastName ||
+          !email ||
+          !phone ||
+          !education ||
+          !passwordValue ||
+          !confirmValue
+        ) {
+
+          showMessage(
+            "Please complete all required fields.",
+            "error"
+          );
+
+          return;
+
+        }
+
+
+        if (passwordValue.length < 8) {
+
+          showMessage(
+            "Password must contain at least 8 characters.",
+            "error"
+          );
+
+          return;
+
+        }
+
+
+        if (passwordValue !== confirmValue) {
+
+          showMessage(
+            "Passwords do not match.",
+            "error"
+          );
+
+          return;
+
+        }
+
+
+        if (!terms) {
+
+          showMessage(
+            "Please accept the Terms of Service and Privacy Policy.",
+            "error"
+          );
+
+          return;
+
+        }
+
+
+        /*
+          FIREBASE REGISTRATION WILL BE CONNECTED HERE.
+
+          Later we will create:
+
+          Firebase Authentication user
+          +
+          Firestore student profile
+
+          Example fields:
+
+          {
+            firstName,
+            lastName,
+            email,
+            phone,
+            education,
+            role: "student",
+            createdAt,
+            accountStatus: "active"
+          }
+        */
+
+
+        registerBtn.disabled = true;
+        registerBtn.textContent =
+          "Creating account...";
+
+
+        // Temporary development response
+        setTimeout(() => {
+
+          registerBtn.disabled = false;
+          registerBtn.textContent =
+            "Create Account";
+
+          showMessage(
+            "Registration interface is ready. Firebase will be connected in the backend phase.",
+            "success"
+          );
+
+        }, 900);
+
+      }
+    );
+
+  </script>
+
+</body>
+  </html>
