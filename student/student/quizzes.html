@@ -1,0 +1,1468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quizzes — TechBridge Rwanda</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Inter, Arial, sans-serif;
+    }
+
+    :root {
+      --bg: #070b14;
+      --sidebar: #0b1120;
+      --card: #0d1627;
+      --card2: #111d31;
+      --border: rgba(255,255,255,.08);
+      --text: #f4f7fb;
+      --muted: #91a0b8;
+      --cyan: #00e5ff;
+      --blue: #3b82f6;
+      --purple: #a855f7;
+      --green: #22c55e;
+      --orange: #f59e0b;
+      --red: #ef4444;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    /* SIDEBAR */
+
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 250px;
+      height: 100vh;
+      background: var(--sidebar);
+      border-right: 1px solid var(--border);
+      padding: 24px 16px;
+      z-index: 1000;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 10px 28px;
+    }
+
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--cyan), var(--blue));
+      color: #001018;
+      font-weight: 900;
+    }
+
+    .logo-text strong {
+      display: block;
+      font-size: 15px;
+    }
+
+    .logo-text span {
+      color: var(--cyan);
+      font-size: 11px;
+    }
+
+    .nav-title {
+      color: #59677e;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      padding: 0 12px 10px;
+    }
+
+    .nav {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .nav a {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      border-radius: 10px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .nav a:hover {
+      background: rgba(255,255,255,.05);
+      color: white;
+    }
+
+    .nav a.active {
+      color: var(--cyan);
+      background: rgba(0,229,255,.10);
+      border: 1px solid rgba(0,229,255,.12);
+    }
+
+    .nav-icon {
+      width: 22px;
+      text-align: center;
+    }
+
+    .sidebar-bottom {
+      position: absolute;
+      left: 16px;
+      right: 16px;
+      bottom: 20px;
+    }
+
+    .sidebar-bottom a {
+      display: block;
+      padding: 12px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    /* MAIN */
+
+    .main {
+      margin-left: 250px;
+      min-height: 100vh;
+    }
+
+    .topbar {
+      height: 72px;
+      padding: 0 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      background: rgba(7,11,20,.9);
+      backdrop-filter: blur(14px);
+      position: sticky;
+      top: 0;
+      z-index: 900;
+    }
+
+    .page-title h1 {
+      font-size: 20px;
+    }
+
+    .page-title p {
+      color: var(--muted);
+      font-size: 11px;
+      margin-top: 3px;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .notification {
+      width: 40px;
+      height: 40px;
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      background: var(--card);
+      color: white;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .notification-dot {
+      position: absolute;
+      top: 7px;
+      right: 8px;
+      width: 7px;
+      height: 7px;
+      background: var(--red);
+      border-radius: 50%;
+    }
+
+    .avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--blue), var(--purple));
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    /* CONTENT */
+
+    .content {
+      max-width: 1400px;
+      padding: 30px 32px 60px;
+    }
+
+    .hero {
+      background:
+        radial-gradient(circle at 90% 10%, rgba(0,229,255,.13), transparent 30%),
+        radial-gradient(circle at 10% 100%, rgba(168,85,247,.12), transparent 35%),
+        var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 27px;
+      margin-bottom: 24px;
+    }
+
+    .hero h2 {
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+
+    .hero p {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+      max-width: 680px;
+    }
+
+    /* STATS */
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 25px;
+    }
+
+    .stat {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+    }
+
+    .stat-icon {
+      font-size: 18px;
+      margin-bottom: 12px;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 23px;
+    }
+
+    .stat span {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      margin-top: 4px;
+    }
+
+    /* CONTROLS */
+
+    .controls {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 22px;
+      flex-wrap: wrap;
+    }
+
+    .search {
+      position: relative;
+      flex: 1;
+      min-width: 220px;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 13px;
+      top: 12px;
+      color: var(--muted);
+    }
+
+    .search input,
+    .filter {
+      width: 100%;
+      height: 44px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--card);
+      color: white;
+      outline: none;
+    }
+
+    .search input {
+      padding: 0 15px 0 40px;
+    }
+
+    .filter {
+      width: 180px;
+      padding: 0 12px;
+    }
+
+    .search input:focus,
+    .filter:focus {
+      border-color: rgba(0,229,255,.45);
+    }
+
+    /* QUIZ GRID */
+
+    .section-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .section-title h3 {
+      font-size: 17px;
+    }
+
+    .section-title span {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .quiz-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 17px;
+    }
+
+    .quiz-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 19px;
+      transition: .2s;
+    }
+
+    .quiz-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(0,229,255,.25);
+    }
+
+    .quiz-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 15px;
+    }
+
+    .quiz-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: rgba(0,229,255,.08);
+      color: var(--cyan);
+      font-size: 19px;
+    }
+
+    .status {
+      padding: 5px 8px;
+      border-radius: 20px;
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: .4px;
+    }
+
+    .status.completed {
+      color: var(--green);
+      background: rgba(34,197,94,.08);
+    }
+
+    .status.available {
+      color: var(--cyan);
+      background: rgba(0,229,255,.08);
+    }
+
+    .status.locked {
+      color: var(--orange);
+      background: rgba(245,158,11,.08);
+    }
+
+    .quiz-title {
+      font-size: 15px;
+      line-height: 1.4;
+      margin-bottom: 7px;
+    }
+
+    .quiz-description {
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.55;
+      min-height: 35px;
+      margin-bottom: 15px;
+    }
+
+    .quiz-meta {
+      display: flex;
+      gap: 13px;
+      color: var(--muted);
+      font-size: 10px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .quiz-result {
+      margin-top: 13px;
+      padding: 10px;
+      border-radius: 9px;
+      background: rgba(34,197,94,.05);
+      color: var(--green);
+      font-size: 11px;
+    }
+
+    .quiz-result strong {
+      font-size: 16px;
+    }
+
+    .quiz-button {
+      width: 100%;
+      height: 40px;
+      margin-top: 13px;
+      border-radius: 9px;
+      border: 1px solid var(--border);
+      background: #111d30;
+      color: white;
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .quiz-button:hover {
+      border-color: rgba(0,229,255,.4);
+    }
+
+    .quiz-button.primary {
+      border: 0;
+      background: linear-gradient(135deg, var(--cyan), var(--blue));
+      color: #001018;
+    }
+
+    .quiz-button.disabled {
+      color: var(--orange);
+      background: rgba(245,158,11,.06);
+      cursor: not-allowed;
+    }
+
+    /* EMPTY */
+
+    .empty {
+      display: none;
+      text-align: center;
+      padding: 55px 20px;
+      color: var(--muted);
+      border: 1px dashed var(--border);
+      border-radius: 15px;
+    }
+
+    .empty-icon {
+      font-size: 35px;
+      margin-bottom: 10px;
+    }
+
+    /* MOBILE */
+
+    .menu-btn {
+      display: none;
+      width: 40px;
+      height: 40px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--card);
+      color: white;
+      cursor: pointer;
+    }
+
+    @media (max-width: 1100px) {
+      .quiz-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 800px) {
+
+      .sidebar {
+        transform: translateX(-100%);
+        transition: .25s;
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .main {
+        margin-left: 0;
+      }
+
+      .menu-btn {
+        display: block;
+      }
+
+      .topbar {
+        padding: 0 16px;
+      }
+
+      .page-title {
+        display: none;
+      }
+
+      .content {
+        padding: 20px 15px 45px;
+      }
+
+      .quiz-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .profile-info {
+        display: none;
+      }
+    }
+
+    @media (max-width: 500px) {
+
+      .stats {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .filter {
+        width: 100%;
+      }
+
+      .notification {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- SIDEBAR -->
+
+  <aside class="sidebar" id="sidebar">
+
+    <div class="logo">
+
+      <div class="logo-icon">
+        TB
+      </div>
+
+      <div class="logo-text">
+        <strong>TECHBRIDGE</strong>
+        <span>RWANDA</span>
+      </div>
+
+    </div>
+
+    <div class="nav-title">
+      Student Menu
+    </div>
+
+    <nav class="nav">
+
+      <a href="index.html">
+        <span class="nav-icon">⌂</span>
+        Dashboard
+      </a>
+
+      <a href="courses.html">
+        <span class="nav-icon">▣</span>
+        My Courses
+      </a>
+
+      <a href="quizzes.html" class="active">
+        <span class="nav-icon">✓</span>
+        Quizzes
+      </a>
+
+      <a href="tests.html">
+        <span class="nav-icon">◆</span>
+        Assessments
+      </a>
+
+      <a href="certificates.html">
+        <span class="nav-icon">🏆</span>
+        Certificates & Badges
+      </a>
+
+      <a href="practical.html">
+        <span class="nav-icon">⌘</span>
+        Practical Learning
+      </a>
+
+      <a href="settings.html">
+        <span class="nav-icon">⚙</span>
+        Settings
+      </a>
+
+    </nav>
+
+    <div class="sidebar-bottom">
+      <a href="../index.html">
+        ← Back to Website
+      </a>
+    </div>
+
+  </aside>
+
+
+  <!-- MAIN -->
+
+  <main class="main">
+
+    <header class="topbar">
+
+      <div style="display:flex;align-items:center;gap:12px;">
+
+        <button
+          class="menu-btn"
+          onclick="toggleSidebar()"
+        >
+          ☰
+        </button>
+
+        <div class="page-title">
+
+          <h1>
+            Quizzes
+          </h1>
+
+          <p>
+            Test your understanding and track your results.
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div class="top-actions">
+
+        <button
+          class="notification"
+          onclick="showNotification()"
+        >
+          🔔
+
+          <span class="notification-dot"></span>
+        </button>
+
+        <div class="avatar">
+          ST
+        </div>
+
+      </div>
+
+    </header>
+
+
+    <section class="content">
+
+
+      <!-- HERO -->
+
+      <div class="hero">
+
+        <h2>
+          Test What You Have Learned 🧠
+        </h2>
+
+        <p>
+          Complete course quizzes after studying your
+          lessons. Your results will help track your
+          learning progress and prepare you for
+          assessments.
+        </p>
+
+      </div>
+
+
+      <!-- STATS -->
+
+      <div class="stats">
+
+        <div class="stat">
+
+          <div class="stat-icon">
+            ✓
+          </div>
+
+          <strong id="completedCount">
+            0
+          </strong>
+
+          <span>
+            Quizzes Completed
+          </span>
+
+        </div>
+
+
+        <div class="stat">
+
+          <div class="stat-icon">
+            ◷
+          </div>
+
+          <strong id="availableCount">
+            0
+          </strong>
+
+          <span>
+            Available Quizzes
+          </span>
+
+        </div>
+
+
+        <div class="stat">
+
+          <div class="stat-icon">
+            %
+          </div>
+
+          <strong id="averageScore">
+            0%
+          </strong>
+
+          <span>
+            Average Score
+          </span>
+
+        </div>
+
+
+        <div class="stat">
+
+          <div class="stat-icon">
+            🏆
+          </div>
+
+          <strong id="passedCount">
+            0
+          </strong>
+
+          <span>
+            Quizzes Passed
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <!-- CONTROLS -->
+
+      <div class="controls">
+
+        <div class="search">
+
+          <span class="search-icon">
+            ⌕
+          </span>
+
+          <input
+            type="text"
+            id="searchInput"
+            placeholder="Search quizzes..."
+            oninput="filterQuizzes()"
+          >
+
+        </div>
+
+
+        <select
+          class="filter"
+          id="statusFilter"
+          onchange="filterQuizzes()"
+        >
+
+          <option value="all">
+            All Status
+          </option>
+
+          <option value="available">
+            Available
+          </option>
+
+          <option value="completed">
+            Completed
+          </option>
+
+          <option value="locked">
+            Locked
+          </option>
+
+        </select>
+
+
+        <select
+          class="filter"
+          id="levelFilter"
+          onchange="filterQuizzes()"
+        >
+
+          <option value="all">
+            All Levels
+          </option>
+
+          <option value="beginner">
+            Beginner
+          </option>
+
+          <option value="intermediate">
+            Intermediate
+          </option>
+
+          <option value="advanced">
+            Advanced
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <!-- QUIZZES -->
+
+      <div class="section-title">
+
+        <h3>
+          Course Quizzes
+        </h3>
+
+        <span id="quizCount">
+          0 quizzes
+        </span>
+
+      </div>
+
+
+      <div
+        class="quiz-grid"
+        id="quizGrid"
+      ></div>
+
+
+      <div
+        class="empty"
+        id="emptyState"
+      >
+
+        <div class="empty-icon">
+          🔎
+        </div>
+
+        <h3>
+          No quizzes found
+        </h3>
+
+        <p style="margin-top:7px;">
+          Try changing your search or filters.
+        </p>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <script>
+
+    /*
+      TECHBRIDGE RWANDA
+
+      CURRENT VERSION:
+      Frontend quiz dashboard.
+
+      FUTURE FIREBASE STRUCTURE:
+
+      quizzes/{quizId}
+
+      {
+        courseId,
+        title,
+        description,
+        level,
+        questions,
+        durationMinutes,
+        passMark,
+        published
+      }
+
+      quizAttempts/{attemptId}
+
+      {
+        userId,
+        quizId,
+        answers,
+        score,
+        percentage,
+        passed,
+        submittedAt
+      }
+
+      IMPORTANT:
+      Correct answers should NOT be exposed
+      to the student in frontend JavaScript
+      when the real system is implemented.
+    */
+
+
+    const quizzes = [
+
+      {
+        id: "programming-quiz-1",
+
+        courseId: "programming-foundations",
+
+        title:
+          "Programming Foundations Quiz",
+
+        description:
+          "Test your understanding of variables, logic, programming concepts and basic syntax.",
+
+        level:
+          "beginner",
+
+        questions:
+          10,
+
+        duration:
+          15,
+
+        status:
+          "completed",
+
+        score:
+          85
+
+      },
+
+
+      {
+        id: "computer-quiz-1",
+
+        courseId: "computer-basics",
+
+        title:
+          "Computer Basics Quiz",
+
+        description:
+          "Check your understanding of computer hardware, software, files and internet basics.",
+
+        level:
+          "beginner",
+
+        questions:
+          15,
+
+        duration:
+          20,
+
+        status:
+          "available",
+
+        score:
+          null
+
+      },
+
+
+      {
+        id: "web-quiz-1",
+
+        courseId: "web-development",
+
+        title:
+          "HTML & CSS Quiz",
+
+        description:
+          "Test your knowledge of HTML structure, CSS styling and basic web development.",
+
+        level:
+          "intermediate",
+
+        questions:
+          15,
+
+        duration:
+          20,
+
+        status:
+          "locked",
+
+        score:
+          null
+
+      },
+
+
+      {
+        id: "python-quiz-1",
+
+        courseId: "python-programming",
+
+        title:
+          "Python Fundamentals Quiz",
+
+        description:
+          "Test your understanding of Python syntax, variables, conditions and functions.",
+
+        level:
+          "intermediate",
+
+        questions:
+          20,
+
+        duration:
+          25,
+
+        status:
+          "available",
+
+        score:
+          null
+
+      },
+
+
+      {
+        id: "cyber-quiz-1",
+
+        courseId: "cyber-security",
+
+        title:
+          "Cyber Security Fundamentals Quiz",
+
+        description:
+          "Review fundamental concepts of cybersecurity, passwords, networks and online safety.",
+
+        level:
+          "advanced",
+
+        questions:
+          20,
+
+        duration:
+          30,
+
+        status:
+          "locked",
+
+        score:
+          null
+
+      },
+
+
+      {
+        id: "advanced-programming-quiz",
+
+        courseId: "advanced-programming",
+
+        title:
+          "Advanced Programming Quiz",
+
+        description:
+          "Evaluate your understanding of algorithms, programming structures and problem solving.",
+
+        level:
+          "advanced",
+
+        questions:
+          25,
+
+        duration:
+          35,
+
+        status:
+          "locked",
+
+        score:
+          null
+
+      }
+
+    ];
+
+
+    function renderQuizzes(list) {
+
+      const grid =
+        document.getElementById(
+          "quizGrid"
+        );
+
+      const empty =
+        document.getElementById(
+          "emptyState"
+        );
+
+      const count =
+        document.getElementById(
+          "quizCount"
+        );
+
+
+      grid.innerHTML = "";
+
+      count.textContent =
+        `${list.length} quiz${list.length === 1 ? "" : "zes"}`;
+
+
+      if (list.length === 0) {
+
+        empty.style.display =
+          "block";
+
+        return;
+
+      }
+
+
+      empty.style.display =
+        "none";
+
+
+      list.forEach(quiz => {
+
+        const card =
+          document.createElement(
+            "article"
+          );
+
+        card.className =
+          "quiz-card";
+
+
+        let statusText =
+          "Available";
+
+
+        if (quiz.status === "completed") {
+          statusText = "Completed";
+        }
+
+        if (quiz.status === "locked") {
+          statusText = "Locked";
+        }
+
+
+        let buttonHTML = "";
+
+
+        if (quiz.status === "completed") {
+
+          buttonHTML = `
+            <button
+              class="quiz-button"
+              onclick="reviewQuiz('${quiz.id}')"
+            >
+              Review Result
+            </button>
+          `;
+
+        }
+        else if (quiz.status === "available") {
+
+          buttonHTML = `
+            <button
+              class="quiz-button primary"
+              onclick="startQuiz('${quiz.id}')"
+            >
+              Start Quiz
+            </button>
+          `;
+
+        }
+        else {
+
+          buttonHTML = `
+            <button
+              class="quiz-button disabled"
+              disabled
+            >
+              🔒 Complete Course Lessons First
+            </button>
+          `;
+
+        }
+
+
+        const resultHTML =
+          quiz.status === "completed"
+          ?
+          `
+            <div class="quiz-result">
+              Score:
+              <strong>
+                ${quiz.score}%
+              </strong>
+            </div>
+          `
+          :
+          "";
+
+
+        card.innerHTML = `
+
+          <div class="quiz-top">
+
+            <div class="quiz-icon">
+              ✓
+            </div>
+
+            <span class="status ${quiz.status}">
+              ${statusText}
+            </span>
+
+          </div>
+
+
+          <h3 class="quiz-title">
+            ${quiz.title}
+          </h3>
+
+
+          <p class="quiz-description">
+            ${quiz.description}
+          </p>
+
+
+          <div class="quiz-meta">
+
+            <span>
+              ◆ ${quiz.questions} questions
+            </span>
+
+            <span>
+              ◷ ${quiz.duration} min
+            </span>
+
+            <span>
+              ${quiz.level}
+            </span>
+
+          </div>
+
+
+          ${resultHTML}
+
+          ${buttonHTML}
+
+        `;
+
+
+        grid.appendChild(card);
+
+      });
+
+    }
+
+
+    function filterQuizzes() {
+
+      const search =
+        document
+          .getElementById("searchInput")
+          .value
+          .toLowerCase()
+          .trim();
+
+
+      const status =
+        document
+          .getElementById("statusFilter")
+          .value;
+
+
+      const level =
+        document
+          .getElementById("levelFilter")
+          .value;
+
+
+      const filtered =
+        quizzes.filter(quiz => {
+
+          const matchesSearch =
+            quiz.title
+              .toLowerCase()
+              .includes(search) ||
+
+            quiz.description
+              .toLowerCase()
+              .includes(search);
+
+
+          const matchesStatus =
+            status === "all" ||
+            quiz.status === status;
+
+
+          const matchesLevel =
+            level === "all" ||
+            quiz.level === level;
+
+
+          return (
+            matchesSearch &&
+            matchesStatus &&
+            matchesLevel
+          );
+
+        });
+
+
+      renderQuizzes(filtered);
+
+    }
+
+
+    function updateStats() {
+
+      const completed =
+        quizzes.filter(
+          quiz =>
+            quiz.status === "completed"
+        );
+
+
+      const available =
+        quizzes.filter(
+          quiz =>
+            quiz.status === "available"
+        );
+
+
+      const passed =
+        completed.filter(
+          quiz =>
+            quiz.score >= 70
+        );
+
+
+      const average =
+        completed.length
+        ?
+        Math.round(
+          completed.reduce(
+            (sum, quiz) =>
+              sum + quiz.score,
+            0
+          ) / completed.length
+        )
+        :
+        0;
+
+
+      document.getElementById(
+        "completedCount"
+      ).textContent =
+        completed.length;
+
+
+      document.getElementById(
+        "availableCount"
+      ).textContent =
+        available.length;
+
+
+      document.getElementById(
+        "averageScore"
+      ).textContent =
+        `${average}%`;
+
+
+      document.getElementById(
+        "passedCount"
+      ).textContent =
+        passed.length;
+
+    }
+
+
+    function startQuiz(quizId) {
+
+      /*
+        Future quiz page:
+
+        quiz.html?id=quizId
+
+        The real page will:
+
+        1. Load questions securely.
+        2. Start timer.
+        3. Save answers.
+        4. Submit attempt.
+        5. Calculate/store score securely.
+        6. Show result.
+      */
+
+      window.location.href =
+        `quiz.html?id=${encodeURIComponent(quizId)}`;
+
+    }
+
+
+    function reviewQuiz(quizId) {
+
+      window.location.href =
+        `quiz-result.html?id=${encodeURIComponent(quizId)}`;
+
+    }
+
+
+    function toggleSidebar() {
+
+      document
+        .getElementById("sidebar")
+        .classList.toggle("open");
+
+    }
+
+
+    function showNotification() {
+
+      alert(
+        "Notifications will be connected to Firebase in the next phase."
+      );
+
+    }
+
+
+    updateStats();
+
+    filterQuizzes();
+
+  </script>
+
+</body>
+</html>
