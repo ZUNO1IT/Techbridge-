@@ -1,835 +1,2440 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#05070d">
+<meta name="description" content="TECHBRIDGE RWANDA — Learn. Build. Practice. Grow.">
+<title>TECHBRIDGE RWANDA — Learn. Build. Practice. Grow.</title>
 
-  <title>TechBridge Rwanda | Learn • Build • Practice • Grow</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap');
 
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
 
-    :root {
-      --bg: #050816;
-      --card: #0b1224;
-      --card-2: #101a31;
-      --text: #f5f7ff;
-      --muted: #9ca9c5;
-      --primary: #00e5ff;
-      --secondary: #6366f1;
-      --success: #22c55e;
-      --border: rgba(255,255,255,.09);
-    }
+:root{
+    --bg:#05070d;
+    --bg2:#080b13;
+    --panel:#0c111c;
+    --panel2:#101725;
+    --text:#f5f8ff;
+    --muted:#8792a8;
+    --line:rgba(255,255,255,.08);
+    --cyan:#00e5ff;
+    --blue:#4285ff;
+    --purple:#9b5cff;
+    --green:#35e58b;
+    --orange:#ffb454;
+    --radius:24px;
+    --max:1240px;
+}
 
-    body {
-      font-family: Arial, Helvetica, sans-serif;
-      background:
-        radial-gradient(circle at 10% 10%, rgba(0,229,255,.12), transparent 30%),
-        radial-gradient(circle at 90% 20%, rgba(99,102,241,.14), transparent 30%),
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    background:
+        radial-gradient(circle at 15% 10%,rgba(0,229,255,.08),transparent 26%),
+        radial-gradient(circle at 85% 12%,rgba(155,92,255,.09),transparent 25%),
         var(--bg);
-      color: var(--text);
-      min-height: 100vh;
+    color:var(--text);
+    font-family:Inter,sans-serif;
+    overflow-x:hidden;
+}
+
+body:before{
+    content:"";
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    background-image:
+        linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);
+    background-size:50px 50px;
+    mask-image:linear-gradient(to bottom,#000,transparent 75%);
+}
+
+a{
+    color:inherit;
+    text-decoration:none;
+}
+
+button{
+    font-family:inherit;
+}
+
+.container{
+    width:min(var(--max),calc(100% - 48px));
+    margin:auto;
+}
+
+/* ================= NAV ================= */
+
+.navbar{
+    position:fixed;
+    top:0;
+    left:0;
+    right:0;
+    z-index:999;
+    padding:16px 0;
+    transition:.3s;
+}
+
+.navbar.scrolled{
+    background:rgba(5,7,13,.78);
+    backdrop-filter:blur(22px);
+    border-bottom:1px solid var(--line);
+}
+
+.nav{
+    height:58px;
+    padding:0 9px 0 15px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    border:1px solid transparent;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:11px;
+}
+
+.logo-mark{
+    width:39px;
+    height:39px;
+    display:grid;
+    place-items:center;
+    border-radius:12px;
+    font-family:"Space Grotesk",sans-serif;
+    font-weight:800;
+    font-size:14px;
+    color:#001014;
+    background:linear-gradient(135deg,var(--cyan),#4ba5ff);
+    box-shadow:0 0 30px rgba(0,229,255,.18);
+}
+
+.logo-text{
+    font-family:"Space Grotesk",sans-serif;
+    font-weight:700;
+    font-size:15px;
+    letter-spacing:.2px;
+}
+
+.logo-text small{
+    display:block;
+    font-family:Inter,sans-serif;
+    color:#69758b;
+    font-size:8px;
+    letter-spacing:2px;
+    margin-top:1px;
+}
+
+.nav-links{
+    display:flex;
+    align-items:center;
+    gap:29px;
+}
+
+.nav-links a{
+    color:#8995aa;
+    font-size:13px;
+    font-weight:500;
+    transition:.2s;
+}
+
+.nav-links a:hover{
+    color:white;
+}
+
+.nav-buttons{
+    display:flex;
+    align-items:center;
+    gap:9px;
+}
+
+.btn{
+    border:0;
+    border-radius:12px;
+    padding:11px 17px;
+    font-size:12px;
+    font-weight:700;
+    cursor:pointer;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    transition:.25s;
+}
+
+.btn:hover{
+    transform:translateY(-2px);
+}
+
+.btn-ghost{
+    background:rgba(255,255,255,.035);
+    border:1px solid var(--line);
+    color:#dfe6f3;
+}
+
+.btn-primary{
+    color:#001014;
+    background:linear-gradient(135deg,var(--cyan),#4d9eff);
+    box-shadow:0 10px 30px rgba(0,229,255,.12);
+}
+
+.menu{
+    display:none;
+    width:42px;
+    height:42px;
+    border:1px solid var(--line);
+    border-radius:11px;
+    background:rgba(255,255,255,.04);
+    color:white;
+    font-size:19px;
+    cursor:pointer;
+}
+
+/* ================= HERO ================= */
+
+.hero{
+    min-height:100vh;
+    padding:155px 0 80px;
+    display:flex;
+    align-items:center;
+}
+
+.hero-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:65px;
+    align-items:center;
+}
+
+.badge{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:7px 11px;
+    border:1px solid rgba(0,229,255,.14);
+    border-radius:999px;
+    background:rgba(0,229,255,.045);
+    color:#8ceef8;
+    font-size:10px;
+    font-weight:700;
+    letter-spacing:.6px;
+    text-transform:uppercase;
+    margin-bottom:23px;
+}
+
+.dot{
+    width:6px;
+    height:6px;
+    border-radius:50%;
+    background:var(--green);
+    box-shadow:0 0 10px var(--green);
+}
+
+.hero h1{
+    font-family:"Space Grotesk",sans-serif;
+    font-size:clamp(48px,6vw,78px);
+    line-height:.99;
+    letter-spacing:-4px;
+    max-width:650px;
+}
+
+.gradient{
+    background:linear-gradient(105deg,var(--cyan),#65a7ff 52%,var(--purple));
+    color:transparent;
+    background-clip:text;
+    -webkit-background-clip:text;
+}
+
+.hero-desc{
+    max-width:570px;
+    color:var(--muted);
+    font-size:16px;
+    line-height:1.8;
+    margin:24px 0 30px;
+}
+
+.hero-actions{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+}
+
+.hero-actions .btn{
+    padding:14px 20px;
+}
+
+.hero-meta{
+    display:flex;
+    gap:25px;
+    margin-top:32px;
+    color:#68748a;
+    font-size:10px;
+}
+
+.hero-meta span{
+    display:flex;
+    align-items:center;
+    gap:6px;
+}
+
+.hero-meta b{
+    color:var(--green);
+}
+
+/* ================= DASHBOARD VISUAL ================= */
+
+.visual{
+    position:relative;
+}
+
+.dashboard{
+    position:relative;
+    padding:15px;
+    border:1px solid rgba(255,255,255,.1);
+    border-radius:27px;
+    background:
+        linear-gradient(145deg,rgba(18,27,45,.9),rgba(7,11,19,.94));
+    box-shadow:
+        0 40px 100px rgba(0,0,0,.48),
+        0 0 70px rgba(0,229,255,.045);
+    transform:rotateY(-4deg) rotateX(2deg);
+}
+
+.browser-top{
+    height:28px;
+    display:flex;
+    align-items:center;
+    gap:6px;
+    padding:0 8px;
+}
+
+.browser-dot{
+    width:6px;
+    height:6px;
+    border-radius:50%;
+    background:#526078;
+}
+
+.browser-title{
+    margin-left:8px;
+    color:#536078;
+    font-size:8px;
+}
+
+.dashboard-content{
+    border:1px solid var(--line);
+    border-radius:19px;
+    overflow:hidden;
+    background:#080d17;
+    display:grid;
+    grid-template-columns:130px 1fr;
+    min-height:420px;
+}
+
+.fake-sidebar{
+    border-right:1px solid var(--line);
+    padding:17px 11px;
+}
+
+.fake-brand{
+    font-size:9px;
+    font-weight:800;
+    color:#dbe8f8;
+    margin-bottom:22px;
+    padding-left:7px;
+}
+
+.fake-nav{
+    display:grid;
+    gap:5px;
+}
+
+.fake-nav div{
+    padding:9px 8px;
+    border-radius:8px;
+    color:#66748c;
+    font-size:8px;
+}
+
+.fake-nav .active{
+    color:#8eeef7;
+    background:rgba(0,229,255,.07);
+}
+
+.fake-main{
+    padding:19px;
+}
+
+.fake-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:17px;
+}
+
+.fake-title{
+    font-size:13px;
+    font-weight:700;
+}
+
+.fake-user{
+    width:25px;
+    height:25px;
+    border-radius:50%;
+    background:linear-gradient(135deg,var(--purple),var(--blue));
+}
+
+.fake-welcome{
+    padding:17px;
+    border:1px solid rgba(0,229,255,.1);
+    border-radius:15px;
+    background:
+        radial-gradient(circle at 85% 0,rgba(0,229,255,.13),transparent 35%),
+        rgba(255,255,255,.02);
+    margin-bottom:13px;
+}
+
+.fake-welcome small{
+    color:#64738b;
+    font-size:8px;
+}
+
+.fake-welcome h3{
+    margin-top:5px;
+    font-size:15px;
+}
+
+.fake-stats{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:8px;
+    margin-bottom:13px;
+}
+
+.stat{
+    border:1px solid var(--line);
+    border-radius:13px;
+    padding:12px;
+    background:rgba(255,255,255,.02);
+}
+
+.stat-icon{
+    font-size:11px;
+    margin-bottom:8px;
+}
+
+.stat strong{
+    display:block;
+    font-size:16px;
+}
+
+.stat small{
+    color:#68758b;
+    font-size:7px;
+}
+
+.fake-course{
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:13px;
+    background:rgba(255,255,255,.018);
+}
+
+.course-top{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:9px;
+}
+
+.course-top span{
+    color:#7d8ba1;
+    font-size:8px;
+}
+
+.course-top b{
+    color:#7feaf2;
+    font-size:8px;
+}
+
+.course-name{
+    font-size:10px;
+    font-weight:700;
+    margin-bottom:8px;
+}
+
+.bar{
+    height:5px;
+    border-radius:20px;
+    background:rgba(255,255,255,.07);
+    overflow:hidden;
+}
+
+.bar i{
+    display:block;
+    width:74%;
+    height:100%;
+    background:linear-gradient(90deg,var(--cyan),var(--blue));
+}
+
+.floating-card{
+    position:absolute;
+    padding:11px 13px;
+    border:1px solid var(--line);
+    border-radius:13px;
+    background:rgba(9,14,24,.9);
+    backdrop-filter:blur(18px);
+    box-shadow:0 20px 45px rgba(0,0,0,.35);
+    font-size:9px;
+}
+
+.float-ai{
+    top:75px;
+    left:-38px;
+}
+
+.float-cert{
+    bottom:55px;
+    right:-30px;
+}
+
+.float-row{
+    display:flex;
+    align-items:center;
+    gap:9px;
+}
+
+.float-icon{
+    width:27px;
+    height:27px;
+    display:grid;
+    place-items:center;
+    border-radius:8px;
+    background:rgba(0,229,255,.09);
+}
+
+.float-card-text strong{
+    display:block;
+    font-size:9px;
+}
+
+.float-card-text small{
+    color:#64738a;
+    font-size:7px;
+}
+
+/* ================= SECTION ================= */
+
+section{
+    padding:105px 0;
+}
+
+.section-heading{
+    max-width:700px;
+    margin-bottom:45px;
+}
+
+.center{
+    text-align:center;
+    margin-left:auto;
+    margin-right:auto;
+}
+
+.kicker{
+    color:var(--cyan);
+    text-transform:uppercase;
+    letter-spacing:2px;
+    font-size:9px;
+    font-weight:800;
+    margin-bottom:11px;
+}
+
+.section-heading h2{
+    font-family:"Space Grotesk",sans-serif;
+    font-size:clamp(32px,4vw,49px);
+    line-height:1.08;
+    letter-spacing:-2px;
+}
+
+.section-heading p{
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.8;
+    margin-top:13px;
+}
+
+/* ================= FEATURE STRIP ================= */
+
+.features{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
+}
+
+.feature{
+    padding:23px;
+    min-height:185px;
+    border:1px solid var(--line);
+    border-radius:20px;
+    background:rgba(11,17,29,.7);
+    transition:.3s;
+}
+
+.feature:hover{
+    transform:translateY(-5px);
+    border-color:rgba(0,229,255,.17);
+}
+
+.feature-icon{
+    width:42px;
+    height:42px;
+    border-radius:12px;
+    display:grid;
+    place-items:center;
+    background:rgba(0,229,255,.07);
+    margin-bottom:18px;
+    font-size:18px;
+}
+
+.feature h3{
+    font-size:14px;
+    margin-bottom:7px;
+}
+
+.feature p{
+    color:#718096;
+    font-size:11px;
+    line-height:1.7;
+}
+
+/* ================= LEARNING PATH ================= */
+
+.path{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:14px;
+}
+
+.path-card{
+    min-height:330px;
+    position:relative;
+    overflow:hidden;
+    padding:27px;
+    border:1px solid var(--line);
+    border-radius:23px;
+    background:#0a101b;
+}
+
+.path-card:after{
+    content:"";
+    position:absolute;
+    width:180px;
+    height:180px;
+    border-radius:50%;
+    right:-80px;
+    bottom:-80px;
+    background:rgba(0,229,255,.06);
+    filter:blur(20px);
+}
+
+.path-number{
+    font-size:10px;
+    color:#58657b;
+    letter-spacing:2px;
+}
+
+.path-card h3{
+    font-family:"Space Grotesk",sans-serif;
+    font-size:27px;
+    margin:15px 0 9px;
+}
+
+.path-card p{
+    color:#77849a;
+    font-size:11px;
+    line-height:1.8;
+    margin-bottom:22px;
+}
+
+.path-list{
+    display:grid;
+    gap:9px;
+    list-style:none;
+}
+
+.path-list li{
+    color:#a8b4c7;
+    font-size:10px;
+    display:flex;
+    gap:7px;
+}
+
+.path-list b{
+    color:var(--green);
+}
+
+/* ================= COURSES ================= */
+
+.course-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:14px;
+}
+
+.course{
+    overflow:hidden;
+    border:1px solid var(--line);
+    border-radius:21px;
+    background:#0b111c;
+    transition:.3s;
+}
+
+.course:hover{
+    transform:translateY(-5px);
+    border-color:rgba(66,133,255,.22);
+}
+
+.course-cover{
+    height:130px;
+    padding:17px;
+    position:relative;
+    background:
+        radial-gradient(circle at 80% 20%,rgba(0,229,255,.16),transparent 35%),
+        linear-gradient(145deg,#111b2d,#090e18);
+}
+
+.course-symbol{
+    width:42px;
+    height:42px;
+    display:grid;
+    place-items:center;
+    border-radius:12px;
+    background:rgba(255,255,255,.055);
+    font-size:18px;
+}
+
+.course-level{
+    position:absolute;
+    right:15px;
+    top:16px;
+    font-size:8px;
+    color:#8b99ae;
+    padding:5px 8px;
+    border-radius:999px;
+    border:1px solid var(--line);
+}
+
+.course-body{
+    padding:18px;
+}
+
+.course-body h3{
+    font-size:14px;
+    margin-bottom:6px;
+}
+
+.course-body p{
+    color:#718096;
+    font-size:10px;
+    line-height:1.7;
+    min-height:35px;
+    margin-bottom:15px;
+}
+
+.course-footer{
+    border-top:1px solid var(--line);
+    padding-top:12px;
+    display:flex;
+    justify-content:space-between;
+    color:#68758a;
+    font-size:8px;
+}
+
+/* ================= PRACTICAL ================= */
+
+.practical-layout{
+    display:grid;
+    grid-template-columns:.85fr 1.15fr;
+    gap:45px;
+    align-items:center;
+}
+
+.practical-copy h2{
+    font-family:"Space Grotesk",sans-serif;
+    font-size:clamp(33px,4vw,50px);
+    line-height:1.06;
+    letter-spacing:-2px;
+}
+
+.practical-copy p{
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.8;
+    margin:17px 0 23px;
+}
+
+.tool-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:11px;
+}
+
+.tool{
+    padding:18px;
+    border:1px solid var(--line);
+    border-radius:18px;
+    background:rgba(255,255,255,.025);
+}
+
+.tool-icon{
+    font-size:18px;
+    margin-bottom:13px;
+}
+
+.tool h3{
+    font-size:12px;
+    margin-bottom:5px;
+}
+
+.tool p{
+    margin:0;
+    font-size:9px;
+    line-height:1.6;
+    color:#6f7c92;
+}
+
+.workspace{
+    padding:13px;
+    border:1px solid var(--line);
+    border-radius:25px;
+    background:#080d16;
+    box-shadow:0 30px 70px rgba(0,0,0,.35);
+}
+
+.workspace-top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:7px 8px 13px;
+}
+
+.workspace-title{
+    font-size:11px;
+    font-weight:700;
+}
+
+.workspace-status{
+    color:#72efaa;
+    font-size:8px;
+}
+
+.workspace-main{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:9px;
+}
+
+.editor{
+    min-height:285px;
+    padding:14px;
+    border:1px solid var(--line);
+    border-radius:15px;
+    background:#050911;
+}
+
+.editor-tabs{
+    display:flex;
+    gap:5px;
+    margin-bottom:14px;
+}
+
+.editor-tabs span{
+    padding:5px 8px;
+    border-radius:6px;
+    color:#657289;
+    font-size:7px;
+}
+
+.editor-tabs .selected{
+    color:#86edf6;
+    background:rgba(0,229,255,.08);
+}
+
+.code{
+    color:#6f8099;
+    font-family:monospace;
+    font-size:8px;
+    line-height:2;
+}
+
+.code .cyan{
+    color:#68e7f2;
+}
+
+.code .purple{
+    color:#b184ff;
+}
+
+.code .green{
+    color:#67db9c;
+}
+
+.preview{
+    min-height:285px;
+    padding:15px;
+    border:1px solid var(--line);
+    border-radius:15px;
+    background:#0c121e;
+}
+
+.preview-header{
+    font-size:8px;
+    color:#66748b;
+    margin-bottom:13px;
+}
+
+.preview-card{
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:15px;
+    background:linear-gradient(145deg,#111b2d,#0a101a);
+}
+
+.preview-logo{
+    width:30px;
+    height:30px;
+    border-radius:9px;
+    background:linear-gradient(135deg,var(--cyan),var(--purple));
+    margin-bottom:13px;
+}
+
+.preview-card h4{
+    font-size:12px;
+    margin-bottom:6px;
+}
+
+.preview-card p{
+    color:#68758c;
+    font-size:8px;
+    line-height:1.7;
+}
+
+/* ================= ASSESSMENTS ================= */
+
+.assessment{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:50px;
+    align-items:center;
+}
+
+.assessment-board{
+    padding:24px;
+    border:1px solid var(--line);
+    border-radius:24px;
+    background:#0a101a;
+}
+
+.assessment-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.assessment-header small{
+    color:#69768b;
+    font-size:8px;
+}
+
+.passed{
+    padding:5px 8px;
+    color:#72edaa;
+    border:1px solid rgba(53,229,139,.13);
+    background:rgba(53,229,139,.05);
+    border-radius:999px;
+    font-size:7px;
+}
+
+.score{
+    width:125px;
+    height:125px;
+    border-radius:50%;
+    display:grid;
+    place-items:center;
+    margin:30px auto;
+    background:
+        radial-gradient(circle,#0a101a 57%,transparent 58%),
+        conic-gradient(var(--cyan) 0 82%,rgba(255,255,255,.06) 82% 100%);
+}
+
+.score strong{
+    font-family:"Space Grotesk",sans-serif;
+    font-size:28px;
+}
+
+.score small{
+    display:block;
+    color:#69768c;
+    text-align:center;
+    font-size:7px;
+}
+
+.skill{
+    display:grid;
+    grid-template-columns:60px 1fr 30px;
+    align-items:center;
+    gap:8px;
+    margin-top:12px;
+    font-size:8px;
+}
+
+.skill > span:first-child{
+    color:#758298;
+}
+
+.skill-bar{
+    height:5px;
+    border-radius:10px;
+    background:rgba(255,255,255,.06);
+    overflow:hidden;
+}
+
+.skill-bar i{
+    display:block;
+    height:100%;
+    background:linear-gradient(90deg,var(--cyan),var(--blue));
+}
+
+.skill b{
+    font-size:8px;
+}
+
+/* ================= STEPS ================= */
+
+.steps{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:10px;
+}
+
+.step{
+    text-align:center;
+    padding:22px 15px;
+}
+
+.step-number{
+    width:46px;
+    height:46px;
+    margin:0 auto 14px;
+    display:grid;
+    place-items:center;
+    border-radius:50%;
+    border:1px solid rgba(0,229,255,.18);
+    background:rgba(0,229,255,.06);
+    color:#81ebf4;
+    font-size:11px;
+    font-weight:800;
+}
+
+.step h3{
+    font-size:12px;
+    margin-bottom:5px;
+}
+
+.step p{
+    color:#6d7a91;
+    font-size:9px;
+    line-height:1.7;
+}
+
+/* ================= CERTIFICATE ================= */
+
+.certificate{
+    position:relative;
+    overflow:hidden;
+    text-align:center;
+    padding:65px 25px;
+    border:1px solid rgba(0,229,255,.13);
+    border-radius:28px;
+    background:
+        radial-gradient(circle at 50% 0,rgba(0,229,255,.1),transparent 42%),
+        rgba(9,15,26,.75);
+}
+
+.certificate:after{
+    content:"TECHBRIDGE";
+    position:absolute;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%) rotate(-7deg);
+    white-space:nowrap;
+    color:rgba(255,255,255,.018);
+    font-family:"Space Grotesk",sans-serif;
+    font-size:100px;
+    font-weight:800;
+}
+
+.certificate-icon{
+    font-size:42px;
+    margin-bottom:13px;
+}
+
+.certificate h2{
+    position:relative;
+    z-index:1;
+    font-family:"Space Grotesk",sans-serif;
+    font-size:clamp(30px,4vw,45px);
+    letter-spacing:-1.5px;
+}
+
+.certificate p{
+    position:relative;
+    z-index:1;
+    max-width:620px;
+    margin:12px auto 23px;
+    color:#758197;
+    font-size:11px;
+    line-height:1.8;
+}
+
+/* ================= CTA ================= */
+
+.cta{
+    padding-top:40px;
+}
+
+.cta-box{
+    text-align:center;
+    padding:70px 25px;
+    border-radius:29px;
+    border:1px solid var(--line);
+    background:
+        radial-gradient(circle at 15% 50%,rgba(0,229,255,.08),transparent 28%),
+        radial-gradient(circle at 85% 50%,rgba(155,92,255,.09),transparent 28%),
+        #090f1a;
+}
+
+.cta-box h2{
+    font-family:"Space Grotesk",sans-serif;
+    font-size:clamp(33px,5vw,56px);
+    line-height:1.05;
+    letter-spacing:-2px;
+}
+
+.cta-box p{
+    max-width:580px;
+    margin:14px auto 25px;
+    color:#778398;
+    font-size:12px;
+    line-height:1.8;
+}
+
+/* ================= FOOTER ================= */
+
+footer{
+    margin-top:80px;
+    padding:55px 0 25px;
+    border-top:1px solid var(--line);
+}
+
+.footer-grid{
+    display:grid;
+    grid-template-columns:1.5fr 1fr 1fr 1fr;
+    gap:35px;
+    padding-bottom:40px;
+}
+
+.footer-description{
+    max-width:310px;
+    color:#69758b;
+    font-size:10px;
+    line-height:1.8;
+    margin-top:14px;
+}
+
+.footer-col h4{
+    font-size:11px;
+    margin-bottom:14px;
+}
+
+.footer-col a{
+    display:block;
+    color:#69758b;
+    font-size:9px;
+    margin:9px 0;
+}
+
+.footer-col a:hover{
+    color:var(--cyan);
+}
+
+.footer-bottom{
+    padding-top:22px;
+    border-top:1px solid var(--line);
+    display:flex;
+    justify-content:space-between;
+    color:#4e5a6d;
+    font-size:8px;
+}
+
+/* ================= MOBILE MENU ================= */
+
+.mobile-menu{
+    display:none;
+    position:absolute;
+    top:73px;
+    left:20px;
+    right:20px;
+    padding:12px;
+    border:1px solid var(--line);
+    border-radius:18px;
+    background:rgba(7,11,19,.97);
+    backdrop-filter:blur(20px);
+}
+
+.mobile-menu.show{
+    display:grid;
+}
+
+.mobile-menu a{
+    padding:12px;
+    color:#8490a5;
+    font-size:11px;
+    border-radius:9px;
+}
+
+.mobile-menu a:hover{
+    background:rgba(255,255,255,.04);
+    color:white;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:1050px){
+
+    .nav-links{
+        gap:18px;
     }
 
-    a {
-      color: inherit;
-      text-decoration: none;
+    .features{
+        grid-template-columns:repeat(2,1fr);
     }
 
-    button {
-      font: inherit;
+    .course-grid{
+        grid-template-columns:repeat(2,1fr);
     }
 
-    /* NAVBAR */
-    .navbar {
-      width: 100%;
-      height: 74px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 7%;
-      border-bottom: 1px solid var(--border);
-      background: rgba(5,8,22,.75);
-      backdrop-filter: blur(18px);
-      position: sticky;
-      top: 0;
-      z-index: 1000;
+    .footer-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+}
+
+@media(max-width:820px){
+
+    .container{
+        width:min(var(--max),calc(100% - 30px));
     }
 
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-weight: 800;
-      font-size: 20px;
+    .nav-links,
+    .nav-buttons{
+        display:none;
     }
 
-    .logo-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 12px;
-      display: grid;
-      place-items: center;
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
-      color: #001018;
-      font-weight: 900;
-      box-shadow: 0 0 25px rgba(0,229,255,.25);
+    .menu{
+        display:block;
     }
 
-    .nav-links {
-      display: flex;
-      gap: 28px;
-      align-items: center;
+    .hero{
+        padding-top:125px;
     }
 
-    .nav-links a {
-      color: var(--muted);
-      font-size: 14px;
-      transition: .25s;
+    .hero-grid,
+    .practical-layout,
+    .assessment{
+        grid-template-columns:1fr;
     }
 
-    .nav-links a:hover {
-      color: var(--primary);
+    .visual{
+        max-width:650px;
+        margin:15px auto 0;
     }
 
-    .nav-buttons {
-      display: flex;
-      gap: 10px;
+    .dashboard{
+        transform:none;
     }
 
-    .btn {
-      border: none;
-      border-radius: 12px;
-      padding: 11px 18px;
-      cursor: pointer;
-      font-weight: 700;
-      transition: .25s;
+    .float-ai{
+        left:-5px;
     }
 
-    .btn:hover {
-      transform: translateY(-2px);
+    .float-cert{
+        right:-5px;
     }
 
-    .btn-outline {
-      background: transparent;
-      border: 1px solid var(--border);
-      color: var(--text);
+    .path{
+        grid-template-columns:1fr;
     }
 
-    .btn-primary {
-      background: linear-gradient(135deg, var(--primary), #3b82f6);
-      color: #001018;
-      box-shadow: 0 8px 25px rgba(0,229,255,.15);
+    .practical-layout{
+        gap:35px;
     }
 
-    .menu-btn {
-      display: none;
-      background: transparent;
-      border: none;
-      color: white;
-      font-size: 25px;
-      cursor: pointer;
+    .steps{
+        grid-template-columns:repeat(2,1fr);
+    }
+}
+
+@media(max-width:580px){
+
+    section{
+        padding:75px 0;
     }
 
-    /* HERO */
-    .hero {
-      width: 86%;
-      max-width: 1200px;
-      margin: auto;
-      min-height: 650px;
-      display: grid;
-      grid-template-columns: 1.1fr .9fr;
-      align-items: center;
-      gap: 50px;
-      padding: 70px 0;
+    .hero h1{
+        font-size:47px;
+        letter-spacing:-2.5px;
     }
 
-    .badge {
-      display: inline-flex;
-      padding: 8px 13px;
-      border: 1px solid rgba(0,229,255,.2);
-      border-radius: 50px;
-      color: var(--primary);
-      background: rgba(0,229,255,.06);
-      font-size: 13px;
-      margin-bottom: 20px;
+    .hero-desc{
+        font-size:14px;
     }
 
-    .hero h1 {
-      font-size: clamp(42px, 6vw, 72px);
-      line-height: 1.03;
-      letter-spacing: -2px;
-      margin-bottom: 22px;
+    .hero-actions{
+        display:grid;
     }
 
-    .gradient-text {
-      background: linear-gradient(90deg, var(--primary), #818cf8);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
+    .hero-actions .btn{
+        width:100%;
     }
 
-    .hero p {
-      max-width: 650px;
-      color: var(--muted);
-      line-height: 1.8;
-      font-size: 17px;
-      margin-bottom: 30px;
+    .hero-meta{
+        gap:13px;
+        flex-wrap:wrap;
     }
 
-    .hero-actions {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
+    .dashboard-content{
+        grid-template-columns:75px 1fr;
+        min-height:360px;
     }
 
-    /* HERO CARD */
-    .hero-visual {
-      position: relative;
+    .fake-sidebar{
+        padding:13px 7px;
     }
 
-    .learning-card {
-      background: linear-gradient(
-        145deg,
-        rgba(16,26,49,.95),
-        rgba(8,14,30,.95)
-      );
-      border: 1px solid var(--border);
-      border-radius: 25px;
-      padding: 25px;
-      box-shadow: 0 30px 80px rgba(0,0,0,.35);
-      transform: rotate(1deg);
+    .fake-main{
+        padding:12px;
     }
 
-    .card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 25px;
+    .fake-stats{
+        grid-template-columns:1fr 1fr;
     }
 
-    .course-label {
-      color: var(--muted);
-      font-size: 13px;
+    .fake-stats .stat:last-child{
+        display:none;
     }
 
-    .status {
-      color: var(--success);
-      font-size: 12px;
-      background: rgba(34,197,94,.1);
-      padding: 6px 10px;
-      border-radius: 20px;
+    .features,
+    .course-grid,
+    .tool-grid,
+    .workspace-main,
+    .footer-grid{
+        grid-template-columns:1fr;
     }
 
-    .course-title {
-      font-size: 23px;
-      margin-bottom: 8px;
+    .course-grid{
+        gap:12px;
     }
 
-    .course-desc {
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.6;
-      margin-bottom: 22px;
+    .workspace-main{
+        display:grid;
     }
 
-    .progress-row {
-      display: flex;
-      justify-content: space-between;
-      color: var(--muted);
-      font-size: 12px;
-      margin-bottom: 8px;
+    .steps{
+        grid-template-columns:1fr 1fr;
     }
 
-    .progress {
-      height: 8px;
-      border-radius: 20px;
-      background: #17233d;
-      overflow: hidden;
-      margin-bottom: 25px;
+    .certificate{
+        padding:45px 18px;
     }
 
-    .progress span {
-      display: block;
-      width: 72%;
-      height: 100%;
-      background: linear-gradient(90deg, var(--primary), var(--secondary));
-      border-radius: inherit;
+    .certificate:after{
+        font-size:60px;
     }
 
-    .lesson {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 12px;
-      border: 1px solid var(--border);
-      border-radius: 13px;
-      margin-bottom: 9px;
-      background: rgba(255,255,255,.025);
+    .footer-bottom{
+        flex-direction:column;
+        gap:8px;
     }
-
-    .lesson-icon {
-      width: 34px;
-      height: 34px;
-      display: grid;
-      place-items: center;
-      border-radius: 10px;
-      background: rgba(0,229,255,.08);
-      color: var(--primary);
-    }
-
-    .lesson-text {
-      font-size: 13px;
-    }
-
-    .lesson-text small {
-      display: block;
-      color: var(--muted);
-      margin-top: 3px;
-    }
-
-    /* SECTIONS */
-    section {
-      width: 86%;
-      max-width: 1200px;
-      margin: auto;
-      padding: 80px 0;
-    }
-
-    .section-heading {
-      text-align: center;
-      max-width: 700px;
-      margin: auto auto 45px;
-    }
-
-    .section-heading h2 {
-      font-size: 38px;
-      margin-bottom: 12px;
-    }
-
-    .section-heading p {
-      color: var(--muted);
-      line-height: 1.7;
-    }
-
-    /* FEATURES */
-    .features {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
-    }
-
-    .feature {
-      padding: 25px;
-      background: rgba(255,255,255,.025);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      transition: .3s;
-    }
-
-    .feature:hover {
-      transform: translateY(-6px);
-      border-color: rgba(0,229,255,.25);
-    }
-
-    .feature-icon {
-      width: 45px;
-      height: 45px;
-      display: grid;
-      place-items: center;
-      border-radius: 13px;
-      background: rgba(0,229,255,.08);
-      color: var(--primary);
-      font-size: 20px;
-      margin-bottom: 18px;
-    }
-
-    .feature h3 {
-      font-size: 17px;
-      margin-bottom: 9px;
-    }
-
-    .feature p {
-      color: var(--muted);
-      line-height: 1.6;
-      font-size: 13px;
-    }
-
-    /* LEVELS */
-    .levels {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 18px;
-    }
-
-    .level {
-      padding: 28px;
-      border: 1px solid var(--border);
-      background: var(--card);
-      border-radius: 20px;
-    }
-
-    .level span {
-      font-size: 12px;
-      color: var(--primary);
-    }
-
-    .level h3 {
-      margin: 10px 0;
-      font-size: 21px;
-    }
-
-    .level p {
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.7;
-    }
-
-    /* CTA */
-    .cta {
-      text-align: center;
-      padding: 70px 30px;
-      border: 1px solid var(--border);
-      border-radius: 30px;
-      background:
-        radial-gradient(circle at 50% 0%, rgba(0,229,255,.13), transparent 45%),
-        var(--card);
-    }
-
-    .cta h2 {
-      font-size: 40px;
-      margin-bottom: 15px;
-    }
-
-    .cta p {
-      color: var(--muted);
-      margin-bottom: 25px;
-    }
-
-    /* FOOTER */
-    footer {
-      border-top: 1px solid var(--border);
-      margin-top: 70px;
-      padding: 35px 7%;
-      display: flex;
-      justify-content: space-between;
-      gap: 20px;
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    /* MOBILE */
-    @media (max-width: 900px) {
-      .hero {
-        grid-template-columns: 1fr;
-        padding-top: 50px;
-      }
-
-      .hero-visual {
-        max-width: 600px;
-        margin: auto;
-      }
-
-      .features {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .levels {
-        grid-template-columns: 1fr;
-      }
-
-      .nav-links,
-      .nav-buttons {
-        display: none;
-      }
-
-      .menu-btn {
-        display: block;
-      }
-
-      .navbar.mobile-open {
-        height: auto;
-        padding-top: 20px;
-        padding-bottom: 20px;
-        flex-wrap: wrap;
-      }
-
-      .navbar.mobile-open .nav-links {
-        display: flex;
-        width: 100%;
-        flex-direction: column;
-        align-items: flex-start;
-        padding-top: 20px;
-      }
-
-      .navbar.mobile-open .nav-buttons {
-        display: flex;
-        width: 100%;
-      }
-    }
-
-    @media (max-width: 600px) {
-      .hero,
-      section {
-        width: 90%;
-      }
-
-      .hero h1 {
-        font-size: 43px;
-      }
-
-      .hero p {
-        font-size: 15px;
-      }
-
-      .features {
-        grid-template-columns: 1fr;
-      }
-
-      .section-heading h2 {
-        font-size: 30px;
-      }
-
-      .cta h2 {
-        font-size: 30px;
-      }
-
-      footer {
-        flex-direction: column;
-      }
-    }
-  </style>
+}
+</style>
 </head>
 
 <body>
 
-  <!-- NAVBAR -->
-  <nav class="navbar" id="navbar">
+<!-- NAVBAR -->
+<header class="navbar" id="navbar">
+    <div class="container">
+        <div class="nav">
 
-    <a href="index.html" class="logo">
-      <div class="logo-icon">T</div>
-      <span>TechBridge Rwanda</span>
-    </a>
+            <a href="index.html" class="logo">
+                <div class="logo-mark">TB</div>
+                <div class="logo-text">
+                    TECHBRIDGE
+                    <small>RWANDA</small>
+                </div>
+            </a>
 
-    <div class="nav-links">
-      <a href="#features">Features</a>
-      <a href="#levels">Learning</a>
-      <a href="#practical">Practical</a>
-    </div>
+            <nav class="nav-links">
+                <a href="#platform">Platform</a>
+                <a href="#courses">Courses</a>
+                <a href="#practical">Practice</a>
+                <a href="#assessments">Assessments</a>
+            </nav>
 
-    <div class="nav-buttons">
-      <a href="login.html" class="btn btn-outline">Login</a>
-      <a href="register.html" class="btn btn-primary">Get Started</a>
-    </div>
+            <div class="nav-buttons">
+                <a href="login.html" class="btn btn-ghost">Sign In</a>
+                <a href="register.html" class="btn btn-primary">Get Started</a>
+            </div>
 
-    <button class="menu-btn" id="menuBtn">☰</button>
+            <button class="menu" id="menuBtn">☰</button>
 
-  </nav>
-
-  <!-- HERO -->
-  <main>
-
-    <div class="hero">
-
-      <div class="hero-content">
-
-        <div class="badge">
-          🇷🇼 Built for learners in Rwanda
         </div>
 
-        <h1>
-          Learn Technology.<br />
-          <span class="gradient-text">Build Your Future.</span>
-        </h1>
+        <nav class="mobile-menu" id="mobileMenu">
+            <a href="#platform">Platform</a>
+            <a href="#courses">Courses</a>
+            <a href="#practical">Practice</a>
+            <a href="#assessments">Assessments</a>
+            <a href="login.html">Sign In</a>
+            <a href="register.html">Get Started</a>
+        </nav>
+    </div>
+</header>
 
-        <p>
-          TechBridge Rwanda is a modern learning platform designed to help
-          students develop computer, programming, and technology skills through
-          structured courses, tests, practical projects, and AI-powered learning.
-        </p>
 
-        <div class="hero-actions">
-          <a href="register.html" class="btn btn-primary">
-            Start Learning →
-          </a>
+<!-- HERO -->
+<section class="hero">
+    <div class="container hero-grid">
 
-          <a href="#features" class="btn btn-outline">
-            Explore Platform
-          </a>
+        <div>
+
+            <div class="badge">
+                <span class="dot"></span>
+                Technology Learning Platform
+            </div>
+
+            <h1>
+                Build skills.
+                <span class="gradient">Build your future.</span>
+            </h1>
+
+            <p class="hero-desc">
+                TECHBRIDGE RWANDA gives students a modern way to learn
+                technology through structured courses, practical projects,
+                coding, AI assistance, assessments and continuous progress.
+            </p>
+
+            <div class="hero-actions">
+                <a href="register.html" class="btn btn-primary">
+                    Start Learning
+                    <span>→</span>
+                </a>
+
+                <a href="#courses" class="btn btn-ghost">
+                    Explore Courses
+                </a>
+            </div>
+
+            <div class="hero-meta">
+                <span><b>✓</b> Structured learning</span>
+                <span><b>✓</b> Practical projects</span>
+                <span><b>✓</b> Progress tracking</span>
+            </div>
+
         </div>
 
-      </div>
 
-      <div class="hero-visual">
+        <!-- DASHBOARD VISUAL -->
+        <div class="visual">
 
-        <div class="learning-card">
+            <div class="floating-card float-ai">
+                <div class="float-row">
+                    <div class="float-icon">✦</div>
+                    <div class="float-card-text">
+                        <strong>AI Learning Assistant</strong>
+                        <small>Ready to help</small>
+                    </div>
+                </div>
+            </div>
 
-          <div class="card-header">
+            <div class="dashboard">
+
+                <div class="browser-top">
+                    <span class="browser-dot"></span>
+                    <span class="browser-dot"></span>
+                    <span class="browser-dot"></span>
+                    <span class="browser-title">app.techbridge.rw/student</span>
+                </div>
+
+                <div class="dashboard-content">
+
+                    <aside class="fake-sidebar">
+
+                        <div class="fake-brand">
+                            TECHBRIDGE
+                        </div>
+
+                        <div class="fake-nav">
+                            <div class="active">◈ Dashboard</div>
+                            <div>▣ My Courses</div>
+                            <div>◉ Quizzes</div>
+                            <div>◫ Assessments</div>
+                            <div>◆ Certificates</div>
+                            <div>⌘ Practical</div>
+                        </div>
+
+                    </aside>
+
+
+                    <main class="fake-main">
+
+                        <div class="fake-header">
+                            <div>
+                                <div style="font-size:7px;color:#657289;margin-bottom:4px;">
+                                    STUDENT DASHBOARD
+                                </div>
+                                <div class="fake-title">
+                                    Welcome back 👋
+                                </div>
+                            </div>
+
+                            <div class="fake-user"></div>
+                        </div>
+
+
+                        <div class="fake-welcome">
+                            <small>CONTINUE LEARNING</small>
+                            <h3>Web Development</h3>
+
+                            <div style="margin-top:12px;">
+                                <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+                                    <span style="font-size:7px;color:#647289;">
+                                        Your progress
+                                    </span>
+                                    <span style="font-size:7px;color:#7cecf4;">
+                                        74%
+                                    </span>
+                                </div>
+
+                                <div class="bar">
+                                    <i></i>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="fake-stats">
+
+                            <div class="stat">
+                                <div class="stat-icon">📚</div>
+                                <strong>04</strong>
+                                <small>Courses</small>
+                            </div>
+
+                            <div class="stat">
+                                <div class="stat-icon">✓</div>
+                                <strong>18</strong>
+                                <small>Quizzes</small>
+                            </div>
+
+                            <div class="stat">
+                                <div class="stat-icon">🏆</div>
+                                <strong>03</strong>
+                                <small>Certificates</small>
+                            </div>
+
+                        </div>
+
+
+                        <div class="fake-course">
+
+                            <div class="course-top">
+                                <span>CONTINUE COURSE</span>
+                                <b>74%</b>
+                            </div>
+
+                            <div class="course-name">
+                                HTML & CSS — Responsive Web Design
+                            </div>
+
+                            <div class="bar">
+                                <i></i>
+                            </div>
+
+                        </div>
+
+                    </main>
+
+                </div>
+
+            </div>
+
+
+            <div class="floating-card float-cert">
+                <div class="float-row">
+                    <div class="float-icon">🏆</div>
+                    <div class="float-card-text">
+                        <strong>Certificate Earned</strong>
+                        <small>Web Development</small>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+
+<!-- PLATFORM -->
+<section id="platform">
+    <div class="container">
+
+        <div class="section-heading center">
+            <div class="kicker">The Platform</div>
+
+            <h2>
+                Everything in one
+                <span class="gradient">learning experience.</span>
+            </h2>
+
+            <p>
+                Learn concepts, test your knowledge, practice your skills
+                and track your progress from one modern platform.
+            </p>
+        </div>
+
+
+        <div class="features">
+
+            <div class="feature">
+                <div class="feature-icon">◈</div>
+                <h3>Structured Courses</h3>
+                <p>
+                    Organized lessons that guide students from
+                    foundations to advanced technology skills.
+                </p>
+            </div>
+
+            <div class="feature">
+                <div class="feature-icon">✦</div>
+                <h3>AI Learning Support</h3>
+                <p>
+                    Ask questions and get guided explanations while
+                    learning difficult technology concepts.
+                </p>
+            </div>
+
+            <div class="feature">
+                <div class="feature-icon">⌘</div>
+                <h3>Practical Workspace</h3>
+                <p>
+                    Practice coding and complete practical technology
+                    tasks instead of only reading theory.
+                </p>
+            </div>
+
+            <div class="feature">
+                <div class="feature-icon">◆</div>
+                <h3>Achievements</h3>
+                <p>
+                    Track assessments, practical work, certificates
+                    and your overall learning progress.
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+
+<!-- LEARNING PATH -->
+<section>
+    <div class="container">
+
+        <div class="section-heading center">
+            <div class="kicker">Learning Path</div>
+
+            <h2>
+                From beginner to
+                <span class="gradient">builder.</span>
+            </h2>
+
+            <p>
+                A simple progression designed to help students grow
+                their technology knowledge step by step.
+            </p>
+        </div>
+
+
+        <div class="path">
+
+            <article class="path-card">
+
+                <div class="path-number">01 / FOUNDATION</div>
+
+                <h3>Beginner</h3>
+
+                <p>
+                    Build a strong understanding of computers,
+                    digital tools and technology fundamentals.
+                </p>
+
+                <ul class="path-list">
+                    <li><b>✓</b> Computer basics</li>
+                    <li><b>✓</b> Operating systems</li>
+                    <li><b>✓</b> Internet fundamentals</li>
+                    <li><b>✓</b> Digital productivity</li>
+                </ul>
+
+            </article>
+
+
+            <article class="path-card">
+
+                <div class="path-number">02 / SKILLS</div>
+
+                <h3>Intermediate</h3>
+
+                <p>
+                    Transform your knowledge into practical
+                    programming and development skills.
+                </p>
+
+                <ul class="path-list">
+                    <li><b>✓</b> Web development</li>
+                    <li><b>✓</b> Programming</li>
+                    <li><b>✓</b> Databases</li>
+                    <li><b>✓</b> Network fundamentals</li>
+                </ul>
+
+            </article>
+
+
+            <article class="path-card">
+
+                <div class="path-number">03 / ADVANCED</div>
+
+                <h3>Advanced</h3>
+
+                <p>
+                    Work with deeper technology concepts and
+                    challenging practical projects.
+                </p>
+
+                <ul class="path-list">
+                    <li><b>✓</b> Cyber security</li>
+                    <li><b>✓</b> Artificial intelligence</li>
+                    <li><b>✓</b> Advanced programming</li>
+                    <li><b>✓</b> Advanced projects</li>
+                </ul>
+
+            </article>
+
+        </div>
+
+    </div>
+</section>
+
+
+<!-- COURSES -->
+<section id="courses">
+    <div class="container">
+
+        <div class="section-heading">
+            <div class="kicker">Courses</div>
+
+            <h2>
+                Learn the technology
+                <span class="gradient">that matters.</span>
+            </h2>
+
+            <p>
+                Courses are designed to combine understanding with
+                practical application.
+            </p>
+        </div>
+
+
+        <div class="course-grid">
+
+            <article class="course">
+                <div class="course-cover">
+                    <div class="course-symbol">🖥️</div>
+                    <span class="course-level">BEGINNER</span>
+                </div>
+
+                <div class="course-body">
+                    <h3>Computer Basics</h3>
+
+                    <p>
+                        Understand computers, operating systems,
+                        files, internet and digital tools.
+                    </p>
+
+                    <div class="course-footer">
+                        <span>Foundation</span>
+                        <span>Self-paced</span>
+                    </div>
+                </div>
+            </article>
+
+
+            <article class="course">
+                <div class="course-cover">
+                    <div class="course-symbol">🌐</div>
+                    <span class="course-level">INTERMEDIATE</span>
+                </div>
+
+                <div class="course-body">
+                    <h3>Web Development</h3>
+
+                    <p>
+                        Learn HTML, CSS and JavaScript while
+                        building responsive websites.
+                    </p>
+
+                    <div class="course-footer">
+                        <span>Development</span>
+                        <span>Projects</span>
+                    </div>
+                </div>
+            </article>
+
+
+            <article class="course">
+                <div class="course-cover">
+                    <div class="course-symbol">⚡</div>
+                    <span class="course-level">INTERMEDIATE</span>
+                </div>
+
+                <div class="course-body">
+                    <h3>Programming Foundations</h3>
+
+                    <p>
+                        Develop logical thinking and programming
+                        fundamentals through practice.
+                    </p>
+
+                    <div class="course-footer">
+                        <span>Coding</span>
+                        <span>Practice</span>
+                    </div>
+                </div>
+            </article>
+
+
+            <article class="course">
+                <div class="course-cover">
+                    <div class="course-symbol">🔐</div>
+                    <span class="course-level">ADVANCED</span>
+                </div>
+
+                <div class="course-body">
+                    <h3>Cyber Security</h3>
+
+                    <p>
+                        Explore security concepts, networks,
+                        threats and defensive practices.
+                    </p>
+
+                    <div class="course-footer">
+                        <span>Security</span>
+                        <span>Advanced</span>
+                    </div>
+                </div>
+            </article>
+
+
+            <article class="course">
+                <div class="course-cover">
+                    <div class="course-symbol">🤖</div>
+                    <span class="course-level">ADVANCED</span>
+                </div>
+
+                <div class="course-body">
+                    <h3>Artificial Intelligence</h3>
+
+                    <p>
+                        Discover AI concepts, intelligent systems
+                        and machine learning foundations.
+                    </p>
+
+                    <div class="course-footer">
+                        <span>AI</span>
+                        <span>Projects</span>
+                    </div>
+                </div>
+            </article>
+
+
+            <article class="course">
+                <div class="course-cover">
+                    <div class="course-symbol">🗄️</div>
+                    <span class="course-level">INTERMEDIATE</span>
+                </div>
+
+                <div class="course-body">
+                    <h3>Databases</h3>
+
+                    <p>
+                        Learn how data is structured, stored,
+                        queried and used by applications.
+                    </p>
+
+                    <div class="course-footer">
+                        <span>Data</span>
+                        <span>Practical</span>
+                    </div>
+                </div>
+            </article>
+
+        </div>
+
+    </div>
+</section>
+
+
+<!-- PRACTICAL -->
+<section id="practical">
+    <div class="container practical-layout">
+
+        <div class="practical-copy">
+
+            <div class="kicker">Practice Zone</div>
+
+            <h2>
+                Learning becomes
+                <span class="gradient">real when you build.</span>
+            </h2>
+
+            <p>
+                TechBridge connects lessons with practical tools so
+                students can experiment, create projects and apply
+                what they have learned.
+            </p>
+
+            <div class="tool-grid">
+
+                <div class="tool">
+                    <div class="tool-icon">✦</div>
+                    <h3>AI Assistant</h3>
+                    <p>Get learning support and explanations.</p>
+                </div>
+
+                <div class="tool">
+                    <div class="tool-icon">⌨️</div>
+                    <h3>Code Editor</h3>
+                    <p>Write and preview code while learning.</p>
+                </div>
+
+                <div class="tool">
+                    <div class="tool-icon">🛠️</div>
+                    <h3>Computer Workshop</h3>
+                    <p>Explore practical computer skills.</p>
+                </div>
+
+                <div class="tool">
+                    <div class="tool-icon">🚀</div>
+                    <h3>Practical Tasks</h3>
+                    <p>Complete real learning challenges.</p>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- CODE WORKSPACE -->
+        <div class="workspace">
+
+            <div class="workspace-top">
+                <div class="workspace-title">
+                    TechBridge Code Workspace
+                </div>
+
+                <div class="workspace-status">
+                    ● Ready
+                </div>
+            </div>
+
+
+            <div class="workspace-main">
+
+                <div class="editor">
+
+                    <div class="editor-tabs">
+                        <span class="selected">HTML</span>
+                        <span>CSS</span>
+                        <span>JS</span>
+                    </div>
+
+                    <div class="code">
+                        <div>
+                            <span class="purple">&lt;section</span>
+                            <span class="cyan"> class=</span>
+                            <span class="green">"hero"</span>
+                            <span class="purple">&gt;</span>
+                        </div>
+
+                        <div>
+                            &nbsp;&nbsp;
+                            <span class="purple">&lt;h1&gt;</span>
+                        </div>
+
+                        <div>
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            Build Your Future
+                        </div>
+
+                        <div>
+                            &nbsp;&nbsp;
+                            <span class="purple">&lt;/h1&gt;</span>
+                        </div>
+
+                        <div>
+                            &nbsp;&nbsp;
+                            <span class="purple">&lt;p&gt;</span>
+                        </div>
+
+                        <div>
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            Learn technology.
+                        </div>
+
+                        <div>
+                            &nbsp;&nbsp;
+                            <span class="purple">&lt;/p&gt;</span>
+                        </div>
+
+                        <div>
+                            <span class="purple">&lt;/section&gt;</span>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div class="preview">
+
+                    <div class="preview-header">
+                        LIVE PREVIEW
+                    </div>
+
+                    <div class="preview-card">
+
+                        <div class="preview-logo"></div>
+
+                        <h4>Build Your Future</h4>
+
+                        <p>
+                            Learn technology and turn your ideas
+                            into practical projects.
+                        </p>
+
+                        <div style="
+                            margin-top:15px;
+                            width:65px;
+                            height:7px;
+                            border-radius:10px;
+                            background:linear-gradient(90deg,#00e5ff,#4285ff);
+                        "></div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+
+<!-- ASSESSMENTS -->
+<section id="assessments">
+    <div class="container assessment">
+
+        <div>
+
+            <div class="section-heading">
+                <div class="kicker">Progress & Assessments</div>
+
+                <h2>
+                    Don't just finish lessons.
+                    <span class="gradient">Understand them.</span>
+                </h2>
+
+                <p>
+                    Quizzes, progressive tests and practical tasks help
+                    students understand where they are and what to improve.
+                </p>
+            </div>
+
+            <a href="register.html" class="btn btn-primary">
+                Start Your Learning Path →
+            </a>
+
+        </div>
+
+
+        <div class="assessment-board">
+
+            <div class="assessment-header">
+                <div>
+                    <small>LATEST ASSESSMENT</small>
+                    <div style="font-size:13px;font-weight:700;margin-top:4px;">
+                        Web Development
+                    </div>
+                </div>
+
+                <span class="passed">PASSED</span>
+            </div>
+
+
+            <div class="score">
+                <div>
+                    <strong>82%</strong>
+                    <small>Overall Score</small>
+                </div>
+            </div>
+
+
+            <div class="skill">
+                <span>HTML</span>
+                <div class="skill-bar">
+                    <i style="width:92%"></i>
+                </div>
+                <b>92</b>
+            </div>
+
+            <div class="skill">
+                <span>CSS</span>
+                <div class="skill-bar">
+                    <i style="width:81%"></i>
+                </div>
+                <b>81</b>
+            </div>
+
+            <div class="skill">
+                <span>JavaScript</span>
+                <div class="skill-bar">
+                    <i style="width:73%"></i>
+                </div>
+                <b>73</b>
+            </div>
+
+            <div class="skill">
+                <span>Project</span>
+                <div class="skill-bar">
+                    <i style="width:85%"></i>
+                </div>
+                <b>85</b>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+
+<!-- HOW IT WORKS -->
+<section>
+    <div class="container">
+
+        <div class="section-heading center">
+            <div class="kicker">How It Works</div>
+
+            <h2>
+                A clear path from
+                <span class="gradient">learning to doing.</span>
+            </h2>
+
+            <p>
+                TechBridge keeps the learning journey simple and structured.
+            </p>
+        </div>
+
+
+        <div class="steps">
+
+            <div class="step">
+                <div class="step-number">01</div>
+                <h3>Choose</h3>
+                <p>Select a course that matches your learning goal.</p>
+            </div>
+
+            <div class="step">
+                <div class="step-number">02</div>
+                <h3>Learn</h3>
+                <p>Follow lessons and understand the concepts.</p>
+            </div>
+
+            <div class="step">
+                <div class="step-number">03</div>
+                <h3>Practice</h3>
+                <p>Build projects and complete practical tasks.</p>
+            </div>
+
+            <div class="step">
+                <div class="step-number">04</div>
+                <h3>Grow</h3>
+                <p>Pass assessments and continue your learning journey.</p>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+
+<!-- CERTIFICATE -->
+<section>
+    <div class="container">
+
+        <div class="certificate">
+
+            <div class="certificate-icon">🏆</div>
+
+            <h2>
+                Turn your progress into achievement.
+            </h2>
+
+            <p>
+                Complete the required learning path, assessments and
+                practical work to become eligible for TechBridge
+                certificates and badges.
+            </p>
+
+            <a href="register.html" class="btn btn-primary">
+                Start Learning
+            </a>
+
+        </div>
+
+    </div>
+</section>
+
+
+<!-- CTA -->
+<section class="cta">
+    <div class="container">
+
+        <div class="cta-box">
+
+            <div class="kicker">TECHBRIDGE RWANDA</div>
+
+            <h2>
+                Your next skill
+                <span class="gradient">starts here.</span>
+            </h2>
+
+            <p>
+                Learn technology. Practice what you learn.
+                Build projects. Grow your future.
+            </p>
+
+            <div style="
+                display:flex;
+                justify-content:center;
+                gap:10px;
+                flex-wrap:wrap;
+            ">
+                <a href="register.html" class="btn btn-primary">
+                    Create Account →
+                </a>
+
+                <a href="login.html" class="btn btn-ghost">
+                    Student Login
+                </a>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+
+<!-- FOOTER -->
+<footer>
+
+    <div class="container">
+
+        <div class="footer-grid">
+
             <div>
-              <div class="course-label">CURRENT COURSE</div>
-              <strong>Computer Programming</strong>
+
+                <a href="index.html" class="logo">
+                    <div class="logo-mark">TB</div>
+
+                    <div class="logo-text">
+                        TECHBRIDGE
+                        <small>RWANDA</small>
+                    </div>
+                </a>
+
+                <p class="footer-description">
+                    A modern technology learning platform helping
+                    students learn, build, practice and grow.
+                </p>
+
             </div>
 
-            <div class="status">● Learning</div>
-          </div>
 
-          <h3 class="course-title">
-            Introduction to Programming
-          </h3>
-
-          <p class="course-desc">
-            Learn programming concepts step by step through lessons,
-            quizzes and practical exercises.
-          </p>
-
-          <div class="progress-row">
-            <span>Course progress</span>
-            <strong>72%</strong>
-          </div>
-
-          <div class="progress">
-            <span></span>
-          </div>
-
-          <div class="lesson">
-            <div class="lesson-icon">✓</div>
-            <div class="lesson-text">
-              Computer Basics
-              <small>Completed</small>
+            <div class="footer-col">
+                <h4>Platform</h4>
+                <a href="#platform">Features</a>
+                <a href="#courses">Courses</a>
+                <a href="#practical">Practice</a>
+                <a href="#assessments">Assessments</a>
             </div>
-          </div>
 
-          <div class="lesson">
-            <div class="lesson-icon">▶</div>
-            <div class="lesson-text">
-              Programming Fundamentals
-              <small>Continue learning</small>
-            </div>
-          </div>
 
-          <div class="lesson">
-            <div class="lesson-icon">?</div>
-            <div class="lesson-text">
-              Beginner Assessment
-              <small>Available</small>
+            <div class="footer-col">
+                <h4>Student</h4>
+                <a href="register.html">Create Account</a>
+                <a href="login.html">Login</a>
+                <a href="student/index.html">Dashboard</a>
+                <a href="student/practical.html">Practical Hub</a>
             </div>
-          </div>
+
+
+            <div class="footer-col">
+                <h4>Admin</h4>
+                <a href="admin/index.html">Admin Dashboard</a>
+                <a href="admin/courses.html">Courses</a>
+                <a href="admin/students.html">Students</a>
+                <a href="admin/payments.html">Payments</a>
+            </div>
 
         </div>
 
-      </div>
+
+        <div class="footer-bottom">
+
+            <span>
+                © <span id="year"></span> TECHBRIDGE RWANDA
+            </span>
+
+            <span>
+                Learn • Build • Practice • Grow
+            </span>
+
+        </div>
 
     </div>
 
-    <!-- FEATURES -->
-    <section id="features">
+</footer>
 
-      <div class="section-heading">
-        <h2>Everything You Need to Learn</h2>
-        <p>
-          TechBridge combines structured education with assessments and
-          practical technology tools.
-        </p>
-      </div>
 
-      <div class="features">
+<script>
 
-        <div class="feature">
-          <div class="feature-icon">📚</div>
-          <h3>Structured Courses</h3>
-          <p>
-            Follow organized lessons and video content designed for different
-            levels of learners.
-          </p>
-        </div>
+/* NAVBAR */
 
-        <div class="feature">
-          <div class="feature-icon">🧠</div>
-          <h3>Smart Assessments</h3>
-          <p>
-            Test your knowledge through quizzes and beginner, intermediate,
-            and advanced assessments.
-          </p>
-        </div>
+const navbar = document.getElementById("navbar");
 
-        <div class="feature">
-          <div class="feature-icon">💻</div>
-          <h3>Practical Learning</h3>
-          <p>
-            Practice programming, computer skills, and technology through
-            hands-on tasks.
-          </p>
-        </div>
+window.addEventListener("scroll",()=>{
+    navbar.classList.toggle("scrolled",window.scrollY > 30);
+});
 
-        <div class="feature">
-          <div class="feature-icon">🏆</div>
-          <h3>Certificates & Badges</h3>
-          <p>
-            Complete learning requirements and earn certificates and
-            achievement badges.
-          </p>
-        </div>
 
-      </div>
+/* MOBILE MENU */
 
-    </section>
+const menuBtn = document.getElementById("menuBtn");
+const mobileMenu = document.getElementById("mobileMenu");
 
-    <!-- LEVELS -->
-    <section id="levels">
+menuBtn.addEventListener("click",()=>{
 
-      <div class="section-heading">
-        <h2>Learn Step by Step</h2>
-        <p>
-          Build your knowledge progressively instead of trying to learn
-          everything at once.
-        </p>
-      </div>
+    mobileMenu.classList.toggle("show");
 
-      <div class="levels">
+    menuBtn.textContent =
+        mobileMenu.classList.contains("show")
+        ? "×"
+        : "☰";
 
-        <div class="level">
-          <span>LEVEL 01</span>
-          <h3>Beginner</h3>
-          <p>
-            Start with computer fundamentals, digital literacy,
-            programming basics, and essential technology concepts.
-          </p>
-        </div>
+});
 
-        <div class="level">
-          <span>LEVEL 02</span>
-          <h3>Intermediate</h3>
-          <p>
-            Develop stronger programming, problem-solving, and practical
-            computer skills through structured projects.
-          </p>
-        </div>
 
-        <div class="level">
-          <span>LEVEL 03</span>
-          <h3>Advanced</h3>
-          <p>
-            Work on advanced concepts, real-world projects, challenging
-            assessments, and practical technology tasks.
-          </p>
-        </div>
+document.querySelectorAll(".mobile-menu a").forEach(link=>{
 
-      </div>
+    link.addEventListener("click",()=>{
 
-    </section>
+        mobileMenu.classList.remove("show");
+        menuBtn.textContent="☰";
 
-    <!-- PRACTICAL -->
-    <section id="practical">
-
-      <div class="section-heading">
-        <h2>Practice, Don't Just Watch</h2>
-        <p>
-          Students will have access to practical tools that turn lessons
-          into real skills.
-        </p>
-      </div>
-
-      <div class="features">
-
-        <div class="feature">
-          <div class="feature-icon">🤖</div>
-          <h3>Gemini AI Assistant</h3>
-          <p>
-            Ask questions, understand difficult concepts, and receive
-            learning assistance.
-          </p>
-        </div>
-
-        <div class="feature">
-          <div class="feature-icon">⌨️</div>
-          <h3>Online Code Editor</h3>
-          <p>
-            Write and practice code directly from the learning platform.
-          </p>
-        </div>
-
-        <div class="feature">
-          <div class="feature-icon">🖥️</div>
-          <h3>Computer Workshop</h3>
-          <p>
-            Follow practical computer exercises and technology challenges.
-          </p>
-        </div>
-
-        <div class="feature">
-          <div class="feature-icon">🎯</div>
-          <h3>Practical Tasks</h3>
-          <p>
-            Apply what you learn through assignments and real-world
-            technology projects.
-          </p>
-        </div>
-
-      </div>
-
-    </section>
-
-    <!-- CTA -->
-    <section>
-
-      <div class="cta">
-
-        <h2>Ready to Start Learning?</h2>
-
-        <p>
-          Create your TechBridge Rwanda account and begin building your
-          technology skills.
-        </p>
-
-        <a href="register.html" class="btn btn-primary">
-          Create Student Account →
-        </a>
-
-      </div>
-
-    </section>
-
-  </main>
-
-  <!-- FOOTER -->
-  <footer>
-
-    <div>
-      © <span id="year"></span> TechBridge Rwanda
-    </div>
-
-    <div>
-      Learn • Build • Practice • Grow
-    </div>
-
-  </footer>
-
-  <script>
-
-    // Current year
-    document.getElementById("year").textContent =
-      new Date().getFullYear();
-
-    // Mobile navigation
-    const menuBtn = document.getElementById("menuBtn");
-    const navbar = document.getElementById("navbar");
-
-    menuBtn.addEventListener("click", () => {
-      navbar.classList.toggle("mobile-open");
     });
 
-    // Close mobile menu after clicking a link
-    document.querySelectorAll(".nav-links a").forEach(link => {
-      link.addEventListener("click", () => {
-        navbar.classList.remove("mobile-open");
-      });
-    });
+});
 
-  </script>
+
+/* YEAR */
+
+document.getElementById("year").textContent =
+    new Date().getFullYear();
+
+
+/* SCROLL REVEAL */
+
+const revealItems = document.querySelectorAll(
+    ".feature,.path-card,.course,.tool,.step,.workspace,.assessment-board,.certificate,.cta-box"
+);
+
+const observer = new IntersectionObserver(
+    entries=>{
+        entries.forEach(entry=>{
+
+            if(entry.isIntersecting){
+
+                entry.target.style.opacity="1";
+                entry.target.style.transform="translateY(0)";
+
+                observer.unobserve(entry.target);
+            }
+
+        });
+    },
+    {
+        threshold:.08
+    }
+);
+
+
+revealItems.forEach(item=>{
+
+    item.style.opacity="0";
+    item.style.transform="translateY(22px)";
+    item.style.transition=
+        "opacity .7s ease, transform .7s ease";
+
+    observer.observe(item);
+
+});
+
+</script>
 
 </body>
-  </html>
+</html>
+```
