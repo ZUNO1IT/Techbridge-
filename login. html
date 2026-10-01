@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Login | TechBridge Rwanda</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #050816;
+      --card: #0c1428;
+      --text: #f7f9ff;
+      --muted: #9ca9c5;
+      --primary: #00e5ff;
+      --secondary: #6366f1;
+      --danger: #ef4444;
+      --border: rgba(255,255,255,.09);
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 15% 20%, rgba(0,229,255,.12), transparent 30%),
+        radial-gradient(circle at 85% 80%, rgba(99,102,241,.15), transparent 30%),
+        var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .page {
+      width: 100%;
+      max-width: 1050px;
+      min-height: 650px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      background: rgba(12,20,40,.82);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: 0 30px 100px rgba(0,0,0,.45);
+      backdrop-filter: blur(20px);
+    }
+
+    /* LEFT SIDE */
+
+    .welcome {
+      padding: 55px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(0,229,255,.13), transparent 35%),
+        radial-gradient(circle at 80% 80%, rgba(99,102,241,.14), transparent 35%);
+      border-right: 1px solid var(--border);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      font-weight: 800;
+      font-size: 19px;
+    }
+
+    .logo-icon {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 13px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: #001018;
+      font-weight: 900;
+      box-shadow: 0 0 30px rgba(0,229,255,.2);
+    }
+
+    .welcome-content h1 {
+      font-size: 48px;
+      line-height: 1.08;
+      margin-bottom: 20px;
+    }
+
+    .gradient {
+      background: linear-gradient(90deg, var(--primary), #818cf8);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .welcome-content p {
+      color: var(--muted);
+      line-height: 1.8;
+      max-width: 450px;
+    }
+
+    .benefits {
+      display: grid;
+      gap: 13px;
+      margin-top: 28px;
+    }
+
+    .benefit {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #dce4f8;
+      font-size: 14px;
+    }
+
+    .benefit-icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 9px;
+      display: grid;
+      place-items: center;
+      background: rgba(0,229,255,.08);
+      color: var(--primary);
+    }
+
+    .welcome-footer {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    /* LOGIN */
+
+    .login-area {
+      padding: 55px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .login-box {
+      width: 100%;
+      max-width: 390px;
+    }
+
+    .login-box h2 {
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 30px;
+      line-height: 1.6;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 13px;
+      color: #dce4f8;
+      font-weight: 600;
+    }
+
+    .input-wrapper {
+      position: relative;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px 15px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      outline: none;
+      background: rgba(255,255,255,.035);
+      color: var(--text);
+      font-size: 14px;
+      transition: .25s;
+    }
+
+    input:focus {
+      border-color: rgba(0,229,255,.55);
+      box-shadow: 0 0 0 3px rgba(0,229,255,.07);
+    }
+
+    input::placeholder {
+      color: #66728d;
+    }
+
+    .password-toggle {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .form-options {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 5px 0 22px;
+      font-size: 12px;
+    }
+
+    .remember {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--muted);
+    }
+
+    .remember input {
+      width: auto;
+      accent-color: var(--primary);
+    }
+
+    .forgot {
+      color: var(--primary);
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 800;
+      color: #001018;
+      background: linear-gradient(135deg, var(--primary), #3b82f6);
+      transition: .25s;
+    }
+
+    .login-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px rgba(0,229,255,.16);
+    }
+
+    .login-btn:disabled {
+      opacity: .6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #65718a;
+      font-size: 11px;
+      margin: 25px 0;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: "";
+      height: 1px;
+      background: var(--border);
+      flex: 1;
+    }
+
+    .register-text {
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .register-text a {
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    .message {
+      display: none;
+      padding: 12px;
+      border-radius: 10px;
+      margin-bottom: 18px;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .message.error {
+      display: block;
+      color: #fecaca;
+      background: rgba(239,68,68,.1);
+      border: 1px solid rgba(239,68,68,.2);
+    }
+
+    .message.success {
+      display: block;
+      color: #bbf7d0;
+      background: rgba(34,197,94,.1);
+      border: 1px solid rgba(34,197,94,.2);
+    }
+
+    @media (max-width: 800px) {
+      .page {
+        grid-template-columns: 1fr;
+        max-width: 500px;
+      }
+
+      .welcome {
+        display: none;
+      }
+
+      .login-area {
+        padding: 40px 25px;
+      }
+    }
+
+    @media (max-width: 420px) {
+      body {
+        padding: 10px;
+      }
+
+      .page {
+        border-radius: 20px;
+      }
+
+      .login-area {
+        padding: 35px 20px;
+      }
+
+      .login-box h2 {
+        font-size: 28px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="page">
+
+    <!-- WELCOME PANEL -->
+
+    <div class="welcome">
+
+      <a href="index.html" class="logo">
+        <div class="logo-icon">T</div>
+        <span>TechBridge Rwanda</span>
+      </a>
+
+      <div class="welcome-content">
+
+        <h1>
+          Welcome<br>
+          <span class="gradient">Back.</span>
+        </h1>
+
+        <p>
+          Continue your learning journey with TechBridge Rwanda.
+          Learn technology, practice your skills, complete assessments,
+          and build your future.
+        </p>
+
+        <div class="benefits">
+
+          <div class="benefit">
+            <div class="benefit-icon">✓</div>
+            <span>Access your enrolled courses</span>
+          </div>
+
+          <div class="benefit">
+            <div class="benefit-icon">✓</div>
+            <span>Continue your lessons and quizzes</span>
+          </div>
+
+          <div class="benefit">
+            <div class="benefit-icon">✓</div>
+            <span>Practice with practical tools</span>
+          </div>
+
+          <div class="benefit">
+            <div class="benefit-icon">✓</div>
+            <span>Track your progress and achievements</span>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="welcome-footer">
+        Learn • Build • Practice • Grow
+      </div>
+
+    </div>
+
+    <!-- LOGIN FORM -->
+
+    <div class="login-area">
+
+      <div class="login-box">
+
+        <h2>Sign in</h2>
+
+        <p class="subtitle">
+          Enter your account details to access your dashboard.
+        </p>
+
+        <div id="message" class="message"></div>
+
+        <form id="loginForm">
+
+          <div class="form-group">
+
+            <label for="email">Email address</label>
+
+            <input
+              type="email"
+              id="email"
+              placeholder="you@example.com"
+              autocomplete="email"
+              required
+            >
+
+          </div>
+
+          <div class="form-group">
+
+            <label for="password">Password</label>
+
+            <div class="input-wrapper">
+
+              <input
+                type="password"
+                id="password"
+                placeholder="Enter your password"
+                autocomplete="current-password"
+                required
+              >
+
+              <button
+                type="button"
+                class="password-toggle"
+                id="togglePassword"
+                aria-label="Show password"
+              >
+                👁
+              </button>
+
+            </div>
+
+          </div>
+
+          <div class="form-options">
+
+            <label class="remember">
+              <input type="checkbox" id="remember">
+              <span>Remember me</span>
+            </label>
+
+            <a href="#" class="forgot" id="forgotPassword">
+              Forgot password?
+            </a>
+
+          </div>
+
+          <button
+            type="submit"
+            class="login-btn"
+            id="loginBtn"
+          >
+            Sign In
+          </button>
+
+        </form>
+
+        <div class="divider">
+          OR
+        </div>
+
+        <div class="register-text">
+          Don't have an account?
+          <a href="register.html">Create account</a>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+
+    const loginForm = document.getElementById("loginForm");
+    const loginBtn = document.getElementById("loginBtn");
+    const message = document.getElementById("message");
+
+    const passwordInput = document.getElementById("password");
+    const togglePassword = document.getElementById("togglePassword");
+
+    // Show / hide password
+    togglePassword.addEventListener("click", () => {
+
+      const isPassword =
+        passwordInput.type === "password";
+
+      passwordInput.type =
+        isPassword ? "text" : "password";
+
+      togglePassword.textContent =
+        isPassword ? "🙈" : "👁";
+
+    });
+
+
+    // Display message
+    function showMessage(text, type) {
+
+      message.textContent = text;
+
+      message.className =
+        "message " + type;
+
+    }
+
+
+    // Login
+    loginForm.addEventListener("submit", (event) => {
+
+      event.preventDefault();
+
+      const email =
+        document.getElementById("email").value.trim();
+
+      const password =
+        passwordInput.value;
+
+      if (!email || !password) {
+
+        showMessage(
+          "Please enter your email and password.",
+          "error"
+        );
+
+        return;
+
+      }
+
+      /*
+        FIREBASE LOGIN WILL BE CONNECTED HERE.
+
+        Example later:
+
+        signInWithEmailAndPassword(
+          auth,
+          email,
+          password
+        )
+      */
+
+      loginBtn.disabled = true;
+      loginBtn.textContent = "Signing in...";
+
+      // Temporary development response
+      setTimeout(() => {
+
+        loginBtn.disabled = false;
+        loginBtn.textContent = "Sign In";
+
+        showMessage(
+          "Authentication will be connected to Firebase in the next phase.",
+          "success"
+        );
+
+      }, 900);
+
+    });
+
+
+    // Forgot password
+    document
+      .getElementById("forgotPassword")
+      .addEventListener("click", (event) => {
+
+        event.preventDefault();
+
+        const email =
+          document.getElementById("email").value.trim();
+
+        if (!email) {
+
+          showMessage(
+            "Enter your email address first.",
+            "error"
+          );
+
+          return;
+
+        }
+
+        /*
+          Firebase password reset will be added later.
+        */
+
+        showMessage(
+          "Password reset will be connected to Firebase.",
+          "success"
+        );
+
+      });
+
+  </script>
+
+</body>
+</html>
