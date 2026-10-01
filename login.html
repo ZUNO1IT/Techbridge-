@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,6 +22,7 @@
       --primary: #00e5ff;
       --secondary: #6366f1;
       --danger: #ef4444;
+      --success: #22c55e;
       --border: rgba(255,255,255,.09);
     }
 
@@ -52,8 +54,6 @@
       backdrop-filter: blur(20px);
     }
 
-    /* LEFT SIDE */
-
     .welcome {
       padding: 55px;
       display: flex;
@@ -71,6 +71,8 @@
       gap: 11px;
       font-weight: 800;
       font-size: 19px;
+      text-decoration: none;
+      color: var(--text);
     }
 
     .logo-icon {
@@ -133,8 +135,6 @@
       font-size: 12px;
     }
 
-    /* LOGIN */
-
     .login-area {
       padding: 55px;
       display: flex;
@@ -175,7 +175,9 @@
       position: relative;
     }
 
-    input {
+    input[type="email"],
+    input[type="password"],
+    input[type="text"] {
       width: 100%;
       padding: 14px 15px;
       border: 1px solid var(--border);
@@ -221,6 +223,7 @@
       align-items: center;
       gap: 7px;
       color: var(--muted);
+      margin: 0;
     }
 
     .remember input {
@@ -230,6 +233,7 @@
 
     .forgot {
       color: var(--primary);
+      text-decoration: none;
     }
 
     .login-btn {
@@ -281,6 +285,7 @@
     .register-text a {
       color: var(--primary);
       font-weight: 700;
+      text-decoration: none;
     }
 
     .message {
@@ -345,8 +350,6 @@
 
   <div class="page">
 
-    <!-- WELCOME PANEL -->
-
     <div class="welcome">
 
       <a href="index.html" class="logo">
@@ -398,8 +401,6 @@
       </div>
 
     </div>
-
-    <!-- LOGIN FORM -->
 
     <div class="login-area">
 
@@ -494,16 +495,125 @@
 
   </div>
 
-  <script>
 
-    const loginForm = document.getElementById("loginForm");
-    const loginBtn = document.getElementById("loginBtn");
-    const message = document.getElementById("message");
+  <!-- FIREBASE -->
+  <script type="module">
 
-    const passwordInput = document.getElementById("password");
-    const togglePassword = document.getElementById("togglePassword");
+    import { initializeApp }
+      from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
 
-    // Show / hide password
+    import {
+      getAuth,
+      signInWithEmailAndPassword,
+      sendPasswordResetEmail,
+      setPersistence,
+      browserLocalPersistence,
+      browserSessionPersistence,
+      onAuthStateChanged
+    }
+      from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
+
+    import {
+      getFirestore,
+      doc,
+      getDoc
+    }
+      from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+
+
+    /* =========================================
+       FIREBASE CONFIG
+       ========================================= */
+
+    const firebaseConfig = {
+
+      apiKey: "YOUR_FIREBASE_API_KEY",
+
+      authDomain:
+        "techbrige-rwanda.firebaseapp.com",
+
+      projectId:
+        "techbrige-rwanda",
+
+      storageBucket:
+        "techbrige-rwanda.firebasestorage.app",
+
+      messagingSenderId:
+        "391783540774",
+
+      appId:
+        "1:391783540774:web:de825e268d4ed6b2711ee7"
+
+    };
+
+
+    /* =========================================
+       INITIALIZE FIREBASE
+       ========================================= */
+
+    const app = initializeApp(firebaseConfig);
+
+    const auth = getAuth(app);
+
+    const db = getFirestore(app);
+
+
+    /* =========================================
+       ELEMENTS
+       ========================================= */
+
+    const loginForm =
+      document.getElementById("loginForm");
+
+    const loginBtn =
+      document.getElementById("loginBtn");
+
+    const message =
+      document.getElementById("message");
+
+    const emailInput =
+      document.getElementById("email");
+
+    const passwordInput =
+      document.getElementById("password");
+
+    const togglePassword =
+      document.getElementById("togglePassword");
+
+    const rememberInput =
+      document.getElementById("remember");
+
+    const forgotPassword =
+      document.getElementById("forgotPassword");
+
+
+    /* =========================================
+       MESSAGE
+       ========================================= */
+
+    function showMessage(text, type) {
+
+      message.textContent = text;
+
+      message.className =
+        "message " + type;
+
+    }
+
+
+    function clearMessage() {
+
+      message.textContent = "";
+
+      message.className = "message";
+
+    }
+
+
+    /* =========================================
+       PASSWORD TOGGLE
+       ========================================= */
+
     togglePassword.addEventListener("click", () => {
 
       const isPassword =
@@ -515,82 +625,227 @@
       togglePassword.textContent =
         isPassword ? "🙈" : "👁";
 
+      togglePassword.setAttribute(
+        "aria-label",
+        isPassword
+          ? "Hide password"
+          : "Show password"
+      );
+
     });
 
 
-    // Display message
-    function showMessage(text, type) {
+    /* =========================================
+       FIREBASE ERROR TRANSLATION
+       ========================================= */
 
-      message.textContent = text;
+    function firebaseErrorMessage(error) {
 
-      message.className =
-        "message " + type;
+      switch (error.code) {
+
+        case "auth/invalid-email":
+          return "Please enter a valid email address.";
+
+        case "auth/invalid-credential":
+          return "Incorrect email or password.";
+
+        case "auth/user-not-found":
+          return "No account was found with this email.";
+
+        case "auth/wrong-password":
+          return "Incorrect email or password.";
+
+        case "auth/user-disabled":
+          return "This account has been disabled. Please contact support.";
+
+        case "auth/too-many-requests":
+          return "Too many login attempts. Please try again later.";
+
+        case "auth/network-request-failed":
+          return "Network error. Please check your internet connection.";
+
+        default:
+          return "Unable to sign in. Please try again.";
+
+      }
 
     }
 
 
-    // Login
-    loginForm.addEventListener("submit", (event) => {
+    /* =========================================
+       REDIRECT USER
+       ========================================= */
 
-      event.preventDefault();
+    async function redirectUser(user) {
 
-      const email =
-        document.getElementById("email").value.trim();
+      try {
 
-      const password =
-        passwordInput.value;
+        const userRef =
+          doc(db, "users", user.uid);
 
-      if (!email || !password) {
+        const userSnap =
+          await getDoc(userRef);
 
-        showMessage(
-          "Please enter your email and password.",
-          "error"
+        if (userSnap.exists()) {
+
+          const userData =
+            userSnap.data();
+
+          if (userData.role === "admin") {
+
+            window.location.href =
+              "admin/index.html";
+
+            return;
+
+          }
+
+          window.location.href =
+            "student/index.html";
+
+          return;
+
+        }
+
+        /*
+          If Authentication exists but
+          Firestore profile does not exist,
+          send student to dashboard.
+        */
+
+        window.location.href =
+          "student/index.html";
+
+      } catch (error) {
+
+        console.error(
+          "Profile check error:",
+          error
         );
 
-        return;
+        /*
+          Authentication succeeded.
+          Dashboard can still open even if
+          the profile read temporarily fails.
+        */
+
+        window.location.href =
+          "student/index.html";
 
       }
 
-      /*
-        FIREBASE LOGIN WILL BE CONNECTED HERE.
-
-        Example later:
-
-        signInWithEmailAndPassword(
-          auth,
-          email,
-          password
-        )
-      */
-
-      loginBtn.disabled = true;
-      loginBtn.textContent = "Signing in...";
-
-      // Temporary development response
-      setTimeout(() => {
-
-        loginBtn.disabled = false;
-        loginBtn.textContent = "Sign In";
-
-        showMessage(
-          "Authentication will be connected to Firebase in the next phase.",
-          "success"
-        );
-
-      }, 900);
-
-    });
+    }
 
 
-    // Forgot password
-    document
-      .getElementById("forgotPassword")
-      .addEventListener("click", (event) => {
+    /* =========================================
+       LOGIN
+       ========================================= */
+
+    loginForm.addEventListener(
+      "submit",
+      async (event) => {
 
         event.preventDefault();
 
+        clearMessage();
+
         const email =
-          document.getElementById("email").value.trim();
+          emailInput.value.trim();
+
+        const password =
+          passwordInput.value;
+
+        if (!email || !password) {
+
+          showMessage(
+            "Please enter your email and password.",
+            "error"
+          );
+
+          return;
+
+        }
+
+
+        loginBtn.disabled = true;
+
+        loginBtn.textContent =
+          "Signing in...";
+
+
+        try {
+
+          /*
+            Remember me:
+            checked  → browserLocalPersistence
+            unchecked → browserSessionPersistence
+          */
+
+          await setPersistence(
+            auth,
+            rememberInput.checked
+              ? browserLocalPersistence
+              : browserSessionPersistence
+          );
+
+
+          const result =
+            await signInWithEmailAndPassword(
+              auth,
+              email,
+              password
+            );
+
+
+          showMessage(
+            "Login successful. Opening your dashboard...",
+            "success"
+          );
+
+
+          await redirectUser(
+            result.user
+          );
+
+
+        } catch (error) {
+
+          console.error(
+            "Login error:",
+            error
+          );
+
+          showMessage(
+            firebaseErrorMessage(error),
+            "error"
+          );
+
+          loginBtn.disabled = false;
+
+          loginBtn.textContent =
+            "Sign In";
+
+        }
+
+      }
+    );
+
+
+    /* =========================================
+       FORGOT PASSWORD
+       ========================================= */
+
+    forgotPassword.addEventListener(
+      "click",
+      async (event) => {
+
+        event.preventDefault();
+
+        clearMessage();
+
+        const email =
+          emailInput.value.trim();
+
 
         if (!email) {
 
@@ -599,22 +854,74 @@
             "error"
           );
 
+          emailInput.focus();
+
           return;
 
         }
 
-        /*
-          Firebase password reset will be added later.
-        */
 
-        showMessage(
-          "Password reset will be connected to Firebase.",
-          "success"
-        );
+        try {
 
-      });
+          await sendPasswordResetEmail(
+            auth,
+            email
+          );
+
+
+          showMessage(
+            "Password reset email sent. Check your inbox.",
+            "success"
+          );
+
+
+        } catch (error) {
+
+          console.error(
+            "Password reset error:",
+            error
+          );
+
+          showMessage(
+            firebaseErrorMessage(error),
+            "error"
+          );
+
+        }
+
+      }
+    );
+
+
+    /* =========================================
+       CHECK EXISTING LOGIN
+       ========================================= */
+
+    onAuthStateChanged(
+      auth,
+      (user) => {
+
+        if (user) {
+
+          /*
+            Do not automatically redirect while
+            the user is still typing/login page.
+            Firebase will restore the session,
+            but redirect only after normal login.
+          */
+
+          console.log(
+            "Authenticated user:",
+            user.email
+          );
+
+        }
+
+      }
+    );
 
   </script>
 
 </body>
 </html>
+```
